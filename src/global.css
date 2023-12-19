@@ -32,12 +32,18 @@ CSS rules to specify families:
 	--neutral-gray: #efefef;
 	--neutral-brown: #3f3631;
 
+  --neutral-gray-op-50: #efefef80
+
 	/* text colors */
 	--contrast-text-light: black;
 	--contrast-text-dark: white;
 
   /* Default font */
   font-family: 'Roboto', sans-serif;
+
+  /* breakpoint widths */
+  --breakpoint-md: 440px;
+  --breakpoint-sm: 300px;
 }
 
 /* default button styling */

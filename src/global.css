@@ -32,7 +32,8 @@ CSS rules to specify families:
 	--neutral-gray: #efefef;
 	--neutral-brown: #3f3631;
 
-  --neutral-gray-op-50: #efefef80
+  --neutral-gray-op-50: #efefef80;
+  --neutral-gray-op-10: #efefef1a;
 
 	/* text colors */
 	--contrast-text-light: black;

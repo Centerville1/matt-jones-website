@@ -4,6 +4,7 @@
 	import { onMount } from 'svelte';
   // svelte-media-query docs: https://www.npmjs.com/package/svelte-media-query
   import MediaQuery from "svelte-media-query";
+	import Footer from './footer.svelte';
 
   // Toggle visibility of the mobile nav dropdown menu
   function toggleNav() {
@@ -34,7 +35,7 @@
 </script>
 
 <div id="page">
-  <nav>
+  <header>
     <div id="logo">
       logo
     </div>
@@ -53,7 +54,7 @@
           <path d="M4 6L20 6" stroke="#000000" stroke-width="2" stroke-linecap="round"/>
         </svg>
       </button>
-      <div id="links">
+      <nav id="links">
         <div>
           <a on:click={toggleNav} href="/">Home</a>
         </div>
@@ -63,17 +64,15 @@
         <div>
           <a on:click={toggleNav} href="/about">About</a>
         </div>
-      </div>
+      </nav>
       {/if}
     </MediaQuery>
-  </nav>
+  </header>
   <main>
     <div id="page-content">
       <slot></slot>
     </div>
-    <footer>
-
-    </footer>
+    <Footer />
   </main>
 </div>
 
@@ -85,7 +84,7 @@
     background-color: var(--neutral-gray);
   }
 
-  nav {
+  header {
     width: 100vw;
     height: 60px;
     background-color: var(--neutral-white);
@@ -152,7 +151,7 @@
       padding: 0;
     }
 
-    #links {
+    nav {
       position: absolute;
       right: 0;
       top: 60px;
@@ -169,16 +168,16 @@
       border-radius: 5px;
     }
 
-    #links div {
+    nav div {
       width: 100%;
       height: 33%;
     }
 
-    #links div:hover {
+   nav div:hover {
       background-color: var(--neutral-gray);
     }
 
-    #links div a {
+    nav div a {
       width: 100%;
       height: 100%;
       display: flex;
@@ -197,15 +196,11 @@
     height: calc(100vh - 60px);
     width: 100vw;
     overflow: scroll;
+    overflow-x: hidden;
   }
 
   #page-content {
     min-height: 80vh;
-  }
-
-  footer {
-    height: 300px;
-    width: 100%;
-    background-color: var(--neutral-brown);
+    width: 100vw;
   }
 </style>

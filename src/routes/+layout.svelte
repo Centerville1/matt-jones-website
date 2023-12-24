@@ -36,7 +36,7 @@
 
 <div id="page">
 	<header>
-		<div id="logo">logo</div>
+		<img id="logo" src="/logo.png" alt="Matt Jones Software Developer, logo" />
 		<MediaQuery query="(min-width: 440px)" let:matches>
 			{#if matches}
 				<div id="links">
@@ -114,14 +114,9 @@
 	}
 
 	#logo {
-		background-color: var(--red);
-		width: 40px;
-		height: 40px;
+		width: 50px;
+		height: 50px;
 		margin-left: 10px;
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		color: white;
 	}
 
 	@media (min-width: 440px) {

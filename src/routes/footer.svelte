@@ -5,7 +5,11 @@
 <footer>
 	<div class="container">
 		<header>
-			<div id="logo">logo</div>
+			<img
+				id="logo"
+				src="/logo.png"
+				alt="Matthew Jones Software Developer, logo"
+			/>
 		</header>
 		<hr />
 		<a href="https://www.linkedin.com/in/matt-jones-a7b389292/" class="link">
@@ -48,14 +52,9 @@
 	}
 
 	#logo {
-		background-color: var(--red);
-		width: 40px;
-		height: 40px;
+		width: 50px;
+		height: 50px;
 		margin-left: 10px;
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		color: white;
 	}
 
 	hr {

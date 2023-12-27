@@ -16,29 +16,7 @@ CSS rules to specify families:
 
 :root {
   /* Color Palette https://coolors.co/4859a8-8bbcda-3f3631-c41717-227c40 */
-  /* Primary Colors */
-	--main-blue: #4859a8;
-	--main-blue-light: #8bbcda;
-
-  --main-blue-alt: #5d7fba;
-  --logo-blue: #2F4369;
-
-  /* Secondary Colors */
-	--red: #c41717;
-	--green: #227c40;
-  --contrast-purple: #943892;
-
-	/* page background colors */
-	--neutral-white: #ffffff;
-	--neutral-gray: #efefef;
-	--neutral-brown: #3f3631;
-
-  --neutral-gray-op-50: #efefef80;
-  --neutral-gray-op-10: #efefef1a;
-
-	/* text colors */
-	--contrast-text-light: black;
-	--contrast-text-dark: white;
+  /* Color and theme definitions found in palette.js */
 
   /* Default font */
   font-family: 'Roboto', sans-serif;

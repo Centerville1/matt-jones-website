@@ -1,8 +1,15 @@
 <script>
-  import SphereLoader from './sphere/sphereLoader.svelte';
+  import SphereLoader from './home/sphere/sphereLoader.svelte';
 </script>
 
-<SphereLoader />
+<div id="page">
+  <SphereLoader />
+</div>
 
 <style>
+  #page {
+    height: 100vh;
+    width: 100vw;
+    background-color: var(--neutral-gray);
+  }
 </style>

@@ -4,12 +4,17 @@
   import './sphereLoader.css';
   import { onMount } from 'svelte';
   import { browser } from '$app/environment';
+  import { goto } from '$app/navigation';
 
   // Display setting props
   // const diameter = 500;
   const numLongLines = 9;
   const numLatLines = 5;
   const color = '--logo-blue';
+
+  function goHome() {
+    goto('/home');
+  }
 
   /** Clear and create a wireframe sphere using HTML and CSS
    *
@@ -80,12 +85,10 @@
         for (let i = 0; i < latLines.length; i++) {
           let latLine = latLines[i];
           latLine.style.height = latLine.clientWidth + 'px';
-          latLine.style.borderColor = 'var(' + color + ')';
         }
         for (let i = 0; i < longLines.length; i++) {
           let longLine = longLines[i];
           longLine.style.height = longLine.clientWidth + 'px';
-          longLine.style.borderColor = 'var(' + color + ')';
         }
       }
     }
@@ -93,6 +96,7 @@
 
   onMount(() => {
     buildSphere(numLongLines, numLatLines);
+    setTimeout(goHome, 7600);
   });
 </script>
 
@@ -102,7 +106,6 @@
       <svg
         height="80vw"
         width="80vw"
-        fill="var(--main-blue)"
         viewBox="101.4248 163.0935 298.7651 146.9131"
         xmlns="http://www.w3.org/2000/svg"
       >
@@ -111,6 +114,13 @@
           transform="matrix(0.10000000149011612, 0, 0, -0.10000000149011612, 100.424789428711, 310.0935363769531)"
         />
       </svg>
+    </div>
+    <div id="title-container">
+      <hr />
+      <div id="text-container">
+        <div id="title">MATT JONES</div>
+        <div id="subtitle">SOFTWARE DEVELOPER</div>
+      </div>
     </div>
     <div id="container">
       <div id="scene">

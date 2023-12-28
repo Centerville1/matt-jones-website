@@ -1,0 +1,97 @@
+/* Seperate CSS so classes get applied when appended by JS */
+
+
+#outer-container {
+  width: 100vw;
+  height: 150vh;
+}
+
+#logo {
+  position: relative;
+  overflow: hidden;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  --animation-length: 8s;
+}
+
+#signature {
+  position: absolute;
+  z-index: 10;
+}
+
+#signature svg {
+  animation: signature var(--animation-length) cubic-bezier(0.55, 0, 0.55, 1) infinite both;
+}
+
+#container {
+  position: relative;
+  width: 40vw;
+  height: 40vw;
+}
+
+#scene {
+  position: absolute;
+  perspective: 800px;
+  perspective-origin: 50% 100px;
+  height: 100%;
+  width: 100%;
+}
+
+#sphere {
+  position: relative;
+  height: 100%;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto;
+  transform-style: preserve-3d;
+  animation: spin var(--animation-length) infinite ease-in-out both;
+}
+
+.long-line {
+  position: absolute;
+  width: 100%;
+  border: solid 2px var(--main-blue);
+  border-radius: 50%;
+}
+
+.lat-line {
+  position: absolute;
+  border: solid 2px var(--main-blue);
+  border-radius: 50%;
+  transform: rotateX(90deg);
+}
+
+@keyframes signature {
+  0% {
+      transform: translateX(100vw) scale(0.8);
+  }
+  19.48051948%, 22.077922077% {
+    transform: translateX(10vw) scale(0.8);
+  }
+  41.558441557%, 72% {
+    transform: scale(0.4);
+  }
+  87.012987007%, 100% {
+    transform: translateX(100vw) scale(0.8);
+  }
+}
+
+@keyframes spin {
+  0% {
+    transform: rotateX(11deg) rotateY(35deg) rotateZ(50deg);
+  }
+  20%, 22% {
+    transform: rotateX(11deg) rotateY(395deg) rotateZ(50deg);
+  }
+  41%, 72% {
+    transform: rotateX(11deg) rotateY(755deg) rotateZ(50deg);
+  }
+  87%, 100% {
+    transform: rotateX(11deg) rotateY(1115deg) rotateZ(50deg);
+  }
+}

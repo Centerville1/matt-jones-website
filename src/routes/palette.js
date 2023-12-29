@@ -18,7 +18,7 @@ const Black = '#000000';
 const AntiFlashWhite = '#EFEFEF';
 
 // Dark Colors
-/* Dark Palette https://coolors.co/101010-1f1f1f-313131-393b40-394356-2f4369*/
+/* Dark Palette https://coolors.co/101010-1f1f1f-313131-393b40-394356-2f4369 */
 const Night = '#101010';
 const EerieBlack = '#1F1F1F';
 const Jet = '#313131';

@@ -69,12 +69,12 @@
     display: flex;
     flex-direction: row;
     align-items: center;
-    color: var(--main-blue-light);
+    color: var(--main-blue);
     font-size: x-large;
   }
 
   .link:nth-child(even) {
-    color: var(--neutral-white);
+    color: var(--contrast-text-light);
     text-decoration: none;
   }
 
@@ -93,7 +93,7 @@
       display: flex;
       align-items: end;
       width: fit-content;
-      color: var(--neutral-white);
+      color: var(--contrast-text-light);
       font-size: medium;
     }
   }

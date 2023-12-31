@@ -7,7 +7,7 @@
     <header>
       <img
         id="logo"
-        src="/logo.png"
+        src="/logo-light-nbg.png"
         alt="Matthew Jones Software Developer, logo"
       />
     </header>
@@ -32,7 +32,7 @@
 
 <style>
   footer {
-    height: 400px;
+    height: 470px;
     width: 100vw;
     background-color: var(--neutral-dark-gray);
   }
@@ -45,22 +45,22 @@
 
   header {
     width: 100%;
-    height: 50px;
+    height: 110px;
     display: flex;
     flex-direction: row;
-    justify-content: end;
+    justify-content: center;
   }
 
   #logo {
-    width: 50px;
-    height: 50px;
+    width: 100px;
+    height: 100px;
     margin-left: 10px;
   }
 
   hr {
-    width: 80%;
+    width: 75%;
     border: none;
-    border-top: 0.5px solid var(--neutral-gray);
+    border-top: 0.5px solid var(--neutral-black);
   }
 
   .link {

@@ -16,6 +16,7 @@ const YaleBlue = '#2f4369';
 const White = '#ffffff';
 const Black = '#000000';
 const AntiFlashWhite = '#EFEFEF';
+const Timberwolf = '#D8D8D8';
 
 // Dark Colors
 /* Dark Palette https://coolors.co/101010-1f1f1f-313131-393b40-394356-2f4369 */
@@ -25,77 +26,60 @@ const Jet = '#313131';
 const Onyx = '#393B40';
 const Charcoal = '#394356';
 
+const Clear = '#00000000';
+
 /**
  * @param {string} color
  * @param {number} opacity
  */
 function opacity(color, opacity) {
-  let finalColor = color + Math.round(255 * (opacity/100)).toString(16);
-  return finalColor;
+  let resultColor = color + Math.round(255 * (opacity/100)).toString(16);
+  return resultColor;
 }
 
-const newPalette = {
-  "light": 
-    {"main": [
-        {"blue": VioletBlue},
-        {"blue-light": CarolinaBlue},
-        {"blue-alt": GlaucousBlue}
-      ], 
-      "logo": [
-        {"blue": YaleBlue}
-      ],
-      "red": [
-        {"": EngineeringOrange}
-      ], 
-      "green": [
-        {"": DarkSpringGreen}
-       ], 
-      "contrast": [
-        {"purple": Plum},
-        {"text-light": Black},
-        {"text-dark": White}
-      ], 
-      "neutral": [
-        {"white": White},
-        {"brown": VanDykeBrown},
-        {"gray": AntiFlashWhite},
-        {"gray-op-50": opacity(AntiFlashWhite, 50)},
-        {"gray-op-10": opacity(AntiFlashWhite, 10)}
-      ]
-    }
-  }
+const constantColors = [
+  {varName: '--constant-white', color: White}, 
+  {varName: '--constant-black', color: Black}, 
+  {varName: '--logo-blue', color: YaleBlue}, 
+  {varName: '--red', color: EngineeringOrange},
+  {varName: '--green', color: DarkSpringGreen},
+  {varName: '--neutral-brown', color: VanDykeBrown}, 
+  {varName: '--no-background', color: Clear}
+]
 
-export const palette = {
-  "light": [
-    {varName: '--main-blue', color: VioletBlue}, 
-    {varName: '--main-blue-light', color: CarolinaBlue},
-    {varName: '--main-blue-alt', color: GlaucousBlue}, 
-    {varName: '--logo-blue', color: YaleBlue}, 
-    {varName: '--red', color: EngineeringOrange}, 
-    {varName: '--green', color: DarkSpringGreen}, 
-    {varName: '--contrast-purple', color: Plum}, 
-    {varName: '--neutral-white', color: White}, 
-    {varName: '--neutral-gray', color: AntiFlashWhite}, 
-    {varName: '--neutral-brown', color: VanDykeBrown}, 
-    {varName: '--neutral-gray-op-50', color: opacity(AntiFlashWhite, 50)}, 
-    {varName: '--neutral-gray-op-10', color: opacity(AntiFlashWhite, 10)}, 
-    {varName: '--contrast-text-light', color: Black}, 
-    {varName: '--contrast-text-dark', color: White}, 
-  ],
-  "dark": [
-    {varName: '--main-blue', color: CarolinaBlue}, 
-    {varName: '--main-blue-light', color: VioletBlue},
-    {varName: '--main-blue-alt', color: GlaucousBlue}, 
-    {varName: '--logo-blue', color: YaleBlue}, 
-    {varName: '--red', color: EngineeringOrange}, 
-    {varName: '--green', color: DarkSpringGreen}, 
-    {varName: '--contrast-purple', color: SteelPink}, 
-    {varName: '--neutral-white', color: Black}, 
-    {varName: '--neutral-gray', color: Night}, 
-    {varName: '--neutral-brown', color: VanDykeBrown}, 
-    {varName: '--neutral-gray-op-50', color: opacity(Night, 50)},
-    {varName: '--neutral-gray-op-10', color: opacity(Night, 10)}, 
-    {varName: '--contrast-text-light', color: White}, 
-    {varName: '--contrast-text-dark', color: Black}, 
-  ],
+const lightScheme = [
+  {varName: '--main-blue', color: VioletBlue}, 
+  {varName: '--main-blue-light', color: CarolinaBlue},
+  {varName: '--main-blue-alt', color: GlaucousBlue}, 
+  {varName: '--contrast-purple', color: Plum}, 
+  {varName: '--neutral-white', color: White},
+  {varName: '--neutral-black', color: Night}, 
+  {varName: '--neutral-gray', color: AntiFlashWhite}, 
+  {varName: '--neutral-gray-op-50', color: opacity(AntiFlashWhite, 50)}, 
+  {varName: '--neutral-gray-op-10', color: opacity(AntiFlashWhite, 10)}, 
+  {varName: '--neutral-dark-gray', color: Timberwolf},
+  {varName: '--contrast-text-light', color: Black}, 
+  {varName: '--contrast-text-dark', color: White}
+];
+
+const darkScheme = [
+  {varName: '--main-blue', color: CarolinaBlue},
+  {varName: '--main-blue-light', color: VioletBlue},
+  {varName: '--main-blue-alt', color: Charcoal},
+  {varName: '--contrast-purple', color: SteelPink},
+  {varName: '--neutral-white', color: Night},
+  {varName: '--neutral-black', color: White},
+  {varName: '--neutral-gray', color: EerieBlack},
+  {varName: '--neutral-gray-op-50', color: opacity(EerieBlack, 50)},
+  {varName: '--neutral-gray-op-10', color: opacity(EerieBlack, 10)},
+  {varName: '--neutral-dark-gray', color: Onyx},
+  {varName: '--contrast-text-light', color: White},
+  {varName: '--contrast-text-dark', color: Black}
+];
+
+export const createPalette = () => {
+  const light = lightScheme.concat(constantColors);
+  const dark = darkScheme.concat(constantColors);
+
+  return {'light': light, 'dark': dark};
 }

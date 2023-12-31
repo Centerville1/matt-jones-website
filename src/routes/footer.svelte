@@ -34,7 +34,7 @@
   footer {
     height: 400px;
     width: 100vw;
-    background-color: var(--neutral-brown);
+    background-color: var(--neutral-dark-gray);
   }
 
   .container {

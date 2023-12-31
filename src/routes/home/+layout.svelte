@@ -108,7 +108,7 @@
   header {
     width: 100vw;
     height: 60px;
-    background-color: var(--neutral-white);
+    background-color: var(--neutral-dark-gray);
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -148,8 +148,8 @@
     }
 
     .emphasis:hover {
-      background-color: var(--main-blue-alt);
-      color: var(--contrast-text-dark);
+      background-color: var(--neutral-gray-op-10);
+      color: var(--contrast-text-light);
     }
 
     .plain {

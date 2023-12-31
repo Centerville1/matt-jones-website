@@ -1,15 +1,33 @@
 <script>
   import Icon from './icons.svelte';
+  import { themeMode } from '../store';
+
+  /**
+   * @type {string}
+   */
+  let mode;
+
+  themeMode.subscribe((value) => {
+    mode = value;
+  });
 </script>
 
 <footer>
   <div class="container">
     <header>
-      <img
-        id="logo"
-        src="/logo-light-nbg.png"
-        alt="Matthew Jones Software Developer, logo"
-      />
+      {#if mode === 'dark'}
+        <img
+          id="logo"
+          src="/logo-light-nbg.png"
+          alt="Matt Jones Software Developer, logo"
+        />
+      {:else}
+        <img
+          id="logo"
+          src="/logo-light.png"
+          alt="Matt Jones Software Developer, logo"
+        />
+      {/if}
     </header>
     <hr />
     <a href="https://www.linkedin.com/in/matt-jones-a7b389292/" class="link">

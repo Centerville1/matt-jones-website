@@ -6,6 +6,7 @@
   // svelte-media-query docs: https://www.npmjs.com/package/svelte-media-query
   import MediaQuery from 'svelte-media-query';
   import Footer from '../footer.svelte';
+  import { themeMode } from '../../store';
 
   // Toggle visibility of the mobile nav dropdown menu
   function toggleNav() {
@@ -33,15 +34,32 @@
       }
     };
   });
+
+  /**
+   * @type {string}
+   */
+  let mode;
+
+  themeMode.subscribe((value) => {
+    mode = value;
+  });
 </script>
 
 <div id="page">
   <header>
-    <img
-      id="logo"
-      src="/logo-light-nbg.png"
-      alt="Matt Jones Software Developer, logo"
-    />
+    {#if mode === 'dark'}
+      <img
+        id="logo"
+        src="/logo-light-nbg.png"
+        alt="Matt Jones Software Developer, logo"
+      />
+    {:else}
+      <img
+        id="logo"
+        src="/logo-light.png"
+        alt="Matt Jones Software Developer, logo"
+      />
+    {/if}
     <MediaQuery query="(min-width: 440px)" let:matches>
       {#if matches}
         <div id="links">

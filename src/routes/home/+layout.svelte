@@ -1,7 +1,7 @@
 <script>
   // import global styles on all pages.
   import '../../global.css';
-  import ModeSwitcher from '../modeSwitcher.svelte';
+  import ThemeSwitch from './themeSwitch.svelte';
   import { onMount } from 'svelte';
   // svelte-media-query docs: https://www.npmjs.com/package/svelte-media-query
   import MediaQuery from 'svelte-media-query';
@@ -21,7 +21,7 @@
     document.getElementById('links').style.display = 'none';
   }
 
-  // Add a listener to close the nav when a click occurs outside of it.
+  // Add a listener to close the mobile nav when a click occurs outside of it.
   onMount(() => {
     document.onclick = function (e) {
       if (window.screen.width <= 439) {
@@ -37,13 +37,17 @@
 
 <div id="page">
   <header>
-    <img id="logo" src="/logo.png" alt="Matt Jones Software Developer, logo" />
+    <img
+      id="logo"
+      src="/logo-light-nbg.png"
+      alt="Matt Jones Software Developer, logo"
+    />
     <MediaQuery query="(min-width: 440px)" let:matches>
       {#if matches}
         <div id="links">
-          <a class="plain" href="/">Home</a>
-          <a class="plain" href="/about">About</a>
-          <a class="emphasis" href="/projects">Projects</a>
+          <a class="plain" href="/home">Home</a>
+          <a class="plain" href="/home/about">About</a>
+          <a class="emphasis" href="/home/projects">Projects</a>
         </div>
       {:else}
         <button id="menu-button" on:click={toggleNav}>
@@ -76,17 +80,20 @@
         </button>
         <nav id="links">
           <div>
-            <a on:click={toggleNav} href="/">Home</a>
+            <a on:click={toggleNav} href="/home">Home</a>
           </div>
           <div>
-            <a on:click={toggleNav} href="/projects">Projects</a>
+            <a on:click={toggleNav} href="/home/projects">Projects</a>
           </div>
           <div>
-            <a on:click={toggleNav} href="/about">About</a>
+            <a on:click={toggleNav} href="/home/about">About</a>
           </div>
         </nav>
       {/if}
     </MediaQuery>
+    <div id="switch-conainer">
+      <ThemeSwitch />
+    </div>
   </header>
   <main>
     <div id="page-content">
@@ -103,16 +110,19 @@
     width: 100vw;
     background-color: var(--neutral-gray);
     color: var(--contrast-text-light);
+    --header-width: 60px;
   }
 
   header {
+    position: fixed;
     width: 100vw;
-    height: 60px;
+    height: var(--header-width);
     background-color: var(--neutral-dark-gray);
     display: flex;
     flex-direction: row;
     align-items: center;
-    justify-content: space-between;
+    box-shadow: 0px -55px 300px 40px var(--constant-black);
+    z-index: 1;
   }
 
   #logo {
@@ -140,15 +150,15 @@
     }
 
     .emphasis {
-      transition: background 0.5s;
       padding: 7px 20px 7px 20px;
-      background-color: var(--main-blue);
-      color: var(--contrast-text-dark);
+      background-color: var(--main-blue-light);
+      color: var(--contrast-text-light);
       border-radius: 10px;
     }
 
     .emphasis:hover {
-      background-color: var(--neutral-gray-op-10);
+      transition: background 0.5s;
+      background-color: var(--main-blue);
       color: var(--contrast-text-light);
     }
 
@@ -169,8 +179,7 @@
 
     nav {
       position: absolute;
-      right: 0;
-      top: 60px;
+      top: var(--header-width);
       z-index: 1;
       height: 200px;
       width: 200px;
@@ -178,7 +187,7 @@
       display: none;
       flex-direction: column;
       justify-content: space-around;
-      background-color: var(--neutral-white);
+      background-color: var(--main-blue-alt);
       border-left: 1px solid black;
       border-bottom: 1px solid var(--contrast-text-light);
       border-radius: 5px;
@@ -190,7 +199,7 @@
     }
 
     nav div:hover {
-      background-color: var(--neutral-gray);
+      background-color: var(--main-blue-light);
     }
 
     nav div a {
@@ -207,9 +216,15 @@
     }
   }
 
+  #switch-conainer {
+    margin-left: auto;
+    margin-right: 10px;
+  }
+
   main {
     position: absolute;
-    height: calc(100vh - 60px);
+    top: var(--header-width);
+    height: calc(100vh - var(--header-width));
     width: 100vw;
     overflow: scroll;
     overflow-x: hidden;

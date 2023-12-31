@@ -1,11 +1,15 @@
 <script>
   import { onMount } from 'svelte';
   import { createPalette } from './palette';
+  import { browser } from '$app/environment';
+  import { themeMode } from '../store';
 
   /**
    * @param {string} themeName
    */
-  function loadColors(themeName) {
+  const loadColors = (themeName) => {
+    if (!browser) return;
+
     /**
      * @type Array<{varName: String, color: String}>
      */
@@ -15,9 +19,17 @@
       const color = theme[i];
       document.documentElement.style.setProperty(color.varName, color.color);
     }
-  }
+  };
 
-  onMount(() => {
-    loadColors('dark');
+  themeMode.subscribe((value) => {
+    if (!browser) return;
+    // console.log('applying the theme', value);
+    loadColors(value);
   });
+
+  onMount(
+    themeMode.subscribe((value) => {
+      loadColors(value);
+    }),
+  );
 </script>

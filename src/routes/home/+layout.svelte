@@ -22,6 +22,13 @@
     document.getElementById('links').style.display = 'none';
   }
 
+  function scrollTop() {
+    let main = document.getElementsByTagName('main')[0];
+    if (main !== null) {
+      main.scrollTop = 0;
+    }
+  }
+
   // Add a listener to close the mobile nav when a click occurs outside of it.
   onMount(() => {
     document.onclick = function (e) {
@@ -64,8 +71,10 @@
     <MediaQuery query="(min-width: 440px)" let:matches>
       {#if matches}
         <div id="links">
-          <a class="plain" href="/home">Home</a>
-          <a class="emphasis" href="/home/projects">Projects</a>
+          <a class="plain" href="/home" on:click={scrollTop}>Home</a>
+          <a class="emphasis" href="/home/projects" on:click={scrollTop}
+            >Projects</a
+          >
         </div>
       {:else}
         <button id="menu-button" on:click={toggleNav}>
@@ -123,7 +132,7 @@
     width: 100vw;
     background-color: var(--neutral-gray);
     z-index: 2;
-    animation: move-up 1s ease both;
+    animation: move-up 1.7s cubic-bezier(0.34, 0.13, 0.06, 0.96) both;
   }
 
   @keyframes move-up {

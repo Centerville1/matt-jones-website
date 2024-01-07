@@ -64,7 +64,6 @@
       {#if matches}
         <div id="links">
           <a class="plain" href="/home">Home</a>
-          <a class="plain" href="/home/about">About</a>
           <a class="emphasis" href="/home/projects">Projects</a>
         </div>
       {:else}
@@ -102,9 +101,6 @@
           </div>
           <div>
             <a on:click={toggleNav} href="/home/projects">Projects</a>
-          </div>
-          <div>
-            <a on:click={toggleNav} href="/home/about">About</a>
           </div>
         </nav>
       {/if}

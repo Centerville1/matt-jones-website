@@ -1,0 +1,19 @@
+{
+  "short": {
+    "default": [
+      "I'm an (aspiring) lifelong learner who fell in love with computer programming by first learning to code from my grandfather.  I've had experience developing software through classes as a computer science student at Gordon College and personal projects. "
+    ]
+  },
+  "mid": {
+    "default": [
+      "I'm an (aspiring) lifelong learner who fell in love with computer programming by first learning to code from my grandfather, a retired software engineer.  I've had experience developing software for web and other applications through classes as a computer science B.S. student at Gordon College and personal projects. ",
+      "I've also had extensive experience with leadership, customer service, people management, and communication in my various roles at Gordon College, including as Head Dispatcher for Gordon Police, and as Access Control Assistant for the Center for Technology Services (see details below)."
+    ]
+  },
+  "long": {
+    "default": [
+      "Since middle school, I've been fascinated by technology and solving problems with software. I first learned to code from my grandfather, a retired programmer out of Silicon Valley in the 70s and 80s. He introduced me to various topics, from microcontrollers and robotics to web development. Additionally, I tinkered with side projects like simulating rocket trajectories and writing primitive game engines in Python. Since high school, I've gained formal experience writing code in Java, C, C++, and JS/HTML/CSS through my classes and projects at Gordon College.",
+      "In addition to my technical skills, I love learning new things and have experience applying more interpersonal and organizational skills. I've practiced adaptability and strong communication skills through my experiences. In the Summer Practicum in Computer Science I had to learn a large existing codebase and how to write new features in React, a framework I had no prior experience with. As student manager for the campus police department I learned the importance of clear communication and organization through my work hiring, training, and communicating."
+    ]
+  }
+}

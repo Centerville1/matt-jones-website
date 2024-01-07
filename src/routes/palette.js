@@ -58,6 +58,8 @@ const lightScheme = [
   {varName: '--neutral-gray-op-50', color: opacity(AntiFlashWhite, 50)}, 
   {varName: '--neutral-gray-op-10', color: opacity(AntiFlashWhite, 10)}, 
   {varName: '--neutral-dark-gray', color: Timberwolf},
+  {varName: '--neutral-dark-gray-op-50', color: opacity(Timberwolf, 50)},
+  {varName: '--neutral-dark-gray-op-10', color: opacity(Timberwolf, 10)},
   {varName: '--contrast-text-light', color: Black}, 
   {varName: '--contrast-text-dark', color: White}
 ];
@@ -73,6 +75,8 @@ const darkScheme = [
   {varName: '--neutral-gray-op-50', color: opacity(EerieBlack, 50)},
   {varName: '--neutral-gray-op-10', color: opacity(EerieBlack, 10)},
   {varName: '--neutral-dark-gray', color: Onyx},
+  {varName: '--neutral-dark-gray-op-50', color: opacity(Onyx, 50)},
+  {varName: '--neutral-dark-gray-op-10', color: opacity(Onyx, 10)},
   {varName: '--contrast-text-light', color: White},
   {varName: '--contrast-text-dark', color: Black}
 ];

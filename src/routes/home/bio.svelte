@@ -8,11 +8,13 @@
    */
   let currentBios = [];
 
+  let selectedLength = 'mid';
+
   /**
    * @param {string[]} bioArray
    */
   function generateBio(bioArray) {
-    console.log(bioArray);
+    // console.log(bioArray);
     if (!browser) return;
     currentBios = bioArray;
     const bio = document.getElementById('bio');
@@ -21,7 +23,7 @@
       for (let i = 0; i < bioArray.length; i++) {
         if (bioArray[i].trim() !== '') {
           let paragraph = document.createElement('p');
-          console.log(bioArray[i], typeof bioArray[i], bioArray[i] === '');
+          // console.log(bioArray[i], typeof bioArray[i], bioArray[i] === '');
           paragraph.innerText = bioArray[i];
           bio.appendChild(paragraph);
         }
@@ -62,13 +64,14 @@
     });
     // for (let i = 0; i < startLengthEnd - startLength; i++) startBioArray.pop();
     // for (let i = 0; i < endLengthEnd - endLength; i++) endBioArray.pop();
-    animateTransformation(eachSteps);
+    animateTransformation(eachSteps, selectedLength);
   }
 
   /**
    * @param {string[][]} eachSteps
+   * @param {string} [currLength]
    */
-  function animateTransformation(eachSteps) {
+  function animateTransformation(eachSteps, currLength) {
     let currBioArray = [];
     for (let i = 0; i < eachSteps.length; i++) {
       let currSteps = eachSteps[i];
@@ -78,58 +81,90 @@
       }
     }
     generateBio(currBioArray);
-    if (eachSteps[0].length !== 1) {
+    if (eachSteps[0].length !== 1 && currLength === selectedLength) {
       setTimeout(
         () => {
-          animateTransformation(eachSteps);
+          animateTransformation(eachSteps, currLength);
         },
         Math.round(Math.random() * 50),
       );
     }
   }
+
+  /**
+   * @param {{ currentTarget: { value: string; }; }} event
+   */
+  function onChange(event) {
+    selectedLength = event.currentTarget.value;
+    // @ts-ignore
+    transformBio(currentBios, bios[event.currentTarget.value].default);
+  }
 </script>
 
-<div id="page">
-  <h1>About Me</h1>
-
+<div id="bio-container">
   <div id="bio"></div>
 
-  <button
-    on:click={() => {
-      transformBio(currentBios, bios.short.default);
-    }}
-  >
-    Short
-  </button>
-  <button
-    on:click={() => {
-      transformBio(currentBios, bios.mid.default);
-    }}
-  >
-    Medium
-  </button>
-  <button
-    on:click={() => {
-      transformBio(currentBios, bios.long.default);
-    }}
-  >
-    Long
-  </button>
+  <form id="length">
+    <label for="short">Short</label>
+    <input
+      type="radio"
+      id="short"
+      value="short"
+      checked={selectedLength === 'short'}
+      on:change={onChange}
+    />
+    <label for="medium">Medium</label>
+    <input
+      type="radio"
+      id="medium"
+      value="mid"
+      checked={selectedLength === 'mid'}
+      on:change={onChange}
+    />
+    <label for="long">Long</label>
+    <input
+      type="radio"
+      id="long"
+      value="long"
+      checked={selectedLength === 'long'}
+      on:change={onChange}
+    />
+  </form>
 </div>
 
 <style>
-  #page {
-    width: 80vw;
-    margin-left: auto;
-    margin-right: auto;
+  #bio-container {
+    display: flex;
   }
 
   #bio {
+    overflow: hidden;
     display: grid;
     grid-template-rows: 0fr;
     transition: grid-template-rows 1s;
+    margin-right: 20px;
   }
 
-  #bio p {
+  #length {
+    display: flex;
+    flex-direction: column;
+    width: fit-content;
+  }
+
+  #length input {
+    width: 20px;
+    height: 20px;
+    border-radius: 0;
+    appearance: initial;
+    background-color: var(--neutral-dark-gray);
+    transition: background-color 0.5s;
+  }
+
+  #length input:hover {
+    background-color: var(--neutral-dark-gray-op-50);
+  }
+
+  #length input:checked {
+    background-color: var(--green);
   }
 </style>

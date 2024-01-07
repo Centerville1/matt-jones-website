@@ -6,6 +6,7 @@ body {
 #outer-container {
   width: 100vw;
   height: 100vh;
+  box-shadow: 0 0 0 transparent, 0 0 0 transparent, inset 0px -55px 300px 40px var(--constant-black);
 }
 
 #logo {
@@ -197,6 +198,7 @@ body {
   80%, 100% {
     transform: rotateX(11deg) rotateY(35deg) rotateZ(50deg);
     border-color: var(--neutral-gray);
+    display:none;
   }
 }
 

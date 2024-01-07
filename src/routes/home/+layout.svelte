@@ -5,7 +5,7 @@
   import { onMount } from 'svelte';
   // svelte-media-query docs: https://www.npmjs.com/package/svelte-media-query
   import MediaQuery from 'svelte-media-query';
-  import Footer from '../footer.svelte';
+  import Footer from './footer.svelte';
   import { themeMode } from '../../store';
 
   // Toggle visibility of the mobile nav dropdown menu
@@ -45,6 +45,7 @@
   });
 </script>
 
+<div id="outer-container"></div>
 <div id="page">
   <header>
     {#if mode === 'dark'}
@@ -118,6 +119,22 @@
 </div>
 
 <style>
+  #outer-container {
+    width: 100vw;
+    background-color: var(--neutral-gray);
+    z-index: 2;
+    animation: move-up 1s ease both;
+  }
+
+  @keyframes move-up {
+    0% {
+      height: 100vh;
+    }
+    100% {
+      height: 0vh;
+    }
+  }
+
   #page {
     position: absolute;
     height: 100vh;
@@ -128,7 +145,6 @@
   }
 
   header {
-    position: fixed;
     width: 100vw;
     height: var(--header-width);
     background-color: var(--neutral-dark-gray);

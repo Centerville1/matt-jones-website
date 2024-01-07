@@ -10,7 +10,6 @@
   // const diameter = 500;
   const numLongLines = 9;
   const numLatLines = 5;
-  const color = '--logo-blue';
 
   function goHome() {
     goto('/home');

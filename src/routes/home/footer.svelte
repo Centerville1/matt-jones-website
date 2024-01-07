@@ -1,6 +1,6 @@
 <script>
-  import Icon from './icons.svelte';
-  import { themeMode } from '../store';
+  import Icon from '../icons.svelte';
+  import { themeMode } from '../../store';
 
   /**
    * @type {string}
@@ -34,16 +34,23 @@
       <Icon width={60} height={60} icon={'linkedin'} />
       <span>LinkedIn</span>
     </a>
-    <a href="tel:978-979-0323" class="link">
-      <Icon width={60} height={60} icon={'phone'} />
-      <span>978-979-0323</span>
-    </a>
+    {#if mode === 'dark'}
+      <a href="https://github.com/Centerville1" class="link">
+        <img id="github" src="/github-dark.png" alt="Github logo" />
+        <span>Github</span>
+      </a>
+    {:else}
+      <a href="https://github.com/Centerville1" class="link">
+        <img id="github" src="/github.png" alt="Github logo" />
+        <span>Github</span>
+      </a>
+    {/if}
     <a href="mailto:matt.jones3054@gmail.com" class="link">
       <Icon width={60} height={60} icon={'email'} />
       <span>matt.jones3054@gmail.com</span>
     </a>
     <div id="copyright">
-      © Copyright 2023 Matthew A. Jones All Rights Reserved
+      © Copyright 2024 Matthew A. Jones All Rights Reserved
     </div>
   </div>
 </footer>
@@ -91,9 +98,9 @@
     font-size: x-large;
   }
 
-  .link:nth-child(even) {
-    color: var(--contrast-text-light);
-    text-decoration: none;
+  #github {
+    width: 60px;
+    height: 60px;
   }
 
   @media (min-width: 440px) {

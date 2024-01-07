@@ -2,6 +2,9 @@
   import { onMount } from 'svelte';
   import { bios, stringTransformSteps } from './bio';
   import { browser } from '$app/environment';
+  import { cubicIn } from 'svelte/easing';
+
+  export let height = 0;
 
   /**
    * @type {string[]}
@@ -10,11 +13,15 @@
 
   let selectedLength = 'mid';
 
+  onMount(() => {
+    generateBio(bios.mid.default);
+    height = calcHeight(currentBios);
+  });
+
   /**
    * @param {string[]} bioArray
    */
   function generateBio(bioArray) {
-    // console.log(bioArray);
     if (!browser) return;
     currentBios = bioArray;
     const bio = document.getElementById('bio');
@@ -23,7 +30,6 @@
       for (let i = 0; i < bioArray.length; i++) {
         if (bioArray[i].trim() !== '') {
           let paragraph = document.createElement('p');
-          // console.log(bioArray[i], typeof bioArray[i], bioArray[i] === '');
           paragraph.innerText = bioArray[i];
           bio.appendChild(paragraph);
         }
@@ -31,9 +37,28 @@
     }
   }
 
-  onMount(() => {
-    generateBio(bios.mid.default);
-  });
+  /**
+   * @param {string[]} bioArray
+   * @returns {number}
+   */
+  function calcHeight(bioArray) {
+    if (!browser) return height;
+    currentBios = bioArray;
+    const bio = document.getElementById('bio');
+    if (bio !== null) {
+      bio.innerHTML = '';
+      for (let i = 0; i < bioArray.length; i++) {
+        if (bioArray[i].trim() !== '') {
+          let paragraph = document.createElement('p');
+          paragraph.innerText = bioArray[i];
+          bio.appendChild(paragraph);
+        }
+      }
+      let height = bio.clientHeight;
+      return height;
+    }
+    return height;
+  }
 
   /**
    * @param {string[]} startBioArray
@@ -64,6 +89,7 @@
     });
     // for (let i = 0; i < startLengthEnd - startLength; i++) startBioArray.pop();
     // for (let i = 0; i < endLengthEnd - endLength; i++) endBioArray.pop();
+    height = calcHeight(endBioArray);
     animateTransformation(eachSteps, selectedLength);
   }
 
@@ -82,11 +108,12 @@
     }
     generateBio(currBioArray);
     if (eachSteps[0].length !== 1 && currLength === selectedLength) {
+      let multiplier = (1 / eachSteps[0].length) * 10;
       setTimeout(
         () => {
           animateTransformation(eachSteps, currLength);
         },
-        Math.round(Math.random() * 50),
+        Math.round(multiplier * 50),
       );
     }
   }
@@ -105,30 +132,36 @@
   <div id="bio"></div>
 
   <form id="length">
-    <label for="short">Short</label>
-    <input
-      type="radio"
-      id="short"
-      value="short"
-      checked={selectedLength === 'short'}
-      on:change={onChange}
-    />
-    <label for="medium">Medium</label>
-    <input
-      type="radio"
-      id="medium"
-      value="mid"
-      checked={selectedLength === 'mid'}
-      on:change={onChange}
-    />
-    <label for="long">Long</label>
-    <input
-      type="radio"
-      id="long"
-      value="long"
-      checked={selectedLength === 'long'}
-      on:change={onChange}
-    />
+    <div>
+      <input
+        type="radio"
+        id="short"
+        value="short"
+        checked={selectedLength === 'short'}
+        on:change={onChange}
+      />
+      <label for="short">Short</label>
+    </div>
+    <div>
+      <input
+        type="radio"
+        id="medium"
+        value="mid"
+        checked={selectedLength === 'mid'}
+        on:change={onChange}
+      />
+      <label for="medium">Medium</label>
+    </div>
+    <div>
+      <input
+        type="radio"
+        id="long"
+        value="long"
+        checked={selectedLength === 'long'}
+        on:change={onChange}
+      />
+      <label for="long">Long</label>
+    </div>
   </form>
 </div>
 
@@ -142,19 +175,28 @@
     display: grid;
     grid-template-rows: 0fr;
     transition: grid-template-rows 1s;
-    margin-right: 20px;
+    margin-right: 10px;
   }
 
   #length {
+    padding: 5px;
     display: flex;
     flex-direction: column;
     width: fit-content;
+    border: 2px solid var(--neutral-dark-gray-op-50);
+  }
+
+  #length div {
+    margin-top: 10px;
+    display: flex;
+    align-items: center;
   }
 
   #length input {
     width: 20px;
     height: 20px;
-    border-radius: 0;
+    margin-right: 2px;
+    border-radius: 5px;
     appearance: initial;
     background-color: var(--neutral-dark-gray);
     transition: background-color 0.5s;
@@ -165,6 +207,6 @@
   }
 
   #length input:checked {
-    background-color: var(--green);
+    background-color: var(--main-blue-light);
   }
 </style>

@@ -36,12 +36,16 @@
     </a>
     {#if mode === 'dark'}
       <a href="https://github.com/Centerville1" class="link">
-        <img id="github" src="/github-dark.png" alt="Github logo" />
+        <img
+          id="github"
+          src="/social-logos/github-dark.png"
+          alt="Github logo"
+        />
         <span>Github</span>
       </a>
     {:else}
       <a href="https://github.com/Centerville1" class="link">
-        <img id="github" src="/github.png" alt="Github logo" />
+        <img id="github" src="/social-logos/github.png" alt="Github logo" />
         <span>Github</span>
       </a>
     {/if}

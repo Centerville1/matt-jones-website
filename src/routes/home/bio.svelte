@@ -207,6 +207,6 @@
   }
 
   #length input:checked {
-    background-color: var(--main-blue-light);
+    background-color: var(--main-blue);
   }
 </style>

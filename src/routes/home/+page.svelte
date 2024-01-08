@@ -64,21 +64,21 @@
       </a>
       {#if mode === 'dark'}
         <a href="https://github.com/Centerville1" class="link">
-          <img src="/github-dark.png" alt="Github logo" />
+          <img src="/social-logos/github-dark.png" alt="Github logo" />
           <span>Github</span>
         </a>
       {:else}
         <a href="https://github.com/Centerville1" class="link">
-          <img src="/github.png" alt="Github logo" />
+          <img src="/social-logos/github.png" alt="Github logo" />
           <span>Github</span>
         </a>
       {/if}
-      <a href="mailto:matt.jones3054@gmail.com" class="link">
-        <img src="/instagram.png" alt="Instagram logo" />
+      <a href="https://www.instagram.com/centermattjones/?hl=en" class="link">
+        <img src="/social-logos/instagram.png" alt="Instagram logo" />
         <span>Instagram</span>
       </a>
-      <a href="mailto:matt.jones3054@gmail.com" class="link">
-        <img src="/soundcloud.png" alt="Soundcloud logo" />
+      <a href="https://soundcloud.com/centermatt" class="link">
+        <img src="/social-logos/soundcloud.png" alt="Soundcloud logo" />
         <span>Soundcloud</span>
       </a>
       <a href="mailto:matt.jones3054@gmail.com" class="link">
@@ -108,9 +108,13 @@
   }
 
   a {
-    transition: background-color 0.5s;
+    transition: 0.5s;
     border-radius: 10px;
     color: var(--main-blue);
+  }
+
+  a:hover {
+    color: var(--main-blue-light);
   }
 
   a:hover {

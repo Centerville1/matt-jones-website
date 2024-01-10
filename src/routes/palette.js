@@ -82,8 +82,6 @@ const darkScheme = [
 ];
 
 export const createPalette = () => {
-  const light = lightScheme.concat(constantColors);
-  const dark = darkScheme.concat(constantColors);
-
-  return {'light': light, 'dark': dark};
+  return {'light': lightScheme.concat(constantColors), 
+  'dark': darkScheme.concat(constantColors)};
 }

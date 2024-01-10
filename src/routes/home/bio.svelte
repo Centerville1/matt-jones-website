@@ -2,7 +2,6 @@
   import { onMount } from 'svelte';
   import { bios, stringTransformSteps } from './bio';
   import { browser } from '$app/environment';
-  import { cubicIn } from 'svelte/easing';
 
   export let height = 0;
 
@@ -12,6 +11,11 @@
   let currentBios = [];
 
   let selectedLength = 'mid';
+
+  /**
+   * @type {any}
+   */
+  export let onButtonClick;
 
   onMount(() => {
     generateBio(bios.mid.default);
@@ -125,6 +129,7 @@
     selectedLength = event.currentTarget.value;
     // @ts-ignore
     transformBio(currentBios, bios[event.currentTarget.value].default);
+    onButtonClick();
   }
 </script>
 

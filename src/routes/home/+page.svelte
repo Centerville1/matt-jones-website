@@ -4,6 +4,7 @@
   import Bio from './bio.svelte';
   import Icons from '../icons.svelte';
   import { themeMode } from '../../store';
+  import notesJSON from './notes.json';
 
   let bioHeight = 0;
 
@@ -11,7 +12,68 @@
 
   onMount(() => {
     updateBioHeight(0);
+    context = new AudioContext();
   });
+
+  /**
+   * @type {AudioContext}
+   */
+  let context;
+
+  function playRandomNote() {
+    let notes = [
+      notesJSON.C4,
+      notesJSON.C5,
+      notesJSON.E4,
+      notesJSON.E3,
+      notesJSON.G4,
+      notesJSON.G3,
+    ];
+
+    playNote(notes[Math.round(Math.random() * (notes.length - 1))], 1);
+  }
+
+  /**
+   * @param {number} frequency
+   * @param {number} duration
+   */
+  function playNote(frequency, duration) {
+    // Original audio example
+    // https://marcgg.com/blog/2016/11/01/javascript-audio/
+    if (!browser) return;
+    let sound = context.createOscillator();
+    sound.frequency.value = frequency;
+    let gain = context.createGain();
+    sound.type = 'sine';
+    sound.connect(gain);
+    sound.connect(gain);
+    gain.connect(context.destination);
+    gain.gain.value = 0.1;
+    sound.start();
+    gain.gain.exponentialRampToValueAtTime(
+      0.00001,
+      context.currentTime + duration,
+    );
+    sound.stop(context.currentTime + duration);
+  }
+
+  // if (browser) {
+  //   document.onmousemove = (event) => {
+  //     let stickers = document.getElementsByClassName('sticker')[0];
+  //     let images = document.getElementsByTagName('img');
+  //     for (let i = 0; i < images.length; i++) {
+  //       let image = images[i];
+  //       if (image.parentElement?.parentElement === stickers) {
+  //         let multiplier = -0.01;
+  //         image.style.top =
+  //           (event.clientY - window.innerHeight / 2) * (multiplier * i) + 'px';
+  //         image.style.left =
+  //           (event.clientX - window.innerWidth / 2) * ((multiplier * 1) / i) +
+  //           'px';
+  //       }
+  //     }
+  //   };
+  // }
 
   /**
    * @type {string}
@@ -37,10 +99,24 @@
 </script>
 
 <div id="page">
+  <div class="sticker">
+    <span id="lego-wave">
+      <img
+        src="/stickers/lego.gif"
+        alt="waving lego minifigure with cool sunglasses"
+      />
+    </span>
+    <span id="piano">
+      <img src="/stickers/piano.png" alt="A grand piano" />
+    </span>
+    <span id="capsule">
+      <img src="/stickers/orion.png" alt="An orion space capsule" />
+    </span>
+  </div>
   <div id="text-container">
     <div id="bio-box" class="text-box">
       <h1>Hi there!</h1>
-      <Bio bind:height={bioHeight} />
+      <Bio bind:height={bioHeight} onButtonClick={playRandomNote} />
     </div>
     <div class="text-box">
       <h1>So What's Here</h1>
@@ -58,30 +134,54 @@
     </div>
     <div class="text-box">
       <h1>Socials</h1>
-      <a href="https://www.linkedin.com/in/matt-jones-a7b389292/" class="link">
+      <a
+        href="https://www.linkedin.com/in/matt-jones-a7b389292/"
+        class="link"
+        on:click={playRandomNote}
+      >
         <Icons width={iconSize} height={iconSize} icon={'linkedin'} />
         <span>LinkedIn</span>
       </a>
       {#if mode === 'dark'}
-        <a href="https://github.com/Centerville1" class="link">
+        <a
+          href="https://github.com/Centerville1"
+          class="link"
+          on:click={playRandomNote}
+        >
           <img src="/social-logos/github-dark.png" alt="Github logo" />
           <span>Github</span>
         </a>
       {:else}
-        <a href="https://github.com/Centerville1" class="link">
+        <a
+          href="https://github.com/Centerville1"
+          class="link"
+          on:click={playRandomNote}
+        >
           <img src="/social-logos/github.png" alt="Github logo" />
           <span>Github</span>
         </a>
       {/if}
-      <a href="https://www.instagram.com/centermattjones/?hl=en" class="link">
+      <a
+        href="https://www.instagram.com/centermattjones/?hl=en"
+        class="link"
+        on:click={playRandomNote}
+      >
         <img src="/social-logos/instagram.png" alt="Instagram logo" />
         <span>Instagram</span>
       </a>
-      <a href="https://soundcloud.com/centermatt" class="link">
+      <a
+        href="https://soundcloud.com/centermatt"
+        class="link"
+        on:click={playRandomNote}
+      >
         <img src="/social-logos/soundcloud.png" alt="Soundcloud logo" />
         <span>Soundcloud</span>
       </a>
-      <a href="mailto:matt.jones3054@gmail.com" class="link">
+      <a
+        href="mailto:matt.jones3054@gmail.com"
+        class="link"
+        on:click={playRandomNote}
+      >
         <Icons width={iconSize} height={iconSize} icon={'email'} />
         <span>matt.jones3054@gmail.com</span>
       </a>
@@ -129,6 +229,9 @@
       margin-left: auto;
       margin-right: auto;
     }
+    .sticker {
+      display: none;
+    }
   }
   @media screen and (min-width: 441px) {
     #text-container {
@@ -137,6 +240,64 @@
       overflow: hidden;
       margin-left: auto;
       margin-right: auto;
+    }
+
+    .sticker {
+      position: absolute;
+      width: 7vw;
+      height: 7vw;
+      opacity: 0.5;
+    }
+
+    .sticker span img {
+      position: relative;
+      width: inherit;
+      height: inherit;
+    }
+
+    @keyframes jiggle {
+      20% {
+        margin-top: 5px;
+      }
+      50% {
+        margin-top: -5px;
+      }
+      80% {
+        margin-top: 5px;
+      }
+    }
+
+    .sticker span:hover {
+      animation-name: jiggle;
+      animation-duration: 0.5s;
+      animation-timing-function: ease;
+      animation-iteration-count: 1;
+    }
+
+    #lego-wave {
+      position: absolute;
+      top: 20vh;
+      transform: rotateZ(5deg);
+      height: inherit;
+      width: inherit;
+    }
+
+    #piano {
+      position: absolute;
+      left: 91vw;
+      top: 40vh;
+      transform: rotateZ(-10deg);
+      height: inherit;
+      width: inherit;
+    }
+
+    #capsule {
+      position: absolute;
+      top: 80vh;
+      left: 1vw;
+      transform: rotateZ(-10deg);
+      height: inherit;
+      width: inherit;
     }
   }
 

@@ -2,7 +2,7 @@
 
 ## About
 
-This is a personal project to expand my skills with fronted web development, and create a personal portfolio website to put my experience, side projects, experiments, and anything else I want on, in a less formal and much more personalized way than LinkedIn
+This is a personal project to expand my skills with frontend web development, and create a personal portfolio website to put my experience, side projects, experiments, and anything else I want on, in a less formal and much more personalized way than LinkedIn
 
 ## Implementation Notes
 

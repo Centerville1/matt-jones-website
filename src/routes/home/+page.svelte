@@ -57,30 +57,12 @@
     sound.stop(context.currentTime + duration);
   }
 
-  // if (browser) {
-  //   document.onmousemove = (event) => {
-  //     let stickers = document.getElementsByClassName('sticker')[0];
-  //     let images = document.getElementsByTagName('img');
-  //     for (let i = 0; i < images.length; i++) {
-  //       let image = images[i];
-  //       if (image.parentElement?.parentElement === stickers) {
-  //         let multiplier = -0.01;
-  //         image.style.top =
-  //           (event.clientY - window.innerHeight / 2) * (multiplier * i) + 'px';
-  //         image.style.left =
-  //           (event.clientX - window.innerWidth / 2) * ((multiplier * 1) / i) +
-  //           'px';
-  //       }
-  //     }
-  //   };
-  // }
-
   /**
    * @type {string}
    */
   let mode;
 
-  themeMode.subscribe((value) => {
+  themeMode.subscribe((/** @type {string} */ value) => {
     mode = value;
   });
 

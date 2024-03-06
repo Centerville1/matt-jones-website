@@ -8,6 +8,8 @@
   import Footer from './footer.svelte';
   import { themeMode } from '../../store';
 
+  import { inject } from '@vercel/analytics';
+
   // Toggle visibility of the mobile nav dropdown menu
   function toggleNav() {
     if (document.getElementById('links')?.style.display == 'none') {

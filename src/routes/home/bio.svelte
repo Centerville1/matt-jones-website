@@ -135,7 +135,6 @@
 
 <div id="bio-container">
   <div id="bio"></div>
-
   <form id="length">
     <div>
       <input

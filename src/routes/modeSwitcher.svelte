@@ -23,7 +23,6 @@
 
   themeMode.subscribe((value) => {
     if (!browser) return;
-    // console.log('applying the theme', value);
     loadColors(value);
   });
 

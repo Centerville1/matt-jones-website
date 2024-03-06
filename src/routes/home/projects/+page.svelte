@@ -1,4 +1,15 @@
-<script></script>
+<script>
+  import { themeMode } from '../../../store';
+
+  /**
+   * @type {string}
+   */
+  let mode;
+
+  themeMode.subscribe((/** @type {string} */ value) => {
+    mode = value;
+  });
+</script>
 
 <div id="page"></div>
 

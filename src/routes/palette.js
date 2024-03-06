@@ -29,14 +29,17 @@ const Charcoal = '#394356';
 const Clear = '#00000000';
 
 /**
- * @param {string} color
- * @param {number} opacity
+ * @param {string} color the color to add opacity to
+ * @param {number} opacity percent opacity for the new color
+ * 
+ * @returns {string} resulting color with opacity value
  */
 function opacity(color, opacity) {
   let resultColor = color + Math.round(255 * (opacity/100)).toString(16);
   return resultColor;
 }
 
+// Colors that don't change between light and dark modes
 const constantColors = [
   {varName: '--constant-white', color: White}, 
   {varName: '--constant-black', color: Black}, 
@@ -47,6 +50,7 @@ const constantColors = [
   {varName: '--no-background', color: Clear}
 ]
 
+// Colors specific to light mode
 const lightScheme = [
   {varName: '--main-blue', color: VioletBlue}, 
   {varName: '--main-blue-light', color: CarolinaBlue},
@@ -64,6 +68,7 @@ const lightScheme = [
   {varName: '--contrast-text-dark', color: White}
 ];
 
+// Colors specific to dark mode
 const darkScheme = [
   {varName: '--main-blue', color: CarolinaBlue},
   {varName: '--main-blue-light', color: VioletBlue},
@@ -81,6 +86,7 @@ const darkScheme = [
   {varName: '--contrast-text-dark', color: Black}
 ];
 
+// Return the full theme JSON, with light and dark palettes included
 export const createPalette = () => {
   return {'light': lightScheme.concat(constantColors), 
   'dark': darkScheme.concat(constantColors)};

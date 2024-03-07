@@ -6,7 +6,7 @@
   <div id="error-page">
     {#if $page.status == 404}
       <h2>Oops, silly, that page doesn't exist! ¯\_(ツ)_/¯</h2>
-      <a href="/">Return Home</a>
+      <a href="/home">Return Home</a>
     {:else}
       <h1>{$page.status}</h1>
       <p>{$page.error?.message}</p>

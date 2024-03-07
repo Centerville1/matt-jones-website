@@ -103,6 +103,7 @@
   }
 
   #top-menu form {
+    min-width: 270px;
     width: fit-content;
     margin-left: auto;
     margin-right: auto;

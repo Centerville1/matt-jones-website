@@ -72,8 +72,10 @@
       {#if matches}
         <div id="links">
           <a class="plain" href="/home" on:click={scrollTop}>Home</a>
-          <a class="emphasis" href="/home/projects" on:click={scrollTop}
-            >Projects</a
+          <a
+            class="emphasis"
+            href="/home/projects#highlighted"
+            on:click={scrollTop}>Projects</a
           >
         </div>
       {:else}

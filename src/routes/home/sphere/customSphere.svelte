@@ -19,7 +19,7 @@
     { title: 'Green', variable: '--green' },
     { title: 'Purple', variable: '--contrast-purple' },
     { title: 'White', variable: '--neutral-white' },
-    { title: 'Gray', variable: '--neutral-gray-op-50' }
+    { title: 'Gray', variable: '--neutral-gray-op-50' },
   ];
 </script>
 
@@ -135,7 +135,7 @@
     height: 100%;
     min-height: 80vh;
     width: 100%;
-    background-color: var(--contrast-text-light);
+    background-color: var(--neutral-gray);
     overflow: hidden;
   }
   .slider-container {
@@ -147,7 +147,7 @@
     justify-content: space-between;
     align-items: start;
     flex-wrap: wrap;
-    color: var(--contrast-text-dark);
+    color: var(--contrast-text-light);
   }
 
   .slider-container div {

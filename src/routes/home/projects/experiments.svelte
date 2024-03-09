@@ -34,7 +34,11 @@
   }
 
   #cards {
+    margin-left: auto;
+    margin-right: auto;
+    min-width: 60%;
     width: fit-content;
     display: flex;
+    justify-content: space-around;
   }
 </style>

@@ -54,7 +54,7 @@
       <Experiments />
     {:else if $page.url.hash === '#timeline'}
       <Timeline />
-    {:else}
+    {:else if $page.url.hash === '#highlighted'}
       <Highlighted />
     {/if}
   </div>

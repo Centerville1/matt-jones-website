@@ -78,8 +78,10 @@
             on:click={scrollTop}>Projects</a
           >
         </div>
+      <!-- Change to hamburger menu on small screens -->
       {:else}
         <button id="menu-button" on:click={toggleNav}>
+          <!-- Hamburger menu icon SVG -->
           <svg
             width="40px"
             height="40px"
@@ -117,9 +119,9 @@
         </nav>
       {/if}
     </MediaQuery>
-    <div id="switch-conainer">
+    <!-- <div id="switch-conainer">
       <ThemeSwitch />
-    </div>
+    </div> -->
   </header>
   <main>
     <div id="page-content">
@@ -172,6 +174,7 @@
     margin-left: 10px;
   }
 
+  /* CSS on large screens */
   @media (min-width: 440px) {
     #links {
       margin-right: 10px;
@@ -212,6 +215,7 @@
     }
   }
 
+  /* CSS for small screens */
   @media (max-width: 439px) {
     #menu-button {
       background-color: transparent;

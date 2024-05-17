@@ -13,28 +13,29 @@
 </script>
 
 <div id="page">
-  <div id="top-menu">
+  <nav>
+    <hr>
     <form>
-      <div class="tab">
-        <input
-          type="radio"
-          id="highlighted"
-          value="highlighted"
-          checked={$page.url.hash !== '#timeline' &&
-            $page.url.hash !== '#other'}
-          on:change={onTabChange}
-        />
-        <label for="highlighted">Highlights</label>
-      </div>
       <div class="tab">
         <input
           type="radio"
           id="timeline"
           value="timeline"
-          checked={$page.url.hash === '#timeline'}
+          checked={$page.url.hash !== '#highlighted' &&
+          $page.url.hash !== '#other'}
           on:change={onTabChange}
         />
         <label for="timeline">Timeline</label>
+      </div>
+      <div class="tab">
+        <input
+          type="radio"
+          id="highlighted"
+          value="highlighted"
+          checked={$page.url.hash === '#highlighted'}
+          on:change={onTabChange}
+        />
+        <label for="highlighted">Highlights</label>
       </div>
       <div class="tab">
         <input
@@ -44,18 +45,19 @@
           checked={$page.url.hash === '#other'}
           on:change={onTabChange}
         />
-        <label for="other">Other</label>
+        <label for="other">Experiments</label>
       </div>
     </form>
-  </div>
-  <hr />
+    <div class="transition"></div>
+  </nav>
   <div id="tab-content">
     {#if $page.url.hash === '#other'}
       <Experiments />
-    {:else if $page.url.hash === '#timeline'}
-      <Timeline />
     {:else if $page.url.hash === '#highlighted'}
       <Highlighted />
+    {:else if $page.url.hash !== '#highlighted' &&
+    $page.url.hash !== '#other'}
+      <Timeline />
     {/if}
   </div>
 </div>
@@ -98,36 +100,46 @@
       32.5px 32.5px;
   }
 
-  #top-menu {
+  nav {
     width: 100vw;
+    background-color: var(--neutral-dark-gray);
+    position: fixed;
+    z-index: 1;
   }
 
-  #top-menu form {
-    min-width: 270px;
+  hr {
+    border-color: var(--neutral-black);
+    margin-top: 0;
+  }
+
+  .transition {
+    width: 100%;
+    height: 10px;
+    background: var(--neutral-gray);
+  }
+
+  nav form {
+    min-width: fit-content;
     width: fit-content;
-    margin-left: auto;
     margin-right: auto;
     display: flex;
     justify-content: center;
-    margin-top: 20px;
-    padding-top: 10px;
-    padding-bottom: 10px;
-    width: 50vw;
+    width: 40vw;
     border-radius: 10px;
-    border: 1px solid;
-    border-color: var(--main-blue-light);
   }
 
   .tab label {
     display: block;
+    border-left: 2px var(--neutral-gray) solid;
+    border-right: 2px var(--neutral-gray) solid;
     padding: 5px 10px 5px 10px;
     margin: 0px 5px 0px 5px;
     transition: background-color 0.5s;
-    border-radius: 5px;
+    border-radius: 10px 10px 0 0;
   }
 
   .tab label:hover {
-    background-color: var(--neutral-dark-gray-op-50);
+    background-color: var(--neutral-gray-op-50);
   }
 
   .tab input[type='radio'] {
@@ -135,8 +147,8 @@
   }
 
   .tab input[type='radio']:checked + label {
-    background: var(--main-blue-alt);
-    border-radius: 4px;
+    background: var(--neutral-gray);
+    border-radius: 10px 10px 0 0;
   }
 
   .tab label {
@@ -145,12 +157,9 @@
     line-height: 1.8em;
   }
 
-  hr {
-    border-color: var(--neutral-gray);
-  }
-
   #tab-content {
     width: 100vw;
+    margin-top: 59px;
     height: fit-content;
     overflow: auto;
   }

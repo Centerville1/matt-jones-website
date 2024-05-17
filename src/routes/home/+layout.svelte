@@ -1,7 +1,7 @@
 <script>
   // import global styles on all pages.
   import '../../global.css';
-  import ThemeSwitch from './themeSwitch.svelte';
+  // import ThemeSwitch from './themeSwitch.svelte';
   import { onMount } from 'svelte';
   // svelte-media-query docs: https://www.npmjs.com/package/svelte-media-query
   import MediaQuery from 'svelte-media-query';
@@ -74,7 +74,7 @@
           <a class="plain" href="/home" on:click={scrollTop}>Home</a>
           <a
             class="emphasis"
-            href="/home/projects#highlighted"
+            href="/home/projects"
             on:click={scrollTop}>Projects</a
           >
         </div>

@@ -6,7 +6,7 @@
   // svelte-media-query docs: https://www.npmjs.com/package/svelte-media-query
   import MediaQuery from 'svelte-media-query';
   import Footer from './footer.svelte';
-  import { themeMode } from '../../store';
+  import { themeMode, animatePageLoadLocalStorageKey } from '../../store';
 
   // Toggle visibility of the mobile nav dropdown menu
   function toggleNav() {
@@ -31,6 +31,13 @@
 
   // Add a listener to close the mobile nav when a click occurs outside of it.
   onMount(() => {
+    let animatePageLoad = localStorage.getItem(animatePageLoadLocalStorageKey)
+    if (animatePageLoad === "true") {
+      localStorage.setItem(animatePageLoadLocalStorageKey, "false")
+    }
+    else {
+      document.getElementById('outer-container').style.animation = 'none'
+    }
     document.onclick = function (e) {
       if (window.screen.width <= 439) {
         let menu_icon_box = document.getElementById('links');
@@ -136,7 +143,7 @@
     width: 100vw;
     background-color: var(--neutral-gray);
     z-index: 2;
-    animation: move-up 1.7s cubic-bezier(0.34, 0.13, 0.06, 0.96) both;
+    animation: move-up 1.7s cubic-bezier(0.34, 0.13, 0.06, 0.96) both;;
   }
 
   @keyframes move-up {

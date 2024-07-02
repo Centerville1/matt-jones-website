@@ -1,73 +1,64 @@
 <script>
-  
+  import experiences from './experiences.json';
+  import TimelineItem from './timeline-item.svelte';
+
+  let experienceList = experiences.experiences;
 </script>
 
-<div class="timeline-container">
-  <div class="timeline white"><p>2024</p></div>
-  <div class="square blue"></div>
-  <div class="timeline white"><p>2023</p></div>
-  <div class="square green"></div>
-  <div class="square red"></div>
-  <div class="timeline white"><p>2022</p></div>
-  <div class="timeline white"><p>2021</p></div>
-  <div class="timeline white"><p>2020</p></div>
-  <div class="timeline white"><p>2019</p></div>
-
+<div class="timeline">
+  {#each experienceList as experience, i}
+    {#if i % 2 === 0}
+      <TimelineItem
+      index={i}
+      title={experience.title}
+      description={experience.description}
+      linkUrl={experience.url}>
+      </TimelineItem>
+    {:else}
+      <TimelineItem
+        index={i}
+        left={false} 
+        title={experience.title}
+        description={experience.description}>
+      </TimelineItem>
+    {/if}
+  {/each}
 </div>
 
-
 <style>
-  .timeline-container {
-    display: grid;
-    width: 330px;
-    margin-left: auto;
-    margin-right: auto;
-    grid-template-columns: repeat(9, 1fr);
-    grid-template-rows: repeat(100, 25px);
-  }
+/* Original styling from https://www.w3schools.com/howto/howto_css_timeline.asp */
+* {
+  box-sizing: border-box;
+  --box-background: var(--neutral-black)
+}
 
-  .timeline {
-    grid-column: 5;
-    grid-row: span 12;
-    height: 99%;
-    opacity: 70%;
-    color: var(--contrast-text-dark);
-  }
+/* The actual timeline (the vertical ruler) */
+.timeline {
+  position: relative;
+  max-width: 1200px;
+  margin: 0 auto;
+}
 
-  .timeline p {
-    margin-top: 3px;
-    margin-left: 2px;
-    font-family: 'Inter', sans-serif;
-    font-size: smaller;
-    font-weight: bold;
-  }
+/* The actual timeline (the vertical ruler) */
+.timeline::after {
+  content: '';
+  position: absolute;
+  width: 6px;
+  background-color: var(--box-background);
+  opacity: 50%; 
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  margin-left: -3px;
+}
 
-  .white {
-    background-color: var(--neutral-black);
-  }
 
-  .square {
-    grid-column: span 1;
-    grid-row: span 6;
-    border-radius: 10px;
-    height: 100%;
-    transition: opacity 0.5s;
-    opacity: 40%;
-  }
 
-  .square:hover {
-    opacity: 60%;
+/* Media queries - Responsive timeline on screens less than 600px wide */
+@media screen and (max-width: 600px) {
+/* Place the timelime to the left */
+  .timeline::after {
+    left: 31px;
   }
-
-  .red {
-    background-color: var(--red);
-  }
-
-  .green {
-    background-color: var(--green);
-  }
-
-  .blue {
-    background-color: var(--main-blue-light);
-  }
+}
 </style>

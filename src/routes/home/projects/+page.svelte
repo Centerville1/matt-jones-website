@@ -104,7 +104,7 @@
     width: 100vw;
     background-color: var(--neutral-dark-gray);
     position: fixed;
-    z-index: 1;
+    z-index: 99;
   }
 
   hr {

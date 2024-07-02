@@ -4,15 +4,17 @@
 
   let experienceList = experiences.experiences;
 </script>
-
+<div class="upper-container">
+  <h2>Present Day</h2>
+</div>
 <div class="timeline">
   {#each experienceList as experience, i}
     {#if i % 2 === 0}
       <TimelineItem
-      index={i}
-      title={experience.title}
-      description={experience.description}
-      linkUrl={experience.url}>
+        index={i}
+        title={experience.title}
+        description={experience.description}
+        linkUrl={experience.url}>
       </TimelineItem>
     {:else}
       <TimelineItem
@@ -29,7 +31,16 @@
 /* Original styling from https://www.w3schools.com/howto/howto_css_timeline.asp */
 * {
   box-sizing: border-box;
-  --box-background: var(--neutral-black)
+  --timeline-color: var(--main-blue-light)
+}
+
+.upper-container {
+  padding-left: 20px;
+}
+
+h2 {
+  margin-bottom: 4px;
+  text-align: center;
 }
 
 /* The actual timeline (the vertical ruler) */
@@ -37,6 +48,7 @@
   position: relative;
   max-width: 1200px;
   margin: 0 auto;
+  border-top: 6px solid var(--timeline-color);
 }
 
 /* The actual timeline (the vertical ruler) */
@@ -44,8 +56,7 @@
   content: '';
   position: absolute;
   width: 6px;
-  background-color: var(--box-background);
-  opacity: 50%; 
+  background-color: var(--timeline-color);
   top: 0;
   bottom: 0;
   left: 50%;
@@ -56,6 +67,11 @@
 
 /* Media queries - Responsive timeline on screens less than 600px wide */
 @media screen and (max-width: 600px) {
+  h2 {
+    margin-bottom: 4px;
+    text-align: left;
+  }
+
 /* Place the timelime to the left */
   .timeline::after {
     left: 31px;

@@ -31,6 +31,8 @@
 
   // Add a listener to close the mobile nav when a click occurs outside of it.
   onMount(() => {
+    // remove scroll-up animation if we aren't coming from the
+    // sphere loader page (prevents animation playing on reload)
     let animatePageLoad = localStorage.getItem(animatePageLoadLocalStorageKey)
     if (animatePageLoad === "true") {
       localStorage.setItem(animatePageLoadLocalStorageKey, "false")
@@ -190,6 +192,7 @@
       align-items: center;
       font-weight: bold;
       font-size: larger;
+      z-index: 99;
     }
 
     #links a {
@@ -205,10 +208,10 @@
       background-color: var(--main-blue-light);
       color: var(--contrast-text-light);
       border-radius: 10px;
+      transition: background 0.5s;
     }
 
     .emphasis:hover {
-      transition: background 0.5s;
       background-color: var(--main-blue);
       color: var(--contrast-text-light);
     }
@@ -232,15 +235,14 @@
     nav {
       position: absolute;
       top: var(--header-width);
-      z-index: 1;
-      height: 200px;
+      z-index: 99;
+      height: fit-content;
       width: 200px;
       /* starts hidden */
       display: none;
       flex-direction: column;
       justify-content: space-around;
       background-color: var(--main-blue-alt);
-      border-left: 1px solid black;
       border-bottom: 1px solid var(--contrast-text-light);
       border-radius: 5px;
     }
@@ -256,7 +258,7 @@
 
     nav div a {
       width: 100%;
-      height: 100%;
+      height: 60px;
       display: flex;
       justify-content: center;
       align-items: center;
@@ -264,13 +266,8 @@
       font-weight: bold;
       color: var(--contrast-text-light);
       text-decoration: none;
-      border-bottom: 0.5px solid var(--contrast-text-light);
+      border-top: 0.5px solid var(--contrast-text-light);
     }
-  }
-
-  #switch-conainer {
-    margin-left: auto;
-    margin-right: 10px;
   }
 
   main {

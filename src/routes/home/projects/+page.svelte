@@ -4,15 +4,63 @@
   import Experiments from './experiments.svelte';
   import { page } from '$app/stores';
 
+  let animateRight = true;
+
   /**
    * @param {{ currentTarget: { value: string; }; }} event
    */
   function onTabChange(event) {
-    window.location.hash = event?.currentTarget.value;
+    animateRight = true;
+    let target = event?.currentTarget.value;
+    let current = window.location.hash;
+    if (current==="#highlighted" && target==="timeline") {
+      animateRight = false;
+    }
+    else if (current==="#other") {
+      animateRight = false;
+    }
+    let page = document.getElementById("timeline-page");
+    page.style.transition="transform 0.8s cubic-bezier(1,-0.3,0.9,0.5)";
+    if (animateRight) {
+      page.style.transform="translateX(-100vw)";
+    }
+    else {
+      page.style.transform="translateX(100vw)";
+    }
+    let main = document.getElementsByTagName("main")[0];
+    main?.scrollTo({top: 0, behavior: "smooth"});
+    
+    setTimeout(() => {changeTab(target)}, 800);
+  }
+
+  /**
+   * @param {string} target
+   */
+  function changeTab(target) {
+    window.location.hash = target;
+    let page = document.getElementById("timeline-page");
+    page.style.transition="transform 0s";
+    if (animateRight) {
+      page.style.transform="translateX(100vw)";
+    }
+    else {
+      page.style.transform="translateX(-100vw)";
+    }
+    let main = document.getElementsByTagName("main")[0];
+    main?.scrollTo({top: 0, behavior: "smooth"});
+    setTimeout(() => {animateEnd()}, 20)
+  }
+
+  function animateEnd() {
+    let page = document.getElementById("timeline-page");
+    page.style.transition="transform 0.5s cubic-bezier(0,0,.3,1.3)";
+    page.style.transform="translateX(0)";
+    let main = document.getElementsByTagName("main")[0];
+    main?.scrollTo({top: 0, behavior: "smooth"});
   }
 </script>
 
-<div id="page">
+<div id="timeline-page">
   <nav>
     <hr>
     <form>
@@ -63,10 +111,21 @@
 </div>
 
 <style>
+  @keyframes move-left {
+    0% {
+      transform: translateX(0);
+    }
+    100% {
+      transform: translateX(-100vw);
+    }
+  }
+
   /* Background pattern originally generated from 
   https://www.magicpattern.design/tools/css-backgrounds */
-  #page {
-    width: 100vw;
+  #timeline-page {
+    width: 450vw;
+    padding-left: 220vw;
+    margin-left: -220vw;
     min-height: 100vh;
     overflow: auto;
     background:
@@ -101,24 +160,32 @@
   }
 
   nav {
-    width: 100vw;
+    width: 450vw;
+    padding-left: 220vw;
+    margin-left: -220vw;
     background-color: var(--neutral-dark-gray);
     position: fixed;
     z-index: 10;
   }
 
   hr {
+    padding-left: 220vw;
+    margin-left: -220vw;
     border-color: var(--neutral-black);
     margin-top: 0;
   }
 
   .transition {
-    width: 100%;
+    padding-left: 220vw;
+    margin-left: -220vw;
+    width: 450vw;
     height: 10px;
     background: var(--neutral-gray);
   }
 
   nav form {
+    padding-left: 220vw;
+    margin-left: -220vw;
     min-width: fit-content;
     width: fit-content;
     margin-right: auto;

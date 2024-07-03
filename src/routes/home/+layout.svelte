@@ -183,6 +183,27 @@
     margin-left: 10px;
   }
 
+  /* width */
+  main::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  /* Track */
+  main::-webkit-scrollbar-track {
+    background: #00000000;
+  }
+
+  /* Handle */
+  main::-webkit-scrollbar-thumb {
+    background: var(--main-blue);
+    border-radius:10px;
+  }
+
+  /* Handle on hover */
+  main::-webkit-scrollbar-thumb:hover {
+    background: var(--main-blue-alt);
+  }
+
   /* CSS on large screens */
   @media (min-width: 440px) {
     #links {

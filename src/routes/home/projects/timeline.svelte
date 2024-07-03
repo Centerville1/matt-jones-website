@@ -9,21 +9,13 @@
 </div>
 <div class="timeline">
   {#each experienceList as experience, i}
-    {#if i % 2 === 0}
       <TimelineItem
         index={i}
         title={experience.title}
         description={experience.description}
-        linkUrl={experience.url}>
+        linkUrl={experience.url}
+        maxHeight={300}>
       </TimelineItem>
-    {:else}
-      <TimelineItem
-        index={i}
-        left={false} 
-        title={experience.title}
-        description={experience.description}>
-      </TimelineItem>
-    {/if}
   {/each}
 </div>
 
@@ -40,15 +32,18 @@
 
 h2 {
   margin-bottom: 4px;
-  text-align: center;
 }
 
 /* The actual timeline (the vertical ruler) */
 .timeline {
   position: relative;
   max-width: 1200px;
-  margin: 0 auto;
+  padding-top: 20px;
+  padding-bottom: 20px;
+  margin-left: 0;
   border-top: 6px solid var(--timeline-color);
+  border-bottom: 6px solid var(--timeline-color);
+  margin-bottom: 15px;
 }
 
 /* The actual timeline (the vertical ruler) */
@@ -59,22 +54,7 @@ h2 {
   background-color: var(--timeline-color);
   top: 0;
   bottom: 0;
-  left: 50%;
+  left: 31px;
   margin-left: -3px;
-}
-
-
-
-/* Media queries - Responsive timeline on screens less than 600px wide */
-@media screen and (max-width: 600px) {
-  h2 {
-    margin-bottom: 4px;
-    text-align: left;
-  }
-
-/* Place the timelime to the left */
-  .timeline::after {
-    left: 31px;
-  }
 }
 </style>

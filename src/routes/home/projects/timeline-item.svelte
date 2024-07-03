@@ -2,15 +2,14 @@
     import { goto } from '$app/navigation';
     import { onMount } from 'svelte';
 
-    export let left = true;
     export let title = 'Placeholder';
     export let description = 'Placeholder';
     export let started = 'Placeholder';
     export let ended = 'Placeholder';
     export let linkUrl = '';
     export let index = 0
+    export let maxHeight = 370
 
-    let maxHeight = 370;
     let showButtonShown = false;
     let overflowHidden = false;
     let renderHeight = 0;
@@ -30,7 +29,7 @@
             showButtonShown = true
             overflowHidden = true;
             let content = document.getElementById("hide-content"+index);
-            content.style.height = "300px"
+            content.style.height = "" + (maxHeight - 70) + "px";
         }
     })
 
@@ -43,44 +42,26 @@
         }
         else {
             overflowHidden = true;
-            content.style.height = "300px"
+            content.style.height = "" + (maxHeight - 70) + "px"
             main.scrollTo({top:boxPosition, behavior:'smooth'})
+        }
+    }
+
+    function linkClicked() {
+        if(linkUrl !== "") {
+            console.log(linkUrl.slice(0,4))
+            if (linkUrl.slice(0,4) === "http") {
+                location.href=linkUrl
+            }
+            else {
+                goto(linkUrl);
+            }
         }
     }
 </script>
 
-{#if left}
-    <div id="container{index}" class="container left">
-        <button class="outer-button" on:click={() => {
-            if (linkUrl !== '') {
-            goto(linkUrl);
-            }
-        }}>
-            <div id="content{index}" class="content">
-                <div id="hide-content{index}" class="hide-content">
-                    <h2>{title}</h2>
-                    <p>{description}</p>
-                </div>
-                {#if overflowHidden && showButtonShown}
-                    <button on:click={() => {changeOverflow()}} class="show-more">
-                        <a href="#">Show More</a>
-                    </button>
-                {:else if showButtonShown}
-                <button on:click={() => {changeOverflow()}} class="show-more">
-                    <a href="#">Show Less</a>
-                </button>
-                {/if}
-    
-            </div>
-        </button>
-    </div>
-{:else}
 <div id="container{index}" class="container right">
-    <button class="outer-button" on:click={() => {
-        if (linkUrl !== '') {
-        goto(linkUrl);
-        }
-    }}>
+    <button class="outer-button" on:click={() => {linkClicked()}}>
         <div id="content{index}" class="content">
             <div id="hide-content{index}" class="hide-content">
                 <h2>{title}</h2>
@@ -95,26 +76,26 @@
                 <a href="#">Show Less</a>
             </button>
             {/if}
-
         </div>
     </button>
 </div>
-{/if}
 
 <style>
     * {
         box-sizing: border-box;
-        --box-background: var(--neutral-dark-gray)
+        --box-color: var(--main-blue-alt)
     }
 
     /* Container around content */
     .container {
         background-color: var(--no-background);
-        padding: 10px 40px;
         z-index: 1;
         position: relative;
-        width: 50%;
+        width: 90%;
+        padding-left: 40px;
+        padding-right: 25px;
         border-radius: 40px;
+        margin-bottom: 10px;
     }
 
     /* The circles on the timeline */
@@ -125,7 +106,6 @@
         height: 25px;
         right: -17px;
         background-color: var(--main-blue-light);
-        opacity: 100%;
         border: 4px solid var(--contrast-text-light);
         top: 15px;
         border-radius: 50%;
@@ -145,42 +125,23 @@
         background-color: inherit;
     }
 
-    /* Place the container to the left */
-    .left {
-        left: 0;
-    }
-
     /* Place the container to the right */
     .right {
-        left: 50%;
-    }
-
-    /* Add arrows to the left container (pointing right) */
-    .left::before {
-        content: " ";
-        height: 0;
-        position: absolute;
-        top: 24px;
-        width: 0;
-        z-index: 1;
-        right: 21px;
-        border: medium solid var(--box-background);
-        border-width: 10px 0 10px 20px;
-        border-color: transparent transparent transparent var(--box-background);
+        left: 31px;
     }
 
     /* Add arrows to the right container (pointing left) */
     .right::before {
         content: " ";
+        left: 20px;
         height: 0;
         position: absolute;
         top: 22px;
         width: 0;
         z-index: 1;
-        left: 21px;
-        border: medium solid var(--box-background);
+        border: medium solid var(--box-color);
         border-width: 10px 20px 10px 0;
-        border-color: transparent var(--box-background) transparent transparent;
+        border-color: transparent var(--box-color) transparent transparent;
     }
 
     /* Fix the circle for containers on the right side */
@@ -198,7 +159,7 @@
         white-space: pre;
         text-wrap: wrap;
         border-radius: 20px;
-        border: 3px solid var(--neutral-dark-gray);
+        border: 3px solid var(--box-color);
         transition: background 0.5s cubic-bezier(.72,0,.83,.67);
     }
 
@@ -223,34 +184,5 @@
 
     p {
         margin-top: 0;
-    }
-
-    /* Media queries - Responsive timeline on screens less than 600px wide */
-    @media screen and (max-width: 600px) {
-
-        /* Full-width containers */
-        .container {
-            width: 100%;
-            padding-left: 70px;
-            padding-right: 25px;
-        }
-
-        /* Make sure that all arrows are pointing leftwards */
-        .container::before {
-            left: 60px;
-            border: medium solid var(--box-background);
-            border-width: 10px 10px 10px 0;
-            border-color: transparent var(--box-background) transparent transparent;
-        }
-
-        /* Make sure all circles are at the same spot */
-        .left::after, .right::after {
-            left: 15px;
-        }
-
-        /* Make all right containers behave like the left ones */
-        .right {
-            left: 0%;
-        }
     }
 </style>

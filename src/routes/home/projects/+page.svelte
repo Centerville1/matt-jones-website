@@ -19,7 +19,7 @@
     else if (current==="#other") {
       animateRight = false;
     }
-    let page = document.getElementById("timeline-page");
+    let page = document.getElementById("tab-content");
     page.style.transition="transform 0.8s cubic-bezier(1,-0.3,0.9,0.5)";
     if (animateRight) {
       page.style.transform="translateX(-100vw)";
@@ -38,7 +38,7 @@
    */
   function changeTab(target) {
     window.location.hash = target;
-    let page = document.getElementById("timeline-page");
+    let page = document.getElementById("tab-content");
     page.style.transition="transform 0s";
     if (animateRight) {
       page.style.transform="translateX(100vw)";
@@ -52,15 +52,22 @@
   }
 
   function animateEnd() {
-    let page = document.getElementById("timeline-page");
+    let page = document.getElementById("tab-content");
     page.style.transition="transform 0.5s cubic-bezier(0,0,.3,1.3)";
     page.style.transform="translateX(0)";
     let main = document.getElementsByTagName("main")[0];
     main?.scrollTo({top: 0, behavior: "smooth"});
+    setTimeout(() => {resetTranslation()}, 500)
+  }
+
+  // Needed to keep position:fixed working on nav bar
+  function resetTranslation() {
+    let page = document.getElementById("projects-page");
+    page.style = "";
   }
 </script>
 
-<div id="timeline-page">
+<div id="projects-page">
   <nav>
     <hr>
     <form>
@@ -122,7 +129,7 @@
 
   /* Background pattern originally generated from 
   https://www.magicpattern.design/tools/css-backgrounds */
-  #timeline-page {
+  #projects-page {
     width: 450vw;
     padding-left: 220vw;
     margin-left: -220vw;

@@ -4,8 +4,8 @@
 
     export let title = 'Placeholder';
     export let description = 'Placeholder';
-    export let started = 'Placeholder';
-    export let ended = 'Placeholder';
+    export let started = '';
+    export let ended = '';
     export let linkUrl = '';
     export let index = 0
     export let maxHeight = 370
@@ -14,6 +14,44 @@
     let overflowHidden = false;
     let renderHeight = 0;
     let boxPosition = 0;
+
+    /**
+     * @type {Date | null}
+     */
+    let startDate = null;
+
+    /**
+     * @type {string}
+     */
+    let startMonth;
+
+    if (started !== '' && started !== null) {
+        let mon1 = parseInt(started.substring(0, 2));
+        let dt1 = parseInt(started.substring(3, 5));
+        let yr1 = parseInt(started.substring(6, 10));
+        startDate = new Date(yr1, mon1 - 1, dt1);
+        startMonth = startDate.toLocaleString('default', { month: 'long' });
+    }
+
+    /**
+     * @type {string | Date}
+     */
+    let endDate;
+
+    /**
+     * @type {string}
+     */
+    let endMonth;
+
+    if (ended !== '' && ended !== null) {
+        let mon1 = parseInt(ended.substring(0, 2));
+        let dt1 = parseInt(ended.substring(3, 5));
+        let yr1 = parseInt(ended.substring(6, 10));
+        endDate = new Date(yr1, mon1 - 1, dt1);
+        endMonth = endDate.toLocaleString('default', { month: 'long' });
+    } else {
+        endDate = 'Present';
+    }
 
     onMount(() => {
         // Find position of the top of this timeline item
@@ -65,6 +103,20 @@
         <div id="content{index}" class="content">
             <div id="hide-content{index}" class="hide-content">
                 <h2>{title}</h2>
+                {#if startDate !== null}
+                    {#if endDate !== 'Present'}
+                    <h5>
+                        {startMonth}
+                        {startDate.getFullYear()} - {endMonth}
+                        {endDate.getFullYear()}
+                    </h5>
+                    {:else}
+                    <h5>
+                        {startMonth}
+                        {startDate.getFullYear()} - {endDate}
+                    </h5>
+                    {/if}
+                {/if}
                 <p>{description}</p>
             </div>
             {#if overflowHidden && showButtonShown}
@@ -182,7 +234,11 @@
         margin-bottom: 0;
     }
 
+    h5 {
+        margin: 0;
+    }
+
     p {
-        margin-top: 0;
+        margin: 0;
     }
 </style>

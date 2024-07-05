@@ -23,6 +23,9 @@
               title={experience.title}
               description={experience.description}
               linkUrl={experience.url}
+              started={experience.startDate}
+              ended={experience.endDate}
+              image={experience.image}
             />
           {/if}
         {/each}

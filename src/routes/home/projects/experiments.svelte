@@ -1,4 +1,6 @@
 <script>
+  // @ts-nocheck
+
   import experiences from './experiences.json';
   import Card from './card.svelte';
 
@@ -14,6 +16,8 @@
           title={experience.title}
           description={experience.description}
           linkUrl={experience.url}
+          started={experience.startDate}
+          ended={experience.endDate}
         />
       {/each}
     </div>

@@ -6,15 +6,17 @@
       "startDate": "08/01/2023",
       "endDate": null,
       "url": "",
+      "image": "",
       "highlight": false
     },
     {
-      "title": "Other Position",
-      "description": "Placeholder Description of other position",
-      "startDate": "01/15/2024",
-      "endDate": null,
-      "url": "",
-      "highlight": false
+      "title": "WordWeather",
+      "description": "    A web development project for CPS 353 Internet Programming.\n    I worked with a student designer from ART 358 Web Design to create a design for a web-app that displays the current weather and a bible verse related to the current conditions.  I then implemented the design using SvelteKit, performing user studies, and adjusting the design as needed to create the final product.",
+      "startDate": "08/01/2023",
+      "endDate": "12/01/2023",
+      "url": "https://wordweather.vercel.app/",
+      "image": "wordWeather.png",
+      "highlight": true
     },
     {
       "title": "Sample Highlighted Card",
@@ -22,14 +24,16 @@
       "startDate": "01/01/2020",
       "endDate": null,
       "url": "",
+      "image": "",
       "highlight": false
     },
     {
       "title": "",
       "description": "",
-      "startDate": "mm/dd/yyyy",
+      "startDate": null,
       "endDate": null,
       "url": "",
+      "image": "",
       "highlight": false
     }
   ],
@@ -37,14 +41,14 @@
     {
       "title": "CSS Artwork",
       "description": "Using CSS to draw shapes and create artwork.\n    Plus some tests with animations using clip paths, and mapping animations to the scroll position using pure CSS, based by work by Kevin Powell on Youtube",
-      "startDate": "mm/dd/yyyy",
+      "startDate": null,
       "endDate": null,
       "url": "/home/page1"
     },
     {
       "title": "CSS 3D Sphere",
       "description": "Play with and customize the sphere used in the website intro animation!",
-      "startDate": "mm/dd/yyyy",
+      "startDate": null,
       "endDate": null,
       "url": "/home/sphere"
     }

@@ -4,6 +4,9 @@
   export let title = 'Placeholder';
   export let description = 'Placeholder';
   export let started = '';
+  /**
+   * @type {String | null}
+   */
   export let ended = '';
   export let linkUrl = '';
   export let image = '';
@@ -27,7 +30,7 @@
   }
 
   /**
-   * @type {string | Date}
+   * @type {Date | null}
    */
   let endDate;
 
@@ -43,6 +46,7 @@
     endDate = new Date(yr1, mon1 - 1, dt1);
     endMonth = endDate.toLocaleString('default', { month: 'long' });
   } else {
+    // @ts-ignore
     endDate = 'Present';
   }
 </script>
@@ -63,7 +67,7 @@
       >
         <h2>{title}</h2>
         {#if startDate !== null}
-          {#if endDate !== 'Present'}
+          {#if typeof(endDate) !== typeof("") && endDate !== null}
             <h5>
               {startMonth}
               {startDate.getFullYear()} - {endMonth}

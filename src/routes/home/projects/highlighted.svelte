@@ -4,6 +4,9 @@
   import Carousel from 'svelte-carousel';
   import MediaQuery from 'svelte-media-query';
 
+  /**
+   * @type {Carousel}
+   */
   let carousel; // for calling methods of the carousel instance
   
   const handleNextClick = () => {
@@ -45,6 +48,9 @@
                     title={experience.title}
                     description={experience.description}
                     linkUrl={experience.url}
+                    started={experience.startDate}
+                    ended={experience.endDate}
+                    image={experience.image}
                   />
                 {/if}
               {/each}
@@ -107,14 +113,5 @@
     margin-left: auto;
     margin-right: auto;
     padding-top: 20px;
-  }
-
-  #cards {
-    margin-left: auto;
-    margin-right: auto;
-    min-width: 60%;
-    width: fit-content;
-    display: flex;
-    justify-content: space-around;
   }
 </style>

@@ -1,12 +1,12 @@
 <script>
   // import global styles on all pages.
   import '../../global.css';
-  import ThemeSwitch from './themeSwitch.svelte';
+  // import ThemeSwitch from './themeSwitch.svelte';
   import { onMount } from 'svelte';
   // svelte-media-query docs: https://www.npmjs.com/package/svelte-media-query
   import MediaQuery from 'svelte-media-query';
   import Footer from './footer.svelte';
-  import { themeMode } from '../../store';
+  import { themeMode, animatePageLoadLocalStorageKey } from '../../store';
 
   // Toggle visibility of the mobile nav dropdown menu
   function toggleNav() {
@@ -31,6 +31,15 @@
 
   // Add a listener to close the mobile nav when a click occurs outside of it.
   onMount(() => {
+    // remove scroll-up animation if we aren't coming from the
+    // sphere loader page (prevents animation playing on reload)
+    let animatePageLoad = localStorage.getItem(animatePageLoadLocalStorageKey)
+    if (animatePageLoad === "true") {
+      localStorage.setItem(animatePageLoadLocalStorageKey, "false")
+    }
+    else {
+      document.getElementById('outer-container').style.animation = 'none'
+    }
     document.onclick = function (e) {
       if (window.screen.width <= 439) {
         let menu_icon_box = document.getElementById('links');
@@ -74,12 +83,14 @@
           <a class="plain" href="/home" on:click={scrollTop}>Home</a>
           <a
             class="emphasis"
-            href="/home/projects#highlighted"
+            href="/home/projects"
             on:click={scrollTop}>Projects</a
           >
         </div>
+      <!-- Change to hamburger menu on small screens -->
       {:else}
         <button id="menu-button" on:click={toggleNav}>
+          <!-- Hamburger menu icon SVG -->
           <svg
             width="40px"
             height="40px"
@@ -117,9 +128,9 @@
         </nav>
       {/if}
     </MediaQuery>
-    <div id="switch-conainer">
+    <!-- <div id="switch-conainer">
       <ThemeSwitch />
-    </div>
+    </div> -->
   </header>
   <main>
     <div id="page-content">
@@ -134,7 +145,7 @@
     width: 100vw;
     background-color: var(--neutral-gray);
     z-index: 2;
-    animation: move-up 1.7s cubic-bezier(0.34, 0.13, 0.06, 0.96) both;
+    animation: move-up 1.7s cubic-bezier(0.34, 0.13, 0.06, 0.96) both;;
   }
 
   @keyframes move-up {
@@ -172,6 +183,28 @@
     margin-left: 10px;
   }
 
+  /* width */
+  main::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  /* Track */
+  main::-webkit-scrollbar-track {
+    background: #00000000;
+  }
+
+  /* Handle */
+  main::-webkit-scrollbar-thumb {
+    background: var(--main-blue);
+    border-radius:10px;
+  }
+
+  /* Handle on hover */
+  main::-webkit-scrollbar-thumb:hover {
+    background: var(--main-blue-alt);
+  }
+
+  /* CSS on large screens */
   @media (min-width: 440px) {
     #links {
       margin-right: 10px;
@@ -180,6 +213,7 @@
       align-items: center;
       font-weight: bold;
       font-size: larger;
+      z-index: 99;
     }
 
     #links a {
@@ -195,10 +229,10 @@
       background-color: var(--main-blue-light);
       color: var(--contrast-text-light);
       border-radius: 10px;
+      transition: background 0.5s;
     }
 
     .emphasis:hover {
-      transition: background 0.5s;
       background-color: var(--main-blue);
       color: var(--contrast-text-light);
     }
@@ -212,6 +246,7 @@
     }
   }
 
+  /* CSS for small screens */
   @media (max-width: 439px) {
     #menu-button {
       background-color: transparent;
@@ -221,15 +256,14 @@
     nav {
       position: absolute;
       top: var(--header-width);
-      z-index: 1;
-      height: 200px;
+      z-index: 99;
+      height: fit-content;
       width: 200px;
       /* starts hidden */
       display: none;
       flex-direction: column;
       justify-content: space-around;
       background-color: var(--main-blue-alt);
-      border-left: 1px solid black;
       border-bottom: 1px solid var(--contrast-text-light);
       border-radius: 5px;
     }
@@ -245,7 +279,7 @@
 
     nav div a {
       width: 100%;
-      height: 100%;
+      height: 60px;
       display: flex;
       justify-content: center;
       align-items: center;
@@ -253,13 +287,8 @@
       font-weight: bold;
       color: var(--contrast-text-light);
       text-decoration: none;
-      border-bottom: 0.5px solid var(--contrast-text-light);
+      border-top: 0.5px solid var(--contrast-text-light);
     }
-  }
-
-  #switch-conainer {
-    margin-left: auto;
-    margin-right: 10px;
   }
 
   main {

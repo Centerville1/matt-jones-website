@@ -4,37 +4,86 @@
   import Experiments from './experiments.svelte';
   import { page } from '$app/stores';
 
+  let animateRight = true;
+
   /**
    * @param {{ currentTarget: { value: string; }; }} event
    */
   function onTabChange(event) {
-    window.location.hash = event?.currentTarget.value;
+    animateRight = true;
+    let target = event?.currentTarget.value;
+    let current = window.location.hash;
+    if (current==="#highlighted" && target==="timeline") {
+      animateRight = false;
+    }
+    else if (current==="#other") {
+      animateRight = false;
+    }
+    let page = document.getElementById("timeline-page");
+    page.style.transition="transform 0.8s cubic-bezier(1,-0.3,0.9,0.5)";
+    if (animateRight) {
+      page.style.transform="translateX(-100vw)";
+    }
+    else {
+      page.style.transform="translateX(100vw)";
+    }
+    let main = document.getElementsByTagName("main")[0];
+    main?.scrollTo({top: 0, behavior: "smooth"});
+    
+    setTimeout(() => {changeTab(target)}, 800);
+  }
+
+  /**
+   * @param {string} target
+   */
+  function changeTab(target) {
+    window.location.hash = target;
+    let page = document.getElementById("timeline-page");
+    page.style.transition="transform 0s";
+    if (animateRight) {
+      page.style.transform="translateX(100vw)";
+    }
+    else {
+      page.style.transform="translateX(-100vw)";
+    }
+    let main = document.getElementsByTagName("main")[0];
+    main?.scrollTo({top: 0, behavior: "smooth"});
+    setTimeout(() => {animateEnd()}, 20)
+  }
+
+  function animateEnd() {
+    let page = document.getElementById("timeline-page");
+    page.style.transition="transform 0.5s cubic-bezier(0,0,.3,1.3)";
+    page.style.transform="translateX(0)";
+    let main = document.getElementsByTagName("main")[0];
+    main?.scrollTo({top: 0, behavior: "smooth"});
   }
 </script>
 
-<div id="page">
-  <div id="top-menu">
+<div id="timeline-page">
+  <nav>
+    <hr>
     <form>
-      <div class="tab">
-        <input
-          type="radio"
-          id="highlighted"
-          value="highlighted"
-          checked={$page.url.hash !== '#timeline' &&
-            $page.url.hash !== '#other'}
-          on:change={onTabChange}
-        />
-        <label for="highlighted">Highlights</label>
-      </div>
       <div class="tab">
         <input
           type="radio"
           id="timeline"
           value="timeline"
-          checked={$page.url.hash === '#timeline'}
+          checked={$page.url.hash !== '#highlighted' &&
+          $page.url.hash !== '#other'}
           on:change={onTabChange}
         />
         <label for="timeline">Timeline</label>
+      </div>
+      <div class="tab">
+        <input
+          type="radio"
+          id="highlighted"
+          value="highlighted"
+          checked={$page.url.hash === '#highlighted'}
+          on:change={onTabChange}
+        />
+        <label for="highlighted">Highlights</label>
       </div>
       <div class="tab">
         <input
@@ -44,27 +93,39 @@
           checked={$page.url.hash === '#other'}
           on:change={onTabChange}
         />
-        <label for="other">Other</label>
+        <label for="other">Experiments</label>
       </div>
     </form>
-  </div>
-  <hr />
+    <div class="transition"></div>
+  </nav>
   <div id="tab-content">
     {#if $page.url.hash === '#other'}
       <Experiments />
-    {:else if $page.url.hash === '#timeline'}
-      <Timeline />
-    {:else}
+    {:else if $page.url.hash === '#highlighted'}
       <Highlighted />
+    {:else if $page.url.hash !== '#highlighted' &&
+    $page.url.hash !== '#other'}
+      <Timeline />
     {/if}
   </div>
 </div>
 
 <style>
+  @keyframes move-left {
+    0% {
+      transform: translateX(0);
+    }
+    100% {
+      transform: translateX(-100vw);
+    }
+  }
+
   /* Background pattern originally generated from 
   https://www.magicpattern.design/tools/css-backgrounds */
-  #page {
-    width: 100vw;
+  #timeline-page {
+    width: 450vw;
+    padding-left: 220vw;
+    margin-left: -220vw;
     min-height: 100vh;
     overflow: auto;
     background:
@@ -98,36 +159,54 @@
       32.5px 32.5px;
   }
 
-  #top-menu {
-    width: 100vw;
+  nav {
+    width: 450vw;
+    padding-left: 220vw;
+    margin-left: -220vw;
+    background-color: var(--neutral-dark-gray);
+    position: fixed;
+    z-index: 10;
   }
 
-  #top-menu form {
-    min-width: 270px;
+  hr {
+    padding-left: 220vw;
+    margin-left: -220vw;
+    border-color: var(--neutral-black);
+    margin-top: 0;
+  }
+
+  .transition {
+    padding-left: 220vw;
+    margin-left: -220vw;
+    width: 450vw;
+    height: 10px;
+    background: var(--neutral-gray);
+  }
+
+  nav form {
+    padding-left: 220vw;
+    margin-left: -220vw;
+    min-width: fit-content;
     width: fit-content;
-    margin-left: auto;
     margin-right: auto;
     display: flex;
     justify-content: center;
-    margin-top: 20px;
-    padding-top: 10px;
-    padding-bottom: 10px;
-    width: 50vw;
+    width: 40vw;
     border-radius: 10px;
-    border: 1px solid;
-    border-color: var(--main-blue-light);
   }
 
   .tab label {
     display: block;
+    border-left: 2px var(--neutral-gray) solid;
+    border-right: 2px var(--neutral-gray) solid;
     padding: 5px 10px 5px 10px;
     margin: 0px 5px 0px 5px;
     transition: background-color 0.5s;
-    border-radius: 5px;
+    border-radius: 10px 10px 0 0;
   }
 
   .tab label:hover {
-    background-color: var(--neutral-dark-gray-op-50);
+    background-color: var(--neutral-gray-op-50);
   }
 
   .tab input[type='radio'] {
@@ -135,8 +214,8 @@
   }
 
   .tab input[type='radio']:checked + label {
-    background: var(--main-blue-alt);
-    border-radius: 4px;
+    background: var(--neutral-gray);
+    border-radius: 10px 10px 0 0;
   }
 
   .tab label {
@@ -145,12 +224,9 @@
     line-height: 1.8em;
   }
 
-  hr {
-    border-color: var(--neutral-gray);
-  }
-
   #tab-content {
     width: 100vw;
+    margin-top: 59px;
     height: fit-content;
     overflow: auto;
   }

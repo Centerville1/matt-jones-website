@@ -29,14 +29,14 @@ const Charcoal = '#394356';
 const Clear = '#00000000';
 
 /**
+ * Opacity filter for HEX colors
  * @param {string} color the color to add opacity to
  * @param {number} opacity percent opacity for the new color
  * 
  * @returns {string} resulting color with opacity value
  */
 function opacity(color, opacity) {
-  let resultColor = color + Math.round(255 * (opacity/100)).toString(16);
-  return resultColor;
+  return color + Math.round(255 * (opacity/100)).toString(16);
 }
 
 // Colors that don't change between light and dark modes

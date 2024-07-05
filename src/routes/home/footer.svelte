@@ -146,7 +146,7 @@
       display: flex;
       align-items: end;
       width: fit-content;
-      color: var(--neutral-white);
+      color: var(--contrast-text-light);
       font-size: xx-small;
     }
   }

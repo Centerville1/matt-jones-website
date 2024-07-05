@@ -50,6 +50,7 @@
     endDate = 'Present';
   }
 </script>
+
 <div>
   <div class="outer-boundary">
     <div class="card"> 

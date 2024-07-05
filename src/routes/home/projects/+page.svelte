@@ -20,11 +20,14 @@
       animateRight = false;
     }
     let page = document.getElementById("tab-content");
+    // @ts-ignore
     page.style.transition="transform 0.8s cubic-bezier(1,-0.3,0.9,0.5)";
     if (animateRight) {
+      // @ts-ignore
       page.style.transform="translateX(-100vw)";
     }
     else {
+      // @ts-ignore
       page.style.transform="translateX(100vw)";
     }
     let main = document.getElementsByTagName("main")[0];
@@ -39,11 +42,14 @@
   function changeTab(target) {
     window.location.hash = target;
     let page = document.getElementById("tab-content");
+    // @ts-ignore
     page.style.transition="transform 0s";
     if (animateRight) {
+      // @ts-ignore
       page.style.transform="translateX(100vw)";
     }
     else {
+      // @ts-ignore
       page.style.transform="translateX(-100vw)";
     }
     let main = document.getElementsByTagName("main")[0];
@@ -53,7 +59,9 @@
 
   function animateEnd() {
     let page = document.getElementById("tab-content");
+    // @ts-ignore
     page.style.transition="transform 0.5s cubic-bezier(0,0,.3,1.3)";
+    // @ts-ignore
     page.style.transform="translateX(0)";
     let main = document.getElementsByTagName("main")[0];
     main?.scrollTo({top: 0, behavior: "smooth"});
@@ -63,6 +71,7 @@
   // Needed to keep position:fixed working on nav bar
   function resetTranslation() {
     let page = document.getElementById("projects-page");
+    // @ts-ignore
     page.style = "";
   }
 </script>
@@ -217,12 +226,17 @@
   }
 
   .tab input[type='radio'] {
-    display: none;
+    height: 0;
+    position: absolute;
+  }
+
+  /* Detect tab focus on input */
+  .tab input[type='radio']:focus + label {
+    border: 2px solid var(--main-blue);
   }
 
   .tab input[type='radio']:checked + label {
     background: var(--neutral-gray);
-    border-radius: 10px 10px 0 0;
   }
 
   .tab label {

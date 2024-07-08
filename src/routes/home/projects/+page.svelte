@@ -145,7 +145,7 @@
           transparent 80%,
           transparent
         )
-        32.5px 32.5px,
+        30px 30px,
       linear-gradient(var(--neutral-dark-gray-op-50) 2.6px, transparent 2.6px) 0 -1.3px,
       linear-gradient(
           90deg,
@@ -153,10 +153,10 @@
           var(--neutral-gray) 2.6px
         ) -1.3px 0;
     background-size:
-      65px 65px,
-      65px 65px,
-      32.5px 32.5px,
-      32.5px 32.5px;
+      60px 60px,
+      60px 60px,
+      30px 30px,
+      30px 30px;
   }
 
   nav {

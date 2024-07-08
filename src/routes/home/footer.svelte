@@ -64,6 +64,7 @@
     height: 470px;
     width: 100vw;
     background-color: var(--neutral-dark-gray);
+    position: relative;
   }
 
   .container {

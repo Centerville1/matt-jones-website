@@ -15,7 +15,9 @@
         title={experience.title}
         description={experience.description}
         linkUrl={experience.url}
-        maxHeight={300}>
+        maxHeight={300}
+        started={experience.startDate}
+        ended={experience.endDate}>
       </TimelineItem>
   {/each}
 </div>

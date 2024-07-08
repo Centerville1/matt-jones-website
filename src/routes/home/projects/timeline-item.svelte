@@ -4,8 +4,11 @@
 
     export let title = 'Placeholder';
     export let description = 'Placeholder';
-    export let started = 'Placeholder';
-    export let ended = 'Placeholder';
+    export let started = '';
+    /**
+    * @type {String | null}
+    */
+    export let ended = '';
     export let linkUrl = '';
     export let index = 0
     export let maxHeight = 370
@@ -15,20 +18,62 @@
     let renderHeight = 0;
     let boxPosition = 0;
 
+    /**
+     * @type {Date | null}
+     */
+    let startDate = null;
+
+    /**
+     * @type {string}
+     */
+    let startMonth;
+
+    if (started !== '' && started !== null) {
+        let mon1 = parseInt(started.substring(0, 2));
+        let dt1 = parseInt(started.substring(3, 5));
+        let yr1 = parseInt(started.substring(6, 10));
+        startDate = new Date(yr1, mon1 - 1, dt1);
+        startMonth = startDate.toLocaleString('default', { month: 'long' });
+    }
+
+    /**
+     * @type {Date | null}
+     */
+    let endDate;
+
+    /**
+     * @type {string}
+     */
+    let endMonth;
+
+    if (ended !== '' && ended !== null) {
+        let mon1 = parseInt(ended.substring(0, 2));
+        let dt1 = parseInt(ended.substring(3, 5));
+        let yr1 = parseInt(ended.substring(6, 10));
+        endDate = new Date(yr1, mon1 - 1, dt1);
+        endMonth = endDate.toLocaleString('default', { month: 'long' });
+    } else {
+        // @ts-ignore
+        endDate = 'Present';
+    }
+
     onMount(() => {
         // Find position of the top of this timeline item
         // used for scrolling on minimize
         let container = document.getElementById("container"+index);
+        // @ts-ignore
         boxPosition = container.offsetTop - 100;
 
         // detect if box is larger than a certain size, and activate
         // the "show more" button
         let box = document.getElementById("content"+index)
+        // @ts-ignore
         renderHeight = box.offsetHeight;
         if (renderHeight > maxHeight) {
             showButtonShown = true
             overflowHidden = true;
             let content = document.getElementById("hide-content"+index);
+            // @ts-ignore
             content.style.height = "" + (maxHeight - 70) + "px";
         }
     })
@@ -38,10 +83,12 @@
         let content = document.getElementById("hide-content"+index);
         if (overflowHidden) {
             overflowHidden = false;
+            // @ts-ignore
             content.style.height = ""+renderHeight+"px"
         }
         else {
             overflowHidden = true;
+            // @ts-ignore
             content.style.height = "" + (maxHeight - 70) + "px"
             main.scrollTo({top:boxPosition, behavior:'smooth'})
         }
@@ -65,15 +112,30 @@
         <div id="content{index}" class="content">
             <div id="hide-content{index}" class="hide-content">
                 <h2>{title}</h2>
+                {#if startDate !== null}
+                    {#if typeof(endDate) !== typeof("") && endDate !== null}
+                    <h5>
+                        {startMonth}
+                        {startDate.getFullYear()} - {endMonth}
+                        {endDate.getFullYear()}
+                    </h5>
+                    {:else}
+                    <h5>
+                        {startMonth}
+                        {startDate.getFullYear()} - {endDate}
+                    </h5>
+                    {/if}
+                {/if}
                 <p>{description}</p>
             </div>
             {#if overflowHidden && showButtonShown}
                 <button on:click={() => {changeOverflow()}} class="show-more">
-                    <a href="#">Show More</a>
+                    <a href={"#"}>Show More</a>
                 </button>
             {:else if showButtonShown}
             <button on:click={() => {changeOverflow()}} class="show-more">
-                <a href="#">Show Less</a>
+                <!-- svelte-ignore a11y-missing-attribute -->
+                <a href={"#"}>Show Less</a>
             </button>
             {/if}
         </div>
@@ -182,7 +244,11 @@
         margin-bottom: 0;
     }
 
+    h5 {
+        margin: 0;
+    }
+
     p {
-        margin-top: 0;
+        margin: 0;
     }
 </style>

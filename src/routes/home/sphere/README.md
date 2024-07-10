@@ -8,7 +8,7 @@ to do all the math for placing the latitude and longitude lines, and with a bit 
 Svelte's built in reactive updates, you can customize the number of lines
 in the sphere's frame by simply manipulating a handful of variables using the on screen sliders.
 
-##Files
+## Files
 
 customSphere.svelte - Page with sliders and variables for manipulating sphere
 sphere.svelte - The independent sphere compenent, with modifiable attributes to customize sphere appearance

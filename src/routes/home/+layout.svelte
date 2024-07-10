@@ -128,9 +128,6 @@
         </nav>
       {/if}
     </MediaQuery>
-    <!-- <div id="switch-conainer">
-      <ThemeSwitch />
-    </div> -->
   </header>
   <main>
     <div id="page-content">
@@ -185,23 +182,23 @@
 
   /* width */
   main::-webkit-scrollbar {
-    width: 6px;
+    width:11px;
   }
 
   /* Track */
   main::-webkit-scrollbar-track {
-    background: #00000000;
+    background: var(--no-background);
   }
 
   /* Handle */
   main::-webkit-scrollbar-thumb {
-    background: var(--main-blue);
+    background: linear-gradient(90deg, var(--no-background), var(--main-blue-light));
     border-radius:10px;
   }
 
   /* Handle on hover */
   main::-webkit-scrollbar-thumb:hover {
-    background: var(--main-blue-alt);
+    background: linear-gradient(90deg, var(--no-background), var(--main-blue));
   }
 
   /* CSS on large screens */

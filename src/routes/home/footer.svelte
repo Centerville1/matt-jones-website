@@ -88,7 +88,7 @@
       <div id="github-link">
         <h3>Check out the project on: </h3>
         {#if mode === 'dark'}
-          <a href="https://github.com/Centerville1" class="link">
+          <a href="https://github.com/Centerville1/matt-jones-website" class="link">
             <img
               id="github"
               src="/social-logos/github-dark.png"

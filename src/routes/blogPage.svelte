@@ -2,6 +2,7 @@
   export let title = "Default Title";
   export let subtitle = "";
   export let background = "blocks";
+  export let signature = true;
 </script>
 
 <div class="page {background}">
@@ -14,6 +15,10 @@
   <div class="page-content">
     <slot />
   </div>
+  {#if signature}
+    <h2>Thanks,</h2>
+    <img src="/MJ_Signature-nobg.png" width=250 alt="Matt Jones' signature" />
+  {/if}
 </div>
 
 <style>

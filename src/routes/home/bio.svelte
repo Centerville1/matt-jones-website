@@ -83,16 +83,12 @@
         stringTransformSteps(startBioArray[i], endBioArray[i], 70),
       );
     }
-    let startLengthEnd = startBioArray.length,
-      endLengthEnd = endBioArray.length;
     startBioArray.forEach((value, index, array) => {
       if (value.trim() === '') array.splice(index, 1);
     });
     endBioArray.forEach((value, index, array) => {
       if (value.trim() === '') array.splice(index, 1);
     });
-    // for (let i = 0; i < startLengthEnd - startLength; i++) startBioArray.pop();
-    // for (let i = 0; i < endLengthEnd - endLength; i++) endBioArray.pop();
     height = calcHeight(endBioArray);
     animateTransformation(eachSteps, selectedLength);
   }

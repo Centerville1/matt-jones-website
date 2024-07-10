@@ -45,13 +45,13 @@ button:hover {
   background-color: var(--main-blue-alt);
 }
 
-/* default link effect coloring */
-a:hover {
-  transition: 0.2s;
-  color: var(--main-blue-light);
+a {
+  transition: color 0.2s;
+  color: var(--main-blue);
 }
 
-a:visited:hover {
-  transition: 0.2s;
+/* default link effect coloring */
+a:hover {
+  
   color: var(--main-blue-light);
 }

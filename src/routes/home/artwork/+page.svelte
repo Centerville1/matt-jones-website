@@ -30,7 +30,10 @@
 			> by Bennett Feely
 		</p>
 		<h3>CSS Artwork</h3>
-		<h5>(Based on Coolors.com designs)</h5>
+		<p>All of these art pieces are pure HTML and CSS.  Feel free to inspect it
+			to see how they work.
+		</p>
+		<h5>(Artwork based directly on Coolors.com design samples)</h5>
 	</div>
 	<div id="art">
 		<div></div>
@@ -76,7 +79,16 @@
 		<div><i /></div>
 	</div>
 	<hr />
-	<div class="text"><h3>Clip-path based animations</h3></div>
+	<div class="spacing" />
+	<hr />
+	<div class="text">
+		<h3>Clip-path based animations</h3>
+		<p>Animations using CSS clip paths (creating polygons by defining a series of points).
+			CSS can automatically interpolate between two clip paths using transitions, allowing
+			you to create all sorts of very interesting animations (a small sample of my initial
+			experiments are here.)
+		</p>
+	</div>
 	<div class="scroll-animation octagon">
 		<div><div></div></div>
 	</div>
@@ -85,13 +97,25 @@
 		<div><div></div></div>
 	</div>
 	<hr />
+	<div class="spacing" />
+	<hr />
+	<div class="text">
+		<h3>Artwork</h3>
+		<p>Now, <strong>try creating you own artwork</strong> using CSS and HTML.  Check out the resources up above
+			for the tips and tricks I used to create this sampling here!
+		</p>
+	</div>
+	<div class="spacing" />
 </div>
 
 <style>
 	#container {
 		width: 100vw;
-		height: 500vh;
-		background-color: var(--main-blue-light);
+		height: fit-content;
+	}
+
+	.spacing {
+		margin-top: 100px;
 	}
 
 	.text {
@@ -114,7 +138,8 @@
 		margin-left: auto;
 		margin-right: auto;
 		background-color: var(--neutral-white);
-		height: 80vh;
+		width: 90vw;
+		max-width: 600px;
 		aspect-ratio: 1 / 1;
 		font-size: 0;
 		display: grid;
@@ -213,7 +238,8 @@
 		margin-left: auto;
 		margin-right: auto;
 		background-color: var(--neutral-white);
-		height: 80vh;
+		width: 90vw;
+		max-width: 600px;
 		aspect-ratio: 1 / 1;
 		font-size: 0;
 	}
@@ -227,7 +253,7 @@
 		background-color: var(--main-blue);
 		animation: octagon 5s linear both;
 		animation-timeline: view();
-		animation-range: entry 300px;
+		animation-range: entry 30vh;
 	}
 
 	.polygon div div {
@@ -343,7 +369,8 @@
 	}
 
 	#pattern {
-		height: 80vh;
+		width: 90vw;
+		max-width: 600px;
 		background-color: var(--neutral-white);
 		border: 10px solid var(--neutral-white);
 		aspect-ratio: 7/6;

@@ -1,41 +1,45 @@
 <script>
+  import { onMount } from 'svelte';
   import Sphere from './sphere.svelte';
 
   let longitudeLines = 9,
     latitudeLines = 5,
-    diameter = 400,
+    diameter = 290,
     animationSpeed = 30,
     animationSpeedSteps = 300,
     color = 0,
-    animate = false,
-    rotateX = 0,
-    rotateY = 0,
-    rotateZ = 0;
+    animate = true,
+    rotateX = 30,
+    rotateY = 30,
+    rotateZ = 30;
 
   let colors = [
-    { title: 'Dark Blue', variable: '--logo-blue' },
     { title: 'Light Blue', variable: '--main-blue-light' },
     { title: 'Red', variable: '--red' },
     { title: 'Green', variable: '--green' },
     { title: 'Purple', variable: '--contrast-purple' },
-    { title: 'White', variable: '--neutral-white' },
-    { title: 'Gray', variable: '--neutral-gray-op-50' },
+    { title: 'Whie', variable: '--neutral-black' },
+    { title: 'Dark Blue', variable: '--logo-blue' },
+    { title: 'Black', variable: '--neutral-white' },
   ];
 </script>
 
 <div id="page">
+  <div class="text">
+    <h3>CSS 3D Wireframe Sphere</h3>
+    <p>Remember the sphere from the intro animation?  Well, it was actually rendered
+      using CSS, and here you can play around with it!  (see more details below)
+    </p>
+    <p>Try messing with the sliders below!</p>
+  </div>
+  <hr />
   <div class="slider-container">
     <div>
-      <label for="diam">Diameter: {diameter}px</label>
+      <label for="animate">Play Animation:</label>
       <input
-        type="range"
-        min="0"
-        max="700"
-        step="10"
-        class="slider"
-        id="diam"
-        bind:value={diameter}
-      />
+      id="animate"
+      type="checkbox"
+      bind:checked={animate} />
     </div>
     <div>
       <label for="speed">Rotation Speed</label>
@@ -46,6 +50,18 @@
         class="slider"
         id="speed"
         bind:value={animationSpeed}
+      />
+    </div>
+    <div>
+      <label for="diam">Diameter: {diameter}px</label>
+      <input
+        type="range"
+        min="10"
+        max="700"
+        step="10"
+        class="slider"
+        id="diam"
+        bind:value={diameter}
       />
     </div>
     <div>
@@ -81,6 +97,7 @@
         bind:value={color}
       />
     </div>
+    {#if !animate}
     <div>
       <label for="rotateX">Xrot: {rotateX}°</label>
       <input
@@ -114,7 +131,10 @@
         bind:value={rotateZ}
       />
     </div>
+    {/if}
   </div>
+
+  <hr />
 
   <div id="sphere-container">
     <Sphere
@@ -122,11 +142,42 @@
       numLongLines={longitudeLines}
       numLatLines={latitudeLines}
       animationSpeed={animationSpeedSteps / animationSpeed}
+      animate={animate}
       color={colors[color].variable}
       {rotateX}
       {rotateY}
       {rotateZ}
     />
+  </div>
+
+  <hr />
+
+  <div class="text">
+    <h3>About</h3>
+    <p>This sphere uses 3D CSS rendering.  Each latitude and longitude line is actually
+      a transparent div with a solid border, manually oriented in 3D space.  Javascript is used
+      to do all the math for placing the latitude and longitude lines, and with a bit of 
+      Svelte's built in reactive updates, you can customize the number of lines
+      in the sphere's frame by simply manipulating a handful of variables using the sliders.
+    </p>
+
+    <p>Inspecting the sphere while changing the sliders can give you a pretty good idea
+      of how it works.  <strong>Try it out!</strong>
+    </p>
+
+    <p>See how the individual div elements are positioned to create the latitude and longitude
+      lines?
+    </p>
+
+    <p>Thanks for checking out the sphere!  Feel free to take a look at the 
+      <a href="https://github.com/Centerville1/matt-jones-website/tree/main/src/routes/home/sphere">source code</a>
+      on Github if you're curious.  I can't promise it's the cleanest code, 
+      but it works, and that's what matters :D
+    </p>
+
+    <h2>Thanks,</h2>
+    <img src="/MJ_Signature-nobg.png" width=250 alt="Matt Jones' signature" />
+
   </div>
 </div>
 
@@ -138,11 +189,16 @@
     background-color: var(--neutral-gray);
     overflow: hidden;
   }
+
+  .text {
+    margin: 30px;
+  }
+
   .slider-container {
-    margin-top: 10px;
+    margin: 20px;
     margin-left: 50px;
-    width: 300px;
-    height: 200px;
+    width: 60%;
+    height: fit-content;
     display: flex;
     justify-content: space-between;
     align-items: start;
@@ -156,6 +212,7 @@
   }
 
   #sphere-container {
+    margin-top: 80px;
     margin-left: auto;
     margin-right: auto;
     width: fit-content;

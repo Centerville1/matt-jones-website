@@ -2,6 +2,7 @@
   import { onMount } from 'svelte';
   import { bios, stringTransformSteps } from './bio';
   import { browser } from '$app/environment';
+  import MediaQuery from 'svelte-media-query';
 
   export let height = 0;
 
@@ -18,9 +19,19 @@
   export let onButtonClick;
 
   onMount(() => {
-    generateBio(bios.mid.default);
-    height = calcHeight(currentBios);
+    setup();
   });
+
+  function setup() {
+    const bio = document.getElementById('bio');
+    if (bio !== null) {
+      generateBio(bios.mid.default);
+      height = calcHeight(currentBios);
+    }
+    else {
+      setTimeout(setup, 50);
+    }
+  }
 
   /**
    * @param {string[]} bioArray
@@ -38,6 +49,7 @@
           bio.appendChild(paragraph);
         }
       }
+      return true;
     }
   }
 
@@ -58,7 +70,7 @@
           bio.appendChild(paragraph);
         }
       }
-      let height = bio.clientHeight;
+      let height = bio.clientHeight + 20;
       return height;
     }
     return height;
@@ -69,7 +81,6 @@
    * @param {string[]} endBioArray
    */
   function transformBio(startBioArray, endBioArray) {
-    // console.log(startBioArray, typeof startBioArray[1], endBioArray);
     let startLength = startBioArray.length,
       endLength = endBioArray.length;
     if (startLength > endLength) {
@@ -130,7 +141,11 @@
 </script>
 
 <div id="bio-container">
-  <div id="bio"></div>
+  <MediaQuery query="(min-width: 440px)" let:matches>
+    {#if matches}
+      <div id="bio"></div>
+    {/if}
+  </MediaQuery>
   <form id="length">
     <div>
       <input
@@ -163,6 +178,11 @@
       <label for="long">Long</label>
     </div>
   </form>
+  <MediaQuery query="(max-width: 440px)" let:matches>
+    {#if matches}
+      <div id="bio"></div>
+    {/if}
+  </MediaQuery>
 </div>
 
 <style>
@@ -183,11 +203,13 @@
     display: flex;
     flex-direction: column;
     width: fit-content;
+    height: fit-content;
     border: 2px solid var(--neutral-dark-gray-op-50);
   }
 
   #length div {
-    margin-top: 10px;
+    margin-top: 5px;
+    margin-bottom: 5px;
     display: flex;
     align-items: center;
   }
@@ -208,5 +230,15 @@
 
   #length input:checked {
     background-color: var(--main-blue);
+  }
+
+  @media screen and (max-width: 440px) {
+    #bio-container {
+      flex-direction: column;
+    }
+
+    #length {
+      flex-direction: row;
+    }
   }
 </style>

@@ -70,7 +70,7 @@
 
   // Needed to keep position:fixed working on nav bar
   function resetTranslation() {
-    let page = document.getElementById("projects-page");
+    let page = document.getElementById("tab-content");
     // @ts-ignore
     page.style = "";
   }

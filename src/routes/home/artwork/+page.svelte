@@ -111,7 +111,13 @@
 <style>
 	#container {
 		width: 100vw;
+		display: flex;
+		flex-direction: column;
 		height: fit-content;
+	}
+
+	hr {
+		width: 100%;
 	}
 
 	.spacing {

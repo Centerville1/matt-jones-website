@@ -1,5 +1,12 @@
 <script>
   import { goto } from '$app/navigation';
+  import { onMount } from 'svelte';
+  import PopupBox from '../../popup-box.svelte';
+
+  /**
+   * @type {PopupBox}
+   */
+  let popup;
 
   export let title = 'Placeholder';
   export let description = 'Placeholder';
@@ -10,6 +17,7 @@
   export let ended = '';
   export let linkUrl = '';
   export let image = '';
+  export let allowPopup = false;
 
   /**
    * @type {Date | null}
@@ -49,50 +57,133 @@
     // @ts-ignore
     endDate = 'Present';
   }
+
+    /**
+   * @type {string | (() => void)}
+   */
+  let url = "";
+
+  onMount(() => {
+    if (linkUrl !== "") {
+      url = () => {
+        if (linkUrl !== '') {
+          if (linkUrl.startsWith('https://')) {
+            // @ts-ignore
+            window.location = linkUrl;
+          } else {
+            goto(linkUrl);
+          }
+        }
+      }
+    }
+  });
 </script>
 
 <div>
-  <div class="outer-boundary">
-    <div class="card"> 
-      <button
-        on:click={() => {
-          if (linkUrl !== '') {
-            if (linkUrl.startsWith('https://')) {
-              // @ts-ignore
-              window.location = linkUrl;
-            } else {
-              goto(linkUrl);
-            }
-          }
-        }}
-      >
-        <h2>{title}</h2>
-        {#if startDate !== null}
-          {#if typeof(endDate) !== typeof("") && endDate !== null}
-            <h5>
-              {startMonth}
-              {startDate.getFullYear()} - {endMonth}
-              {endDate.getFullYear()}
-            </h5>
-          {:else}
-            <h5>
-              {startMonth}
-              {startDate.getFullYear()} - {endDate}
-            </h5>
+  {#if allowPopup}
+    <PopupBox
+      bind:this={popup}
+      onClick={url}>
+      <h2>{title}</h2>
+      {#if startDate !== null}
+        {#if typeof(endDate) !== typeof("") && endDate !== null}
+          <h5>
+            {startMonth}
+            {startDate.getFullYear()} - {endMonth}
+            {endDate.getFullYear()}
+          </h5>
+        {:else}
+          <h5>
+            {startMonth}
+            {startDate.getFullYear()} - {endDate}
+          </h5>
+        {/if}
+      {/if}
+      {#if image !== ''}
+        <div id="img-container">
+          <img
+            src="/experiences/{image}"
+            alt="Image uploaded to represent {title}"
+          />
+        </div>
+      {/if}
+      <p id="description">{description}</p>
+    </PopupBox>
+    <div class="outer-boundary" style="cursor: pointer;">
+      <div class="card" title="click to expand"> 
+        <button
+          on:click={() => {popup.openPopup()}}
+        >
+          <h2>{title}</h2>
+          {#if startDate !== null}
+            {#if typeof(endDate) !== typeof("") && endDate !== null}
+              <h5>
+                {startMonth}
+                {startDate.getFullYear()} - {endMonth}
+                {endDate.getFullYear()}
+              </h5>
+            {:else}
+              <h5>
+                {startMonth}
+                {startDate.getFullYear()} - {endDate}
+              </h5>
+            {/if}
           {/if}
-        {/if}
-        {#if image !== ''}
-          <div>
-            <img
-              src="/experiences/{image}"
-              alt="Image uploaded to represent {title}"
-            />
-          </div>
-        {/if}
-        <p id="description">{description}</p>
-      </button>
+          {#if image !== ''}
+            <div id="img-container">
+              <img
+                src="/experiences/{image}"
+                alt="Image uploaded to represent {title}"
+              />
+            </div>
+          {/if}
+          <p id="description">{description}</p>
+        </button>
+      </div>
     </div>
-  </div>
+  {:else}
+    <div class="outer-boundary">
+      <div class="card" title="click to expand"> 
+        <button
+          on:click={() => {
+            if (linkUrl !== '') {
+              if (linkUrl.startsWith('https://')) {
+                // @ts-ignore
+                window.location = linkUrl;
+              } else {
+                goto(linkUrl);
+              }
+            }
+          }}
+        >
+          <h2>{title}</h2>
+          {#if startDate !== null}
+            {#if typeof(endDate) !== typeof("") && endDate !== null}
+              <h5>
+                {startMonth}
+                {startDate.getFullYear()} - {endMonth}
+                {endDate.getFullYear()}
+              </h5>
+            {:else}
+              <h5>
+                {startMonth}
+                {startDate.getFullYear()} - {endDate}
+              </h5>
+            {/if}
+          {/if}
+          {#if image !== ''}
+            <div id="img-container">
+              <img
+                src="/experiences/{image}"
+                alt="Image uploaded to represent {title}"
+              />
+            </div>
+          {/if}
+          <p id="description">{description}</p>
+        </button>
+      </div>
+    </div>
+  {/if}
 </div>
 
 <style>
@@ -150,13 +241,21 @@
     background: var(--main-blue-alt);
   }
 
+  #img-container {
+    width: 100%;
+  }
+
   img {
-    width: 90%;
+    border: 1px solid var(--contrast-text-light);
+    border-radius: 7px;
+    max-height: 100px;
+    margin-left: auto;
+    margin-right: auto;
   }
 
   #description {
     text-align: left;
     white-space: pre-wrap;
-    overflow-y: auto;
+    overflow-y: hidden;
   }
 </style>

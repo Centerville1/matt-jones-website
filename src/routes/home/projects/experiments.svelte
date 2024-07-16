@@ -9,7 +9,6 @@
 
 <div id="content">
   <h2>Experiments with Webdev!</h2>
-  <div id="cards-scrollbox">
     <div id="cards">
       {#each experienceList as experience}
         <Card
@@ -18,10 +17,11 @@
           linkUrl={experience.url}
           started={experience.startDate}
           ended={experience.endDate}
+          image={experience.image}
+          allowPopup={true}
         />
       {/each}
     </div>
-  </div>
 </div>
 
 <style>
@@ -31,18 +31,13 @@
     margin-right: auto;
   }
 
-  #cards-scrollbox {
-    width: 100%;
-    padding-bottom: 20px;
-    overflow-x: scroll;
-  }
-
   #cards {
     margin-left: auto;
     margin-right: auto;
-    min-width: 60%;
+    width: 100%;
     width: fit-content;
-    display: flex;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
     justify-content: space-around;
   }
 </style>

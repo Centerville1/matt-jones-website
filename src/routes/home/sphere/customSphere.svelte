@@ -186,7 +186,6 @@
     height: 100%;
     min-height: 80vh;
     width: 100%;
-    background-color: var(--neutral-gray);
     overflow: hidden;
   }
 

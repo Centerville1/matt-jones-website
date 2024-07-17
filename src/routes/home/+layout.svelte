@@ -7,6 +7,7 @@
   import MediaQuery from 'svelte-media-query';
   import Footer from './footer.svelte';
   import { themeMode, animatePageLoadLocalStorageKey } from '../../store';
+  import { afterNavigate } from '$app/navigation';
 
   // Toggle visibility of the mobile nav dropdown menu
   function toggleNav() {
@@ -50,6 +51,11 @@
       }
     };
   });
+
+  // Ensure that the main element's scroll position is reset on navigation
+  afterNavigate(() => {
+    document.getElementById("main")?.scrollTo(0,0)
+  })
 
   /**
    * @type {string}
@@ -129,7 +135,7 @@
       {/if}
     </MediaQuery>
   </header>
-  <main>
+  <main id="main">
     <div id="page-content">
       <slot />
     </div>

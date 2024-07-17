@@ -9,19 +9,21 @@
 
 <div id="content">
   <h2>Experiments with Webdev!</h2>
-    <div id="cards">
-      {#each experienceList as experience}
-        <Card
-          title={experience.title}
-          description={experience.description}
-          linkUrl={experience.url}
-          started={experience.startDate}
-          ended={experience.endDate}
-          image={experience.image}
-          allowPopup={true}
-        />
-      {/each}
-    </div>
+  <p>Browse the list below to check out all web development experiments, and miscellaneous other projects!</p>
+  <hr />
+  <div id="cards">
+    {#each experienceList as experience}
+      <Card
+        title={experience.title}
+        description={experience.description}
+        linkUrl={experience.url}
+        started={experience.startDate}
+        ended={experience.endDate}
+        image={experience.image}
+        allowPopup={true}
+      />
+    {/each}
+  </div>
 </div>
 
 <style>

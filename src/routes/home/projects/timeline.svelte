@@ -6,6 +6,9 @@
 </script>
 
 <div class="upper-container">
+  <h1>My Work Experience</h1>
+  <p>Checkout the timeline below, listing all the positions I've held and projects I've worked on</p>
+  <p>Or... Check out some highlights and other projects using the tabs above!</p>
   <h2>Present Day</h2>
 </div>
 <div class="timeline">

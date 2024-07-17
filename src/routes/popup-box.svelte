@@ -25,19 +25,24 @@
   }
 </script>
 
-<div id="background-{instance}" class="background">
-  {#if onClick !== ""}
+<!-- svelte-ignore a11y-click-events-have-key-events -->
+<!-- svelte-ignore a11y-no-static-element-interactions -->
+<div id="background-{instance}" class="background" on:click={closeBox} title="Close Popup">
+  {#if onClick !== ""} 
+  <!-- If the popup has an onclick action to perform -->
     <div class="popup">
       <button class="close" on:click={closeBox}>&times;</button>
-      <button class="content" on:click={onClick} style="cursor: pointer;">
-        <h4><i>Click to Visit Page</i></h4>
+      <button class="content" on:click={onClick} style="cursor: pointer;" title="Click to Visit">
         <slot />
       </button>
+      <h4><i>Click again to Visit Page</i></h4>
     </div>
   {:else}
     <div class="popup">
       <button class="close" on:click={closeBox}>&times;</button>
-      <slot />
+      <button class="content">
+        <slot />
+      </button>
     </div>
   {/if}
 </div>
@@ -81,11 +86,27 @@
 }
 
 .content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
   background-color: var(--no-background);
   width: 90%;
   height: 100%;
   min-height: 300px;
+  max-height: 90%;
   border-radius: 0;
+  overflow-y: auto;
+  transition: none;
+}
+
+.content:hover {
+  background-color: var(--neutral-gray-op-10);
+  border-radius: 15px;
+}
+
+h4 {
+  margin: 0 0 5px;
 }
 
 .popup :global(button) {

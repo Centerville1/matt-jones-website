@@ -2,19 +2,47 @@
   "experiences": [
     {
       "title": "STEM Education Intern - Near Space Education",
-      "description": "Developing curriculum for a technical STEM summer camp for junior and senior high students.  Including teaching students CAD, 3D printing, soldering, electronics, programming, and high altitude balloon flight.  \n\nAssisting with the overall planning, operation, and details of summer camps for Near Space Education",
-      "startDate": "06/01/2024",
+      "description": "Creating, developing, and teaching STEM curricula to Junior and Senior High school students for space camps. I researched and learned CAD, 3D printing, soldering, Micro:Bit Microcontrollers, basic electronics, and more with the goal to be able to teach students these valuable STEM skills. I helped launch several high altitude weather balloons to test hardware. Worked on editing/creating social media content for the camps, as well as the creation of fundraising webpages and a reconfiguration of the local network.",
+      "startDate": "05/01/2024",
       "endDate": null,
+      "image": "",
+      "url": "https://www.nearspaceeducation.org/pages/space-camps",
+      "highlight": false
+    },
+    {
+      "title": "Student Cybersecurity Intern - Center for Technology Services",
+      "description": "Working with the Gordon College Center for Technology Services' (CTS) Network Systems Group (NSG). Developing and maintaining cybersecurity applications and scripting.",
+      "startDate": "01/01/2024",
+      "endDate": null,
+      "image": "",
+      "url": "",
+      "highlight": false
+    },
+    {
+      "title": "ASC Peer Subject Tutor - Computer Science Lab",
+      "description": "Working with Gordon's Academic Success Center (ASC) to host a bi-weekly computer science help session to offer assistance to first and second year students with their computer science coursework and projects.",
+      "startDate": "01/01/2024",
+      "endDate": null,
+      "image": "",
+      "url": "",
+      "highlight": false
+    },
+    {
+      "title": "President - Computer Science Club",
+      "description": "Volunteer position, involving planning, organizing, and handling communication for events for the computer science club. As the president, I led a small, dedicated team of students to run fun and educational extra-curricular events for computer science students and peers.",
+      "startDate": "08/01/2023",
+      "endDate": null,
+      "image": "CS_Club_Outreach.jpg",
       "url": "",
       "highlight": true
     },
     {
-      "title": "Computer Science Club President",
-      "description": "Placeholder Description of CS Club Pres",
-      "startDate": "08/01/2023",
+      "title": "Head Dispatcher - Gordon Police",
+      "description": "In addition to my responsibilities as a dispatcher and senior dispatcher, I stepped into the student manager role: overseeing scheduling, shift coverage, interviews, hiring decisions, training, organization, staff communications, and meetings for a team of a dozen student dispatchers.  \n\nAs part of my job, I developed a new workflow for scheduling. Since my team consisted entirely of student workers, the work schedule had to accommodate classes and other jobs. I implemented a system using Google Forms and Calendar to allow dispatchers to enter their availability and shift preferences using a google form, which would auto-populate a Google Sheet. I then wrote a JavaScript program, using Google's Apps Script software, to take the spreadsheet data and convert it to calendar events, so I could easily visualize the shift preferences of my staff. This was a vast improvement over the previous workflow, which was simply based on email responses and manually populating a spreadsheet from those responses, which was far more error-prone and time-consuming.",
+      "startDate": "06/01/2022",
       "endDate": null,
-      "url": "",
       "image": "",
+      "url": "",
       "highlight": false
     },
     {
@@ -27,56 +55,79 @@
       "highlight": true
     },
     {
-      "title": "Sample Highlighted Card",
-      "description": "Sample description with preformatted whitespace\n\n    Lorem ipsum dolor sit amet, sit audiam utamur necessitatibus ei. Mollis principes est te, est graeci ornatus voluptua ei, an vel labores senserit gubergren. In est reque propriae expetendis, cu commodo tacimates reprehendunt pro. Vide aperiam eum ei. Elitr nemore voluptatibus cu usu. Ignota splendide id qui, pri eu quod minimum.\n\n    Tempor quodsi in qui. An quodsi splendide pri, sea sale accusam omnesque ei. Ex vivendum recteque vel. No quod clita qui, vel idque menandri at.\n\n    Vix id quodsi scaevola consetetur. Ea quod fabellas mea, vis ne suavitate ocurreret, ne sed paulo assentior scripserit. Inciderint dissentiet voluptatibus te cum, pri illud dolore eleifend at, vis id quod latine expetendis. Ad nam saepe timeam scaevola.\n\n    Cu aliquam argumentum reprimique nam. Facete pertinax te mei. Habemus corrumpit mei an, apeirian disputationi ut sea. Mei nostro prompta ut, an oratio persequeris nec. Te qui tale delenit labores, ei eos nulla praesent pericula. Sea odio voluptatibus ut, enim fabellas sit ex.\n\n    Vim audiam iisque cu, autem comprehensam ius no. Eos ea singulis gloriatur, te qui habemus ullamcorper. Cu malis nonumy ocurreret vis. At vim nostrud ceteros.\n\n    Ius graeci fierent cotidieque at, utamur vulputate no vim, ex est omittantur referrentur delicatissimi. Vidit laudem sit ut, te prima maiorum nusquam pro, modus putant expetendis ex ius. Mei an aeque tacimates, vis possim aperiri an. Alterum facilis pro no. Duo duis legimus molestiae ne, vide illud numquam et pri.",
-      "startDate": "01/01/2020",
-      "endDate": "03/01/2021",
-      "url": "",
+      "title": "Access Control Assistant - Center for Technology Services",
+      "description": "Worked with several software systems to set up ID cards for students and faculty, effectively manage access on campus, and deal with customer requests and issues.",
+      "startDate": "05/01/2022",
+      "endDate": "08/01/2023",
       "image": "",
-      "highlight": false
-    },
-    {
-      "title": "STEM Education Intern - Near Space Education",
-      "description": "Developing curriculum for a technical STEM summer camp for junior and senior high students.  Including teaching students CAD, 3D printing, soldering, electronics, programming, and high altitude balloon flight.  \n\nAssisting with the overall planning, operation, and details of summer camps for Near Space Education",
-      "startDate": "06/01/2024",
-      "endDate": null,
       "url": "",
       "highlight": false
     },
     {
-      "title": "Computer Science Club President",
-      "description": "Placeholder Description of CS Club Pres",
-      "startDate": "08/01/2023",
-      "endDate": null,
-      "url": "",
-      "highlight": false
-    },
-    {
-      "title": "Other Position",
-      "description": "Placeholder Description of other position",
-      "startDate": "01/15/2024",
-      "endDate": null,
-      "url": "",
-      "highlight": false
-    },
-    {
-      "title": "Sample Highlighted Card",
-      "description": "Sample description with preformatted whitespace\n\n    Lorem ipsum dolor sit amet, sit audiam utamur necessitatibus ei. Mollis principes est te, est graeci ornatus voluptua ei, an vel labores senserit gubergren. In est reque propriae expetendis, cu commodo tacimates reprehendunt pro. Vide aperiam eum ei. Elitr nemore voluptatibus cu usu. Ignota splendide id qui, pri eu quod minimum.\n\n    Tempor quodsi in qui. An quodsi splendide pri, sea sale accusam omnesque ei. Ex vivendum recteque vel. No quod clita qui, vel idque menandri at.\n\n    Vix id quodsi scaevola consetetur. Ea quod fabellas mea, vis ne suavitate ocurreret, ne sed paulo assentior scripserit. Inciderint dissentiet voluptatibus te cum, pri illud dolore eleifend at, vis id quod latine expetendis. Ad nam saepe timeam scaevola.\n\n    Cu aliquam argumentum reprimique nam. Facete pertinax te mei. Habemus corrumpit mei an, apeirian disputationi ut sea. Mei nostro prompta ut, an oratio persequeris nec. Te qui tale delenit labores, ei eos nulla praesent pericula. Sea odio voluptatibus ut, enim fabellas sit ex.\n\n    Vim audiam iisque cu, autem comprehensam ius no. Eos ea singulis gloriatur, te qui habemus ullamcorper. Cu malis nonumy ocurreret vis. At vim nostrud ceteros.\n\n    Ius graeci fierent cotidieque at, utamur vulputate no vim, ex est omittantur referrentur delicatissimi. Vidit laudem sit ut, te prima maiorum nusquam pro, modus putant expetendis ex ius. Mei an aeque tacimates, vis possim aperiri an. Alterum facilis pro no. Duo duis legimus molestiae ne, vide illud numquam et pri.",
-      "startDate": "01/01/2020",
-      "endDate": null,
-      "url": "",
+      "title": "Summer Practicum Programmer - Computer Science Department",
+      "description": "Worked with a team of student developers and professors programming features on a real application with real users. Gained experience applying agile methodologies, and updated a significant amount of the existing CSS styling to add appearance settings features to the app.",
+      "startDate": "04/01/2023",
+      "endDate": "07/01/2023",
       "image": "",
+      "url": "",
       "highlight": false
+    },
+    {
+      "title": "TA - CPS 122 Object Oriented Programming",
+      "description": "Working with the CS department, offered weekly help sessions for students taking Object Oriented Programming. I helped students learn the concepts of object oriented programming in Java by assisting them with their projects and homework.",
+      "startDate": "01/01/2023",
+      "endDate": "05/01/2023",
+      "image": "",
+      "url": "",
+      "highlight": false
+    },
+    {
+      "title": "Peer Tutor - CPS 121 Introduction to Programming",
+      "description": "Working with the academic support office as a peer tutor, running help and review sessions for the students taking Introduction to Programming. I helped students understand the basic concepts of program structure, logic, and Python programming for their homework and projects.",
+      "startDate": "01/01/2022",
+      "endDate": "05/01/2022",
+      "image": "",
+      "url": "",
+      "highlight": false
+    },
+    {
+      "title": "Senior Dispatcher - Gordon Police",
+      "description": "In addition to my dispatch responsibilities, began assisting with training of new dispatchers, and data entry of paper logs and citations.",
+      "startDate": "05/01/2021",
+      "endDate": "05/01/2022",
+      "image": "",
+      "url": "",
+      "highlight": false
+    },
+    {
+      "title": "TA - CPS 121 Introduction to Programming",
+      "description": "Assisted students through help in lab sessions and by running review and project help sessions outside of class. Helped students in Introduction to Programming learn basic programming concepts such as program structure, logic, and Python programming.",
+      "startDate": "08/01/2021",
+      "endDate": "12/01/2021",
+      "image": "",
+      "url": "",
+      "highlight": false
+    },
+    {
+      "title": "Dispatcher - Gordon Police",
+      "description": "Answering service and emergency phone calls, communicating on the radio, assisting customers with requests and complaints, and handling emergency response.",
+      "startDate": "05/01/2019",
+      "endDate": "04/01/2021",
+      "image": "",
+      "url": "",
+      "highlight": false
+    },
+    {
+      "title": "CSS 3D Sphere",
+      "description": "The 3D CSS sphere project, as seen in the website intro animation",
+      "startDate": null,
+      "endDate": null,
+      "url": "/home/sphere",
+      "image": "CSSSphere.png",
+      "highlight": true
     }
   ],
   "other": [
-    {
-      "title": "CSS Artwork",
-      "description": "Using CSS to draw shapes and create artwork.\n    Plus some tests with animations using clip paths, and mapping animations to the scroll position using pure CSS, based by work by Kevin Powell on Youtube",
-      "startDate": null,
-      "endDate": null,
-      "url": "/home/artwork"
-    },
     {
       "title": "CSS 3D Sphere",
       "description": "Play with and customize the sphere used in the website intro animation!",
@@ -84,15 +135,23 @@
       "endDate": null,
       "url": "/home/sphere",
       "image": "CSSSphere.png",
-      "highlight": false
+      "highlight": true
     },
     {
-      "title": "Sample Highlighted Card",
-      "description": "Sample description with preformatted whitespace\n\n    Lorem ipsum dolor sit amet, sit audiam utamur necessitatibus ei. Mollis principes est te, est graeci ornatus voluptua ei, an vel labores senserit gubergren. In est reque propriae expetendis, cu commodo tacimates reprehendunt pro. Vide aperiam eum ei. Elitr nemore voluptatibus cu usu. Ignota splendide id qui, pri eu quod minimum.\n\n    Tempor quodsi in qui. An quodsi splendide pri, sea sale accusam omnesque ei. Ex vivendum recteque vel. No quod clita qui, vel idque menandri at.\n\n    Vix id quodsi scaevola consetetur. Ea quod fabellas mea, vis ne suavitate ocurreret, ne sed paulo assentior scripserit. Inciderint dissentiet voluptatibus te cum, pri illud dolore eleifend at, vis id quod latine expetendis. Ad nam saepe timeam scaevola.\n\n    Cu aliquam argumentum reprimique nam. Facete pertinax te mei. Habemus corrumpit mei an, apeirian disputationi ut sea. Mei nostro prompta ut, an oratio persequeris nec. Te qui tale delenit labores, ei eos nulla praesent pericula. Sea odio voluptatibus ut, enim fabellas sit ex.\n\n    Vim audiam iisque cu, autem comprehensam ius no. Eos ea singulis gloriatur, te qui habemus ullamcorper. Cu malis nonumy ocurreret vis. At vim nostrud ceteros.\n\n    Ius graeci fierent cotidieque at, utamur vulputate no vim, ex est omittantur referrentur delicatissimi. Vidit laudem sit ut, te prima maiorum nusquam pro, modus putant expetendis ex ius. Mei an aeque tacimates, vis possim aperiri an. Alterum facilis pro no. Duo duis legimus molestiae ne, vide illud numquam et pri.",
-      "startDate": "01/01/2020",
+      "title": "CSS Artwork",
+      "description": "Using CSS to draw shapes and create artwork.\n    Plus some tests with animations using clip paths, and mapping animations to the scroll position using pure CSS, based by work by Kevin Powell on Youtube",
+      "startDate": null,
       "endDate": null,
-      "url": "",
-      "image": "",
+      "image": "CSS_Artwork.png",
+      "url": "/home/artwork"
+    },
+    {
+      "title": "Tic-Tac-Toe",
+      "description": "A project for CPS 353 Internet Programming.\n\n  A simple HTML, CSS, JS webapp for playing Tic-Tac-Toe.  It even has a simple computer player (which is pretty easy to beat).  This was one of the first projects for the webdev class, and served as an introductory exercise.",
+      "startDate": null,
+      "endDate": null,
+      "url": "https://tictactoe-jones.vercel.app/",
+      "image": "Tic-Tac-Toe.png",
       "highlight": false
     }
   ]

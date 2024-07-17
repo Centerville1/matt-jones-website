@@ -113,6 +113,7 @@
       <div class="card" title="click to expand"> 
         <button
           on:click={() => {popup.openPopup()}}
+          style="cursor: pointer;"
         >
           <h2>{title}</h2>
           {#if startDate !== null}
@@ -139,11 +140,12 @@
           {/if}
           <p id="description">{description}</p>
         </button>
+        <h4 class="instruction">Click to Expand</h4>
       </div>
     </div>
   {:else}
     <div class="outer-boundary">
-      <div class="card" title="click to expand"> 
+      <div class="card"> 
         <button
           on:click={() => {
             if (linkUrl !== '') {
@@ -220,25 +222,8 @@
     transition: background 0.3s cubic-bezier(.03,.38,.72,.71);
   }
 
-  /* width */
-  p::-webkit-scrollbar {
-    width: 6px;
-  }
-
-  /* Track */
-  p::-webkit-scrollbar-track {
-    background: #00000000;
-  }
-
-  /* Handle */
-  p::-webkit-scrollbar-thumb {
-    background: var(--main-blue);
-    border-radius:10px;
-  }
-
-  /* Handle on hover */
-  p::-webkit-scrollbar-thumb:hover {
-    background: var(--main-blue-alt);
+  .instruction {
+    margin-left: 20px;
   }
 
   #img-container {

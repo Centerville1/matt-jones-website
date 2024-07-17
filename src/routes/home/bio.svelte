@@ -6,6 +6,10 @@
 
   export let height = 0;
 
+  // Keep track of screen width (using react:window below)
+  let prevWidth = 0
+  $: innerWidth = 0;
+
   /**
    * @type {string[]}
    */
@@ -21,6 +25,15 @@
   onMount(() => {
     setup();
   });
+
+  // Update height of bio container box whenever screen width changes
+  $: (() => {
+    (innerWidth); // Listen to changes in the inner width variable
+    if (Math.abs(innerWidth - prevWidth) > 20) {
+      prevWidth = innerWidth;
+      height = calcHeight(currentBios);
+    }
+  }) ()
 
   function setup() {
     const bio = document.getElementById('bio');
@@ -70,6 +83,7 @@
           bio.appendChild(paragraph);
         }
       }
+      // Set the height of the bio box to the calculated height
       let height = bio.clientHeight + 20;
       return height;
     }
@@ -139,6 +153,8 @@
     onButtonClick();
   }
 </script>
+
+<svelte:window bind:innerWidth />
 
 <div id="bio-container">
   <MediaQuery query="(min-width: 440px)" let:matches>

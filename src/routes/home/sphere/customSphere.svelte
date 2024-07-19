@@ -18,7 +18,7 @@
     { title: 'Red', variable: '--red' },
     { title: 'Green', variable: '--green' },
     { title: 'Purple', variable: '--contrast-purple' },
-    { title: 'Whie', variable: '--neutral-black' },
+    { title: 'White', variable: '--neutral-black' },
     { title: 'Dark Blue', variable: '--logo-blue' },
     { title: 'Black', variable: '--neutral-white' },
   ];
@@ -70,6 +70,7 @@
         type="range"
         min="1"
         max="50"
+        step="2"
         class="slider"
         id="long"
         bind:value={longitudeLines}

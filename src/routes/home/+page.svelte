@@ -113,7 +113,7 @@
           <ul>
             <li>My Tech Experience</li>
             <li>Personal Projects Showcase</li>
-            <a href="/home/projects#other"><li>Fun Creations</li></a>
+            <li><a href="/home/projects#other">Fun Creations</a></li>
           </ul>
         </li>
       </ul>
@@ -361,5 +361,9 @@
   .link img {
     width: 30px;
     height: 30px;
+  }
+
+  .a {
+    width: fit-content;
   }
 </style>

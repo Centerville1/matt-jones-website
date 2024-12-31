@@ -12,6 +12,7 @@
   // Toggle visibility of the mobile nav dropdown menu
   function toggleNav() {
     if (document.getElementById('links')?.style.display == 'none') {
+      // @ts-ignore
       document.getElementById('links').style.display = 'flex';
       return;
     }
@@ -20,6 +21,7 @@
 
   // Close (remove visibility of) the mobile nav dropdown menu
   function closeNav() {
+    // @ts-ignore
     document.getElementById('links').style.display = 'none';
   }
 
@@ -186,26 +188,28 @@
     margin-left: 10px;
   }
 
+
+  /* Custom Styled Scrollbar */
   /* width */
-  main::-webkit-scrollbar {
+  /* main::-webkit-scrollbar {
     width:11px;
-  }
+  } */
 
   /* Track */
-  main::-webkit-scrollbar-track {
+  /* main::-webkit-scrollbar-track {
     background: var(--no-background);
-  }
+  } */
 
   /* Handle */
-  main::-webkit-scrollbar-thumb {
+  /* main::-webkit-scrollbar-thumb {
     background: linear-gradient(90deg, var(--no-background), var(--main-blue-light));
     border-radius:10px;
-  }
+  } */
 
   /* Handle on hover */
-  main::-webkit-scrollbar-thumb:hover {
+  /* main::-webkit-scrollbar-thumb:hover {
     background: linear-gradient(90deg, var(--no-background), var(--main-blue));
-  }
+  } */
 
   /* CSS on large screens */
   @media (min-width: 440px) {

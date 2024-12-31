@@ -89,17 +89,7 @@
           $page.url.hash !== '#other'}
           on:change={onTabChange}
         />
-        <label for="timeline">Timeline</label>
-      </div>
-      <div class="tab">
-        <input
-          type="radio"
-          id="highlighted"
-          value="highlighted"
-          checked={$page.url.hash === '#highlighted'}
-          on:change={onTabChange}
-        />
-        <label for="highlighted">Highlights</label>
+        <label for="timeline">My Experience</label>
       </div>
       <div class="tab">
         <input
@@ -109,7 +99,7 @@
           checked={$page.url.hash === '#other'}
           on:change={onTabChange}
         />
-        <label for="other">Experiments</label>
+        <label for="other">Creations</label>
       </div>
     </form>
     <div class="transition"></div>
@@ -206,7 +196,6 @@
     width: fit-content;
     margin-right: auto;
     display: flex;
-    justify-content: center;
     width: 40vw;
     border-radius: 10px;
   }

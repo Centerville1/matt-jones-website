@@ -1,17 +1,7 @@
 <script>
   import experiences from './experiences.json';
   import Card from './card.svelte';
-  import Carousel from 'svelte-carousel';
   import MediaQuery from 'svelte-media-query';
-
-  /**
-   * @type {Carousel}
-   */
-  let carousel; // for calling methods of the carousel instance
-  
-  const handleNextClick = () => {
-    carousel.goToNext()
-  }
 
   let experienceList = experiences.experiences;
 
@@ -25,22 +15,12 @@
 
 <div id="content">
   <div class="upper-container">
-    <h2>Highlighted Experiences</h2>
+    <h2>Highlights</h2>
+    <hr />
   </div>
-  <div id="upper-content">
     <div id="carousel-box">
       <MediaQuery query="(min-width: 700px)" let:matches>
         {#if matches}
-          <Carousel
-            bind:this={carousel}
-            particlesToShow={2}
-            autoplay={true}
-            autoplayDuration={4000}
-            autoplayProgressVisible={true}
-            duration={1000}
-            pauseOnFocus={true}
-            infinite={true}
-          >
             {#if countHighlights > 0}
               {#each experienceList as experience}
                 {#if experience.highlight}
@@ -48,9 +28,10 @@
                     title={experience.title}
                     description={experience.description}
                     linkUrl={experience.url}
-                    started={experience.startDate}
+                    started={experience.startDate || undefined}
                     ended={experience.endDate}
                     image={experience.image}
+                    allowPopup={true}
                   />
                 {/if}
               {/each}
@@ -61,18 +42,7 @@
                 linkUrl={'/home/projects#timeline'}
               />
             {/if}
-          </Carousel>
         {:else}
-          <Carousel
-            bind:this={carousel}
-            particlesToShow={1}
-            autoplay={true}
-            autoplayDuration={4000}
-            autoplayProgressVisible={true}
-            duration={1000}
-            pauseOnFocus={true}
-            infinite={true}
-          >
             {#if countHighlights > 0}
               {#each experienceList as experience}
                 {#if experience.highlight}
@@ -80,9 +50,10 @@
                   title={experience.title}
                   description={experience.description}
                   linkUrl={experience.url}
-                  started={experience.startDate}
+                  started={experience.startDate || undefined}
                   ended={experience.endDate}
                   image={experience.image}
+                  allowPopup={true}
                   />
                 {/if}
               {/each}
@@ -93,11 +64,9 @@
                 linkUrl={'/home/projects#timeline'}
               />
             {/if}
-          </Carousel>
         {/if}
         </MediaQuery>
     </div>
-  </div>
 </div>
 
 <style>
@@ -106,15 +75,12 @@
     padding-left: 20px;
   }
 
-  #upper-content {
-    border-top: 6px solid var(--main-blue-light);
-    border-bottom: 6px solid var(--main-blue-light);
-  }
-
   #carousel-box {
     width:95%;
     margin-left: auto;
     margin-right: auto;
     padding-top: 20px;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   }
 </style>

@@ -1,27 +1,27 @@
 <script>
   import experiences from './experiences.json';
-  import TimelineItem from './timeline-item.svelte';
+  import Highlighted from './highlighted.svelte';
+  import Card from './card.svelte';
 
   let experienceList = experiences.experiences;
 </script>
 
+<Highlighted />
 <div class="upper-container">
-  <h1>My Work Experience</h1>
-  <p>Checkout the timeline below, listing all the positions I've held and projects I've worked on</p>
-  <p>Or... Check out some highlights and other projects using the tabs above!</p>
-  <h2>Present Day</h2>
+  <h1>All Experience</h1>
 </div>
 <div class="timeline">
   {#each experienceList as experience, i}
-      <TimelineItem
-        index={i}
-        title={experience.title}
-        description={experience.description}
-        linkUrl={experience.url}
-        maxHeight={300}
-        started={experience.startDate}
-        ended={experience.endDate}>
-      </TimelineItem>
+    <Card
+      title={experience.title}
+      image={experience.image}
+      description={experience.description}
+      linkUrl={experience.url}
+      started={experience.startDate}
+      ended={experience.endDate}
+      minimizeHeight={true}
+      allowPopup={true}>
+  </Card>
   {/each}
 </div>
 
@@ -34,18 +34,15 @@
 
 .upper-container {
   padding-left: 20px;
-}
-
-h2 {
-  margin-bottom: 4px;
+  margin-bottom: 20px;
 }
 
 /* The actual timeline (the vertical ruler) */
 .timeline {
   position: relative;
-  max-width: 1200px;
   padding-top: 20px;
   padding-bottom: 20px;
+  padding-left: 20px;
   margin-left: 0;
   border-top: 6px solid var(--timeline-color);
   border-bottom: 6px solid var(--timeline-color);

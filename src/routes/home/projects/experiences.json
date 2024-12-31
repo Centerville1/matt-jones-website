@@ -16,7 +16,7 @@
       "endDate": null,
       "image": "",
       "url": "",
-      "highlight": false
+      "highlight": true
     },
     {
       "title": "ASC Peer Subject Tutor - Computer Science Lab",
@@ -68,9 +68,9 @@
       "description": "Worked with a team of student developers and professors programming features on a real application with real users. Gained experience applying agile methodologies, and updated a significant amount of the existing CSS styling to add appearance settings features to the app.",
       "startDate": "04/01/2023",
       "endDate": "07/01/2023",
-      "image": "",
+      "image": "practicum.jpg",
       "url": "",
-      "highlight": false
+      "highlight": true
     },
     {
       "title": "TA - CPS 122 Object Oriented Programming",
@@ -116,15 +116,6 @@
       "image": "",
       "url": "",
       "highlight": false
-    },
-    {
-      "title": "CSS 3D Sphere",
-      "description": "The 3D CSS sphere project, as seen in the website intro animation",
-      "startDate": null,
-      "endDate": null,
-      "url": "/home/sphere",
-      "image": "CSSSphere.png",
-      "highlight": true
     }
   ],
   "other": [
@@ -136,6 +127,15 @@
       "url": "/home/sphere",
       "image": "CSSSphere.png",
       "highlight": true
+    },
+    {
+      "title": "FireSim",
+      "description": "A forest fire simulation, using grid based rules (similar to cellular automata) to generate interesting, endless forest fire animations",
+      "startDate": null,
+      "endDate": null,
+      "url": "/home/firesim",
+      "image": "firesim.png",
+      "highlight": false
     },
     {
       "title": "CSS Artwork",

@@ -86,15 +86,11 @@
 }
 
 .content {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: flex-start;
   background-color: var(--no-background);
-  width: 90%;
   height: 100%;
-  min-height: 300px;
-  max-height: 90%;
+  min-height: 50vh;
+  max-height: 90vh;
+  width: 100%;
   border-radius: 0;
   overflow-y: auto;
   transition: none;

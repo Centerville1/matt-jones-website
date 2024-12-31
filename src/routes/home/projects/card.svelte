@@ -10,6 +10,9 @@
 
   export let title = 'Placeholder';
   export let description = 'Placeholder';
+    /**
+   * @type {String | null}
+   */
   export let started = '';
   /**
    * @type {String | null}
@@ -18,6 +21,7 @@
   export let linkUrl = '';
   export let image = '';
   export let allowPopup = false;
+  export let minimizeHeight = false;
 
   /**
    * @type {Date | null}
@@ -63,6 +67,11 @@
    */
   let url = "";
 
+  /**
+   * @type HTMLElement | null
+   */
+  let thisCard = null;
+
   onMount(() => {
     if (linkUrl !== "") {
       url = () => {
@@ -76,6 +85,12 @@
         }
       }
     }
+    if (minimizeHeight && thisCard) {
+      thisCard.style.height = "fit-content"
+    }
+    else if (thisCard) {
+      thisCard.style.height = "450px"
+    }
   });
 </script>
 
@@ -83,34 +98,40 @@
   {#if allowPopup}
     <PopupBox
       bind:this={popup}
-      onClick={url}>
-      <h2>{title}</h2>
-      {#if startDate !== null}
-        {#if typeof(endDate) !== typeof("") && endDate !== null}
-          <h5>
-            {startMonth}
-            {startDate.getFullYear()} - {endMonth}
-            {endDate.getFullYear()}
-          </h5>
-        {:else}
-          <h5>
-            {startMonth}
-            {startDate.getFullYear()} - {endDate}
-          </h5>
+      onClick={url}
+      >
+      <div class="popup">
+        <h2>{title}</h2>
+        {#if startDate !== null}
+          {#if typeof(endDate) !== typeof("") && endDate !== null}
+            <h4>
+              {startMonth}
+              {startDate.getFullYear()} - {endMonth}
+              {endDate.getFullYear()}
+            </h4>
+          {:else}
+            <h4>
+              {startMonth}
+              {startDate.getFullYear()} - {endDate}
+            </h4>
+          {/if}
         {/if}
-      {/if}
-      {#if image !== ''}
-        <div id="img-container">
-          <img
-            src="/experiences/{image}"
-            alt="Image uploaded to represent {title}"
-          />
+        <div class="popup-content">
+          {#if image !== ''}
+            <div id="img-container">
+              <img
+                class="popup-image"
+                src="/experiences/{image}"
+                alt="Image uploaded to represent {title}"
+              />
+            </div>
+          {/if}
+          <p id="description">{description}</p>
         </div>
-      {/if}
-      <p id="description">{description}</p>
+      </div>
     </PopupBox>
     <div class="outer-boundary" style="cursor: pointer;">
-      <div class="card" title="click to expand"> 
+      <div class="card" id="card" title="click to expand" bind:this={thisCard}> 
         <button
           on:click={() => {popup.openPopup()}}
           style="cursor: pointer;"
@@ -133,6 +154,7 @@
           {#if image !== ''}
             <div id="img-container">
               <img
+                class={minimizeHeight ? "image-wide" : "image"}
                 src="/experiences/{image}"
                 alt="Image uploaded to represent {title}"
               />
@@ -175,7 +197,8 @@
           {/if}
           {#if image !== ''}
             <div id="img-container">
-              <img
+              <img 
+                class={minimizeHeight ? "image-wide" : "image"}
                 src="/experiences/{image}"
                 alt="Image uploaded to represent {title}"
               />
@@ -195,7 +218,6 @@
   }
 
   .card {
-    height: 450px;
     border-radius: 40px;
     border: 4px solid var(--main-blue-alt);
     background-color: var(--no-background);
@@ -203,7 +225,7 @@
     display: flex;
     flex-direction: column;
     margin-bottom: 20px;
-    transition: background 0.5s cubic-bezier(.72,0,.83,.67);
+    transition: background 0.25s cubic-bezier(.72,0,.83,.67);
   }
 
   .card button {
@@ -219,7 +241,6 @@
 
   .card:hover {
     background-color: var(--main-blue-alt);
-    transition: background 0.3s cubic-bezier(.03,.38,.72,.71);
   }
 
   .instruction {
@@ -230,17 +251,56 @@
     width: 100%;
   }
 
-  img {
+  .popup-image {
     border: 1px solid var(--contrast-text-light);
     border-radius: 7px;
-    max-height: 100px;
+    max-height: 250px;
+    max-width: 100%;
+    float: left;
+  }
+
+  .image {
+    border: 1px solid var(--contrast-text-light);
+    border-radius: 7px;
+    max-width: 90%;
     margin-left: auto;
     margin-right: auto;
+  }
+
+  .image-wide {
+    border: 1px solid var(--contrast-text-light);
+    border-radius: 7px;
+    max-height: 150px;
+    float: left;
   }
 
   #description {
     text-align: left;
     white-space: pre-wrap;
     overflow-y: hidden;
+  }
+
+  .popup {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .popup-content {
+    display: flex;
+    flex-direction: row;
+    column-gap: 20px;
+  }
+
+  .popup p {
+    text-align: center;
+    font-size: large;
+  }
+
+  @media screen and (max-width: 950px) {
+    .popup-content {
+      display: flex;
+      flex-direction: column;
+      row-gap: 20px;
+    }
   }
 </style>

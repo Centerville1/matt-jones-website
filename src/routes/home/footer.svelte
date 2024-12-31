@@ -100,7 +100,7 @@
     </div>
 
     <div id="copyright">
-      © 2023 - 2024 Matthew A. Jones All Rights Reserved
+      © 2025 Matthew A. Jones All Rights Reserved
     </div>
   </div>
 </footer>

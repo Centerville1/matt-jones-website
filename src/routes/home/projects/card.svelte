@@ -226,6 +226,7 @@
     flex-direction: column;
     margin-bottom: 20px;
     transition: background 0.25s cubic-bezier(.72,0,.83,.67);
+    transition: transform .2s ease-out;
   }
 
   .card button {
@@ -241,6 +242,7 @@
 
   .card:hover {
     background-color: var(--main-blue-alt);
+    transform: scale(1.01);
   }
 
   .instruction {

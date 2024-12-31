@@ -213,12 +213,7 @@
     height: 0;
     position: absolute;
   }
-
-  /* Detect tab focus on input */
-  .tab input[type='radio']:focus + label {
-    border: 2px solid var(--main-blue);
-  }
-
+  
   .tab input[type='radio']:checked + label {
     background: var(--neutral-gray);
   }

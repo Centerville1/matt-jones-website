@@ -12,7 +12,7 @@ in the sphere's frame by simply manipulating a handful of variables using the on
 
 - customSphere.svelte - Page with sliders and variables for manipulating sphere.
   
-- sphere.svelte - The independent sphere compenent, with modifiable attributes to customize sphere appearance.
+- sphere.svelte - The independent sphere component, with modifiable attributes to customize sphere appearance.
   
 - sphere.css - style for the sphere component (styling must be in separate file, since most of the sphere is added in Javascript, the style section in svelte files by default doesn't apply to elements added by Javascript (I believe this is due to Svelte's SSR implementation).
 

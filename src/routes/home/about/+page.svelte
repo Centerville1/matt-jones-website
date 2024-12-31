@@ -6,13 +6,15 @@
   <img src="/logo-light-nbg.png" alt="Matt Jones' personal logo, a wireframe sphere with a signature over it"/>
 
   <h3>Why This Site:</h3>
-  <p>My personal portfolio website, a personal project 
-    designed to be a place where I can experiment with
+  <p>My personal portfolio website, a personal web development project 
+    designed as a playground to experiment with
     web development, and keep a detailed record of my
-    experience and various projects.  This site is
-    meant to be a chance for me to show off my skills
-    and a place that I can keep adding to, growing, and
-    maintaing over time</p>
+    experience and various projects.  This site is, like many old school
+    personal websites of the early 2000s,
+    meant to be a chance for me to highlight my skills and experience
+    and a place that I can keep adding to and tinkering with over time
+  </p>
+
 
   <div class="spacing" />
 

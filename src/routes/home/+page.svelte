@@ -246,8 +246,8 @@
   .banner {
     width: 100vw;
     height: fit-content;
-    mask-image: linear-gradient(180deg,
-    rgba(0,0,0,100) 70%, rgba(0,0,0,0) 100%);
+    mask-image: linear-gradient(180deg, rgba(0,0,0,0.2) 0%, rgba(0,0,0,100) 5%,
+    rgba(0,0,0,100) 70%, rgba(0,0,0,0) 99%);
     background-size: cover;
   }
 
@@ -259,7 +259,6 @@
   @media screen and (max-width: 440px) {
     #text-container {
       width: 100vw;
-      margin-top: 30px;
       overflow: hidden;
       margin-left: auto;
       margin-right: auto;
@@ -271,7 +270,6 @@
   @media screen and (min-width: 441px) {
     #text-container {
       width: 80vw;
-      margin-top: 30px;
       overflow: hidden;
       margin-left: auto;
       margin-right: auto;

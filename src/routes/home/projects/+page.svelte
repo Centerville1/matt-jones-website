@@ -133,16 +133,16 @@
       radial-gradient(
         circle,
         transparent 20%,
-        var(--neutral-gray) 20%,
-        var(--neutral-gray) 80%,
+        var(--neutral-white) 20%,
+        var(--neutral-white) 80%,
         transparent 80%,
         transparent
       ),
       radial-gradient(
           circle,
           transparent 20%,
-          var(--neutral-gray) 20%,
-          var(--neutral-gray) 80%,
+          var(--neutral-white) 20%,
+          var(--neutral-white) 80%,
           transparent 80%,
           transparent
         )
@@ -151,7 +151,7 @@
       linear-gradient(
           90deg,
           var(--neutral-dark-gray-op-50) 2.6px,
-          var(--neutral-gray) 2.6px
+          var(--neutral-white) 2.6px
         ) -1.3px 0;
     background-size:
       60px 60px,

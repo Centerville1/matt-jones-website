@@ -18,6 +18,6 @@
   #page {
     height: 100vh;
     width: 100vw;
-    background-color: var(--neutral-gray);
+    background-color: var(--neutral-white);
   }
 </style>

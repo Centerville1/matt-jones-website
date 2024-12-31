@@ -41,12 +41,14 @@
       localStorage.setItem(animatePageLoadLocalStorageKey, "false")
     }
     else {
+      // @ts-ignore
       document.getElementById('outer-container').style.animation = 'none'
     }
     document.onclick = function (e) {
       if (window.screen.width <= 439) {
         let menu_icon_box = document.getElementById('links');
         let button = document.getElementById('menu-button');
+        // @ts-ignore
         if (!menu_icon_box.contains(e.target) && !button.contains(e.target)) {
           closeNav();
         }
@@ -166,7 +168,7 @@
     position: absolute;
     height: 100vh;
     width: 100vw;
-    background-color: var(--neutral-gray);
+    background-color: var(--neutral-white);
     color: var(--contrast-text-light);
     --header-width: 60px;
   }
@@ -304,7 +306,7 @@
     height: calc(100vh - var(--header-width));
     width: 100vw;
     overflow: scroll;
-    overflow-x: hidden;
+    overflow-x: clip;
   }
 
   #page-content {

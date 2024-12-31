@@ -41,7 +41,6 @@
         <h3>Inquiries?  Contact me:</h3>
       </div>
       <h3>Email: <a href="mailto:matt.jones3054@gmail.com" class="inline-link">matt.jones3054@gmail.com</a></h3>
-      <h3>Phone: 978-979-0323</h3>
     </div>
     <div class="horizontal-divider" />
     <div class="navigation">
@@ -56,17 +55,12 @@
           </h3>
           <h3>
             <a href="/home/projects" class="inline-link" on:click={scroll_top}>
-              Timeline
-            </a>
-          </h3>
-          <h3>
-            <a href="/home/projects#highlighted" class="inline-link" on:click={scroll_top}>
-              Highlighted Experience
+              All Experience
             </a>
           </h3>
           <h3>
             <a href="/home/projects#other" class="inline-link" on:click={scroll_top}>
-              Experiments
+              Web Creations
             </a>
           </h3>
         </div>

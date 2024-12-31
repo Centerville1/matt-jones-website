@@ -92,7 +92,7 @@
           <a
             class="emphasis"
             href="/home/projects"
-            on:click={scrollTop}>Projects</a
+            on:click={scrollTop}>My Portfolio</a
           >
         </div>
       <!-- Change to hamburger menu on small screens -->
@@ -131,7 +131,7 @@
             <a on:click={toggleNav} href="/home">Home</a>
           </div>
           <div>
-            <a on:click={toggleNav} href="/home/projects">Projects</a>
+            <a on:click={toggleNav} href="/home/projects">My Portfolio</a>
           </div>
         </nav>
       {/if}
@@ -224,7 +224,7 @@
     }
 
     #links a {
-      width: 100px;
+      width: 120px;
       display: flex;
       justify-content: center;
       text-decoration: none;

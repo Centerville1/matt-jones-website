@@ -15,7 +15,7 @@
    */
   let currentBios = [];
 
-  let selectedLength = 'mid';
+  let selectedLength = 'short';
 
   /**
    * @type {any}
@@ -38,7 +38,8 @@
   function setup() {
     const bio = document.getElementById('bio');
     if (bio !== null) {
-      generateBio(bios.mid.default);
+      // @ts-ignore
+      generateBio(bios[selectedLength].default);
       height = calcHeight(currentBios);
     }
     else {

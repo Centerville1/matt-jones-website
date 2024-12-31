@@ -1,5 +1,4 @@
 <script>
-  import Highlighted from './highlighted.svelte';
   import Timeline from './timeline.svelte';
   import Experiments from './experiments.svelte';
   import { page } from '$app/stores';
@@ -85,8 +84,7 @@
           type="radio"
           id="timeline"
           value="timeline"
-          checked={$page.url.hash !== '#highlighted' &&
-          $page.url.hash !== '#other'}
+          checked={$page.url.hash !== '#other'}
           on:change={onTabChange}
         />
         <label for="timeline">My Experience</label>
@@ -107,10 +105,7 @@
   <div id="tab-content">
     {#if $page.url.hash === '#other'}
       <Experiments />
-    {:else if $page.url.hash === '#highlighted'}
-      <Highlighted />
-    {:else if $page.url.hash !== '#highlighted' &&
-    $page.url.hash !== '#other'}
+    {:else if $page.url.hash !== '#other'}
       <Timeline />
     {/if}
   </div>

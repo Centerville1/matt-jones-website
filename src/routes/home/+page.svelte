@@ -81,6 +81,9 @@
 </script>
 
 <div id="page">
+  <div class="banner">
+    <img src="/pictures/banner.png" alt="Banner, welcome to my website"/>
+  </div>
   <div class="sticker">
     <span id="lego-wave">
       <img
@@ -97,25 +100,62 @@
   </div>
   <div id="text-container">
     <div id="bio-box" class="text-box">
-      <h1>Hi there!</h1>
+      <h1>Hi there! Welcome to my website</h1>
       <Bio bind:height={bioHeight} onButtonClick={playRandomNote} />
+      <h3>Matt Jones</h3>
     </div>
     <div class="text-box">
       <h1>So What's Here</h1>
-      <p>On this site you can find:</p>
+      <h3>This site is my personal portfolio, blog, project showcase, and more:</h3>
+      <h2>You can find:</h2>
       <ul>
-        <a href="/home/projects"><li>my projects</li></a>
-        <li>things I've worked on</li>
-        <li>companies I've worked for</li>
-        <li>people I've worked with</li>
+        <li><a href="/home/projects">My portfolio, including:</a>
+          <ul>
+            <li>My Tech Experience</li>
+            <li>Personal Projects Showcase</li>
+            <a href="/home/projects#other"><li>Fun Creations</li></a>
+          </ul>
+        </li>
       </ul>
-      <p>
-        It's also a place for me to build future projects off of, and somewhere
-        I can put my experiments with webdev.
-      </p>
+      <br />
+      <h2>Inquiries? Feel free to reach out!</h2>
+      <h4>Email: <a href="mailto:matt.jones3054@gmail.com" class="inline-link">matt.jones3054@gmail.com</a></h4>
+      <h4>LinkedIn:
+        <a href="https://www.linkedin.com/in/matt-jones-a7b389292/">
+          My Profile
+        </a>
+      </h4>
+      <br />
+      <hr />
+      <br />
+      <h3>Site Story</h3>
+      <p>This is an open source project, for more about the project, read the below:</p>
+      <ul>
+        <li>
+          <h4>
+            <a href="/home/about" class="inline-link">
+              About Site
+            </a>
+          </h4>
+        </li>
+        <li>
+          <h4>
+            <a href="/home/architecture" class="inline-link">
+              Tech Stack/Development Story
+            </a>
+          </h4>
+        </li>
+        <li>
+          <h4>
+            <a href="https://github.com/Centerville1/matt-jones-website">
+              Project on Github
+            </a>
+          </h4>
+        </li>
+      </ul>
     </div>
     <div class="text-box">
-      <h1>Socials</h1>
+      <h1>My Links</h1>
       <a
         href="https://www.linkedin.com/in/matt-jones-a7b389292/"
         class="link"
@@ -201,6 +241,19 @@
 
   a:hover {
     background-color: var(--neutral-dark-gray-op-50);
+  }
+
+  .banner {
+    width: 100vw;
+    height: fit-content;
+    mask-image: linear-gradient(180deg,
+    rgba(0,0,0,100) 70%, rgba(0,0,0,0) 100%);
+    background-size: cover;
+  }
+
+  .banner img {
+    width: 100%;
+    opacity: 10;
   }
 
   @media screen and (max-width: 440px) {

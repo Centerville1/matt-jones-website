@@ -1,7 +1,6 @@
 {
   "short": {
     "default": [
-      "Thanks for visiting my site!",
       "My name is Matt, I'm a college student studying for my B.S. in Computer Science.  I fell in love with coding in middle school, when learning from my grandfather.  We would get together once a week and learn the fundamentals by working on a variety of projects.",
       "In college, I've had formal experience writing code for classes and projects in Python, Java, C, C++, SQL, and JS/HTML/CSS.  I've also TA'd several programming classes, and been able to pass on my knowledge to help peers grasp the fundamentals of the powerful skill of programming.",
       "Personally, I love learning a little bit about everything I can, obsessing over various nerdy topics, from spaceflight to Formula 1.  I'm also a musician, avid lego enjoyer, and dog lover."
@@ -9,7 +8,6 @@
   },
   "mid": {
     "default": [
-      "Thanks for visiting my site!",
       "My name is Matt, I'm a college student studying for my B.S. in Computer Science.  I first fell in love with computer science in middle school, when my grandfather, a retired programmer, introduced me to programming.  We would get together once a week to work on whatever project interested us at the time, writing code to control a home security system and drive robots.",
       "In high school, I learned Python, and worked on a wide variety of personal projects, anything that piqued my interest.  I experimented with physics simulations and experimented with graphics using tkinter.  Putting everything together, I wrote my own simple game engine, displaying sprites and animations, and simulating movement and collisions of assets for an unfinished space game.  The majority of these scripts now lie buried in a subdirectory on my computer, in varying states of completeness, but invaluable to me for the concepts I learned.",
       "In college, I've had formal experience with many more languages, writing code for classes and projects in Python, Java, C, C++, SQL, and JS/HTML/CSS.  I've also TA'd several programming classes, and been able to pass on my knowledge to help peers grasp the fundamentals of the powerful skill of programming.",
@@ -18,7 +16,6 @@
   },
   "long": {
     "default": [
-      "Thanks for visiting my site!",
       "My name is Matt, I'm a college student studying for my B.S. in Computer Science.  I first fell in love with computer science in middle school, when my grandfather, a retired programmer out of silicon valley, introduced me to programming.  Him and I would get together for an hour or two one night a week to work on whatever project interested us at the time.  Initially, he taught me the fundamentals of coding, writing C code for the Wink Arduino based robot.  From there, we worked on a variety of IOT applications, using Particle's wifi enabled microcontroller, Photon, to control a home security system, drive robots, and much more.",
       "In high school, I learned Python, and began experimenting with all sorts of projects, exploring the vast array of Python libraries, including writing code for the web using Python Flask.  During those years, I also worked on a wide variety of personal projects, anything that piqued my interest.  I experimented with physics simulations, plotting the trajectories of model rockets and the orbits of planets.  I also experimented with graphics using Tkinter.  Putting everything together, I essentially wrote my own game engine, displaying sprites and animations, and simulating movement and collisions of assets for a space game I worked on for fun.  The majority of these scripts now lie buried in a subdirectory on my computer, in varying states of completeness, but are invaluable to me by what they taught me about programming.",
       "In college, I've had formal experience with many more languages, writing code for classes and projects in Python, Java, C, C++, SQL, and JS/HTML/CSS.  I've also had the opportunity to TA a variety of programming classes, and been able to pass on my knowledge and love of programming to help peers grasp the fundamentals of the powerful skill of programming.",

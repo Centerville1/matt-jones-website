@@ -23,7 +23,7 @@ const Timberwolf = '#D8D8D8';
 const Night = '#101010';
 const EerieBlack = '#1F1F1F';
 // const Jet = '#313131';
-const Onyx = '#393B40';
+const Onyx = '#2D2F34';
 const Charcoal = '#394356';
 
 const Clear = '#00000000';

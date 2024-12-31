@@ -118,17 +118,9 @@
         </li>
       </ul>
       <br />
-      <h2>Inquiries? Feel free to reach out!</h2>
-      <h4>Email: <a href="mailto:matt.jones3054@gmail.com" class="inline-link">matt.jones3054@gmail.com</a></h4>
-      <h4>LinkedIn:
-        <a href="https://www.linkedin.com/in/matt-jones-a7b389292/">
-          My Profile
-        </a>
-      </h4>
-      <br />
-      <hr />
-      <br />
-      <h3>Site Story</h3>
+    </div>
+    <div class="text-box">
+      <h1>Site Story</h1>
       <p>This is an open source project, for more about the project, read the below:</p>
       <ul>
         <li>
@@ -153,6 +145,16 @@
           </h4>
         </li>
       </ul>
+      <br />
+      <hr />
+      <br />
+      <h2>Inquiries? Feel free to reach out!</h2>
+      <h4>Email: <a href="mailto:matt.jones3054@gmail.com" class="inline-link">matt.jones3054@gmail.com</a></h4>
+      <h4>LinkedIn:
+        <a href="https://www.linkedin.com/in/matt-jones-a7b389292/">
+          My Profile
+        </a>
+      </h4>
     </div>
     <div class="text-box">
       <h1>My Links</h1>
@@ -215,7 +217,7 @@
   #page {
     width: 100vw;
     min-height: 80vh;
-    overflow: hidden;
+    overflow: clip;
     margin-left: auto;
     margin-right: auto;
     /* Background pattern originally generated from 
@@ -244,16 +246,26 @@
   }
 
   .banner {
+    transform: translateY(0px); 
+    opacity: 1;
     width: 100vw;
     height: fit-content;
     mask-image: linear-gradient(180deg, rgba(0,0,0,0.2) 0%, rgba(0,0,0,100) 5%,
     rgba(0,0,0,100) 70%, rgba(0,0,0,0) 99%);
     background-size: cover;
+    animation: slide-down cubic-bezier(0.58, 0, 0.48, 0.9) forwards;
+    animation-timeline: view();
+    animation-range-start: 82vh;
+    animation-range-end: 130vh;
   }
 
   .banner img {
     width: 100%;
     opacity: 10;
+  }
+
+  @keyframes slide-down {
+    to { transform: translateY(-100px); opacity: 0;}
   }
 
   @media screen and (max-width: 440px) {
@@ -270,7 +282,7 @@
   @media screen and (min-width: 441px) {
     #text-container {
       width: 80vw;
-      overflow: hidden;
+      overflow: clip;
       margin-left: auto;
       margin-right: auto;
     }
@@ -335,12 +347,22 @@
   }
 
   .text-box {
+    transform: translateY(300px);
+    opacity: 0;
     border: 3px solid var(--neutral-dark-gray-op-50);
     border-radius: 20px;
     padding: 2vw;
     margin-bottom: 10px;
     overflow: hidden;
-    transition: height 3s cubic-bezier(0.3, 0.3, 0.27, 1);
+    transition: height 1s cubic-bezier(0.3, 0.3, 0.27, 1);
+    animation: slide-up cubic-bezier(0.58, 0, 0.48, 0.9) forwards;
+    animation-timeline: view();
+    animation-range-start: 10vh;
+    animation-range-end: 50vh;
+  }
+
+  @keyframes slide-up {
+    to { transform: translateY(0px); opacity: 1;}
   }
 
   .link {

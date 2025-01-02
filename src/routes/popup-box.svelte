@@ -88,7 +88,7 @@
 .content {
   background-color: var(--no-background);
   height: 100%;
-  min-height: 50vh;
+  /* min-height: 50vh; */
   max-height: 90vh;
   width: 100%;
   border-radius: 0;

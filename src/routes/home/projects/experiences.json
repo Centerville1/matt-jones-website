@@ -46,15 +46,6 @@
       "highlight": false
     },
     {
-      "title": "WordWeather",
-      "description": "    A web development project for CPS 353 Internet Programming.\n    I worked with a student designer from ART 358 Web Design to create a design for a web-app that displays the current weather and a bible verse related to the current conditions.  I then implemented the design using SvelteKit, performing user studies, and adjusting the design as needed to create the final product.",
-      "startDate": "08/01/2023",
-      "endDate": "12/01/2023",
-      "url": "https://wordweather.vercel.app/",
-      "image": "wordWeather.png",
-      "highlight": true
-    },
-    {
       "title": "Access Control Assistant - Center for Technology Services",
       "description": "Worked with several software systems to set up ID cards for students and faculty, effectively manage access on campus, and deal with customer requests and issues.",
       "startDate": "05/01/2022",
@@ -115,6 +106,26 @@
       "endDate": "04/01/2021",
       "image": "",
       "url": "",
+      "highlight": false
+    }
+  ],
+  "projects": [
+    {
+      "title": "WordWeather",
+      "description": "    A web development project for CPS 353 Internet Programming.\n    I worked with a student designer from ART 358 Web Design to create a design for a web-app that displays the current weather and a bible verse related to the current conditions.  I then implemented the design using SvelteKit, performing user studies, and adjusting the design as needed to create the final product.",
+      "startDate": "08/01/2023",
+      "endDate": "12/01/2023",
+      "url": "https://wordweather.vercel.app/",
+      "image": "wordWeather.png",
+      "highlight": false
+    },
+    {
+      "title": "Personal Portfolio Website",
+      "description": "    The website you're on right now!  This is a web development project built using SvelteKit as a learning exercise in web development.",
+      "startDate": "12/01/2024",
+      "endDate": "",
+      "url": "/home",
+      "image": "website-logo.png",
       "highlight": false
     }
   ],

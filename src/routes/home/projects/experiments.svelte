@@ -34,10 +34,6 @@
   }
 
   #cards {
-    margin-left: auto;
-    margin-right: auto;
-    width: 100%;
-    width: fit-content;
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
     justify-content: space-around;

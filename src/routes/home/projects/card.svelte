@@ -126,7 +126,7 @@
               />
             </div>
           {/if}
-          <p id="description">{description}</p>
+          <p>{description}</p>
         </div>
       </div>
     </PopupBox>
@@ -247,17 +247,15 @@
 
   .instruction {
     margin-left: 20px;
-  }
-
-  #img-container {
-    width: 100%;
+    margin-top: 0;
+    margin-bottom: 10px;
   }
 
   .popup-image {
     border: 1px solid var(--contrast-text-light);
     border-radius: 7px;
     max-height: 250px;
-    max-width: 100%;
+    max-width: 25vw;
     float: left;
   }
 
@@ -265,6 +263,7 @@
     border: 1px solid var(--contrast-text-light);
     border-radius: 7px;
     max-width: 90%;
+    max-height: 100px;
     margin-left: auto;
     margin-right: auto;
   }
@@ -278,8 +277,12 @@
 
   #description {
     text-align: left;
-    white-space: pre-wrap;
-    overflow-y: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 5;
+    line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
   .popup {
@@ -289,8 +292,8 @@
 
   .popup-content {
     display: flex;
-    flex-direction: row;
-    column-gap: 20px;
+    justify-content: flex-start;
+    column-gap: 30px;
   }
 
   .popup p {
@@ -303,6 +306,9 @@
       display: flex;
       flex-direction: column;
       row-gap: 20px;
+    }
+    .popup-image {
+      max-width: 100%;
     }
   }
 </style>

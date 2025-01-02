@@ -1,6 +1,7 @@
 <script>
   import Timeline from './timeline.svelte';
   import Experiments from './experiments.svelte';
+  import Projects from './projects.svelte';
   import { page } from '$app/stores';
 
   let animateRight = true;
@@ -12,7 +13,7 @@
     animateRight = true;
     let target = event?.currentTarget.value;
     let current = window.location.hash;
-    if (current==="#highlighted" && target==="timeline") {
+    if (current==="#timeline" && target==="projects") {
       animateRight = false;
     }
     else if (current==="#other") {
@@ -79,34 +80,49 @@
   <nav>
     <hr>
     <form>
-      <div class="tab">
-        <input
-          type="radio"
-          id="timeline"
-          value="timeline"
-          checked={$page.url.hash !== '#other'}
-          on:change={onTabChange}
-        />
-        <label for="timeline">My Experience</label>
-      </div>
-      <div class="tab">
-        <input
-          type="radio"
-          id="other"
-          value="other"
-          checked={$page.url.hash === '#other'}
-          on:change={onTabChange}
-        />
-        <label for="other">Creations</label>
+      <div class="title"><h3>My Portfolio:</h3></div>
+      <div class="tabs">
+        <div class="tab">
+          <input
+            type="radio"
+            id="projects"
+            value="projects"
+            checked={$page.url.hash !== "#timeline" && $page.url.hash !== '#other'}
+            on:change={onTabChange}
+          />
+          <label for="projects">Projects</label>
+        </div>
+        <div class="tab">
+          <input
+            type="radio"
+            id="timeline"
+            value="timeline"
+            checked={$page.url.hash === '#timeline'}
+            on:change={onTabChange}
+          />
+          <label for="timeline">My Experience</label>
+        </div>
+        <div class="tab">
+          <input
+            type="radio"
+            id="other"
+            value="other"
+            checked={$page.url.hash === '#other'}
+            on:change={onTabChange}
+          />
+          <label for="other">Creations</label>
+        </div>
       </div>
     </form>
-    <div class="transition"></div>
+    <div class="transition" />
   </nav>
   <div id="tab-content">
     {#if $page.url.hash === '#other'}
       <Experiments />
-    {:else if $page.url.hash !== '#other'}
+    {:else if $page.url.hash === "#timeline"}
       <Timeline />
+    {:else if $page.url.hash !== "#timeline" && $page.url.hash !== '#other'}
+      <Projects />
     {/if}
   </div>
 </div>
@@ -176,6 +192,18 @@
     margin-top: 0;
   }
 
+  .title {
+    display: flex;
+    align-items: center;
+    margin-left: 10px;
+    margin-right: 10px;
+  }
+
+  .title h3 {
+    margin: 0;
+    height: fit-content;
+  }
+
   .transition {
     padding-left: 220vw;
     margin-left: -220vw;
@@ -193,6 +221,10 @@
     display: flex;
     width: 40vw;
     border-radius: 10px;
+  }
+
+  .tabs {
+    display: flex;
   }
 
   .tab label {
@@ -213,7 +245,7 @@
     height: 0;
     position: absolute;
   }
-  
+
   .tab input[type='radio']:checked + label {
     background: var(--neutral-gray);
   }

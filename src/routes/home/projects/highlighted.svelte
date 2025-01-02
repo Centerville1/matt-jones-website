@@ -70,9 +70,10 @@
 </div>
 
 <style>
-
-  .upper-container {
-    padding-left: 20px;
+  #content {
+    width:98%;
+    margin-left: auto;
+    margin-right: auto;
   }
 
   #carousel-box {

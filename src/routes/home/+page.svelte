@@ -347,7 +347,7 @@
   }
 
   .text-box {
-    transform: translateY(300px);
+    transform: translateY(100px);
     opacity: 0;
     border: 3px solid var(--neutral-dark-gray-op-50);
     border-radius: 20px;

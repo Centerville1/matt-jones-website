@@ -96,6 +96,12 @@
     margin-bottom: 20px;
   }
 
+  .page-content {
+    width: 75vw;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
   .page-content :global(p) {
     text-indent: 30px;
   }

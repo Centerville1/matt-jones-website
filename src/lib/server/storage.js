@@ -1,6 +1,8 @@
 import { put, del } from '@vercel/blob';
 import { error } from '@sveltejs/kit';
-import { BLOB_READ_WRITE_TOKEN } from '$env/static/private';
+import { env } from '$env/dynamic/private';
+
+const BLOB_READ_WRITE_TOKEN = env.BLOB_READ_WRITE_TOKEN;
 
 /**
  * Allowed image MIME types

@@ -5,7 +5,9 @@ import {
   createSession,
   cookieOptions,
 } from '$lib/server/auth.js';
-import { ADMIN_PASSWORD } from '$env/static/private';
+import { env } from '$env/dynamic/private';
+
+const ADMIN_PASSWORD = env.ADMIN_PASSWORD;
 
 /** @type {import('./$types').PageServerLoad} */
 export async function load({ locals }) {

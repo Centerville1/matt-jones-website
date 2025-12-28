@@ -75,3 +75,112 @@ export async function getPortfolioItemsByCategory(categorySlug) {
     highlight: Boolean(item.highlight),
   }));
 }
+
+/**
+ * Get all portfolio items (for admin)
+ * Returns full item data including IDs
+ * @returns {Promise<import('$lib/types/admin').PortfolioItemWithCategory[]>}
+ */
+export async function getAllPortfolioItems() {
+  const items = await db
+    .select({
+      id: portfolioItems.id,
+      categoryId: portfolioItems.categoryId,
+      title: portfolioItems.title,
+      description: portfolioItems.description,
+      startDate: portfolioItems.startDate,
+      endDate: portfolioItems.endDate,
+      url: portfolioItems.url,
+      image: portfolioItems.image,
+      highlight: portfolioItems.highlight,
+      displayOrder: portfolioItems.displayOrder,
+      createdAt: portfolioItems.createdAt,
+      updatedAt: portfolioItems.updatedAt,
+      categorySlug: categories.slug,
+      categoryName: categories.name,
+    })
+    .from(portfolioItems)
+    .leftJoin(categories, eq(portfolioItems.categoryId, categories.id))
+    .orderBy(portfolioItems.displayOrder)
+    .all();
+
+  return items;
+}
+
+/**
+ * Get a single portfolio item by ID
+ * @param {number} id - Portfolio item ID
+ * @returns {Promise<import('$lib/types/admin').PortfolioItem | undefined>}
+ */
+export async function getPortfolioItemById(id) {
+  const item = await db
+    .select()
+    .from(portfolioItems)
+    .where(eq(portfolioItems.id, id))
+    .get();
+
+  return item;
+}
+
+/**
+ * Create a new portfolio item
+ * @param {{ categoryId: number, title: string, description: string, startDate?: string, endDate?: string, url?: string, image?: string, highlight?: boolean, displayOrder?: number }} data - Portfolio item data
+ * @returns {Promise<import('$lib/types/admin').PortfolioItem>} Created item with ID
+ */
+export async function createPortfolioItem(data) {
+  const now = new Date();
+
+  const [item] = await db
+    .insert(portfolioItems)
+    .values({
+      categoryId: data.categoryId,
+      title: data.title,
+      description: data.description,
+      startDate: data.startDate || null,
+      endDate: data.endDate || null,
+      url: data.url || null,
+      image: data.image || null,
+      highlight: Boolean(data.highlight),
+      displayOrder: data.displayOrder || 0,
+      createdAt: now,
+      updatedAt: now,
+    })
+    .returning();
+
+  return item;
+}
+
+/**
+ * Update an existing portfolio item
+ * @param {number} id - Portfolio item ID
+ * @param {{ categoryId: number, title: string, description: string, startDate?: string, endDate?: string, url?: string, image?: string, highlight?: boolean, displayOrder?: number }} data - Portfolio item data to update
+ * @returns {Promise<import('$lib/types/admin').PortfolioItem>} Updated item
+ */
+export async function updatePortfolioItem(id, data) {
+  const [item] = await db
+    .update(portfolioItems)
+    .set({
+      categoryId: data.categoryId,
+      title: data.title,
+      description: data.description,
+      startDate: data.startDate || null,
+      endDate: data.endDate || null,
+      url: data.url || null,
+      image: data.image || null,
+      highlight: Boolean(data.highlight),
+      displayOrder: data.displayOrder || 0,
+      updatedAt: new Date(),
+    })
+    .where(eq(portfolioItems.id, id))
+    .returning();
+
+  return item;
+}
+
+/**
+ * Delete a portfolio item
+ * @param {number} id - Portfolio item ID
+ */
+export async function deletePortfolioItem(id) {
+  await db.delete(portfolioItems).where(eq(portfolioItems.id, id));
+}

@@ -32,7 +32,7 @@ export const portfolioItems = sqliteTable('portfolio_items', {
   // Single URL field (can be internal like /home/sphere or external)
   url: text('url'),
 
-  // Image filename (stored in /experiences/ directory)
+  // Image URL (Vercel Blob Storage URL)
   image: text('image'),
 
   // Whether to show in "highlighted" section (only used for experiences category)

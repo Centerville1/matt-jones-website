@@ -117,7 +117,7 @@
             <div id="img-container">
               <img
                 class="popup-image"
-                src="/experiences/{image}"
+                src={image}
                 alt="Image uploaded to represent {title}"
               />
             </div>
@@ -153,7 +153,7 @@
             <div id="img-container">
               <img
                 class={minimizeHeight ? 'image-wide' : 'image'}
-                src="/experiences/{image}"
+                src={image}
                 alt="Image uploaded to represent {title}"
               />
             </div>
@@ -197,7 +197,7 @@
             <div id="img-container">
               <img
                 class={minimizeHeight ? 'image-wide' : 'image'}
-                src="/experiences/{image}"
+                src={image}
                 alt="Image uploaded to represent {title}"
               />
             </div>

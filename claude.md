@@ -173,23 +173,19 @@ Comprehensive SEO implementation using database-driven metadata:
 
 ### High Priority
 
-1. **No Test Coverage:** Project has no test suite. Consider Vitest + Testing Library.
-
-2. **No Admin Interface:** Content updates require direct database access or running migration scripts.
+1. **No Admin Interface:** Content updates require direct database access or running migration scripts.
 
 ### Medium Priority
 
-3. **Magic Numbers:** Timeouts and dimensions hardcoded throughout (e.g., 800ms, 7.6s, 220vw).
+2. **Magic Numbers:** Timeouts and dimensions hardcoded throughout (e.g., 800ms, 7.6s, 220vw).
 
-4. **Theme System:** Infrastructure exists but only dark mode implemented.
-
-5. **Self-Closing Tags:** Svelte 5 warns about self-closing non-void elements. These are warnings only but should be fixed for cleanliness.
+3. **Theme System:** Infrastructure exists but only dark mode implemented.
 
 ### Low Priority
 
-6. **Accessibility:** No reduced-motion media queries despite heavy animations.
+4. **Accessibility:** No reduced-motion media queries despite heavy animations.
 
-7. **Musical Notes Data:** [notes.json](src/routes/home/notes.json) is the only remaining JSON file - could be migrated to database for consistency.
+5. **Musical Notes Data:** [notes.json](src/routes/home/notes.json) is the only remaining JSON file - could be migrated to database for consistency.
 
 ## Development Workflow
 

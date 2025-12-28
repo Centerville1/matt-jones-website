@@ -83,7 +83,7 @@
 
   /* The slider track when checked */
   input:checked + .slider {
-    /* background-color: #2196f3; */
+    background-color: #21d4f3;
   }
 
   input:focus + .slider {

@@ -57,29 +57,29 @@
 		<div><i></i></div>
 		<div><i><span></span></i></div>
 		<div><i><span></span></i></div>
-		<div><i /><i /><i /><i /></div>
-		<div><i /><i /><i /><i /></div>
-		<div><i /><i /><i /><i /><i /><i /><i /></div>
+		<div><i></i><i></i><i></i><i></i></div>
+		<div><i></i><i></i><i></i><i></i></div>
+		<div><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
 		<div></div>
-		<div><i /></div>
-		<div><i /></div>
-		<div></div>
-		<div></div>
+		<div><i></i></div>
+		<div><i></i></div>
 		<div></div>
 		<div></div>
-		<div><i /><i /></div>
-		<div><i><span /></i></div>
-		<div><i /><i /><i /><i /><i /><i /><i /></div>
-		<div><i><span /></i></div>
-		<div><i /></div>
-		<div><i /></div>
 		<div></div>
-		<div><i /></div>
 		<div></div>
-		<div><i /></div>
+		<div><i></i><i></i></div>
+		<div><i><span></span></i></div>
+		<div><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+		<div><i><span></span></i></div>
+		<div><i></i></div>
+		<div><i></i></div>
+		<div></div>
+		<div><i></i></div>
+		<div></div>
+		<div><i></i></div>
 	</div>
 	<hr />
-	<div class="spacing" />
+	<div class="spacing"></div>
 	<hr />
 	<div class="text">
 		<h3>Clip-path based animations</h3>
@@ -97,7 +97,7 @@
 		<div><div></div></div>
 	</div>
 	<hr />
-	<div class="spacing" />
+	<div class="spacing"></div>
 	<hr />
 	<div class="text">
 		<h3>Artwork</h3>
@@ -105,7 +105,7 @@
 			for the tips and tricks I used to create this sampling here!
 		</p>
 	</div>
-	<div class="spacing" />
+	<div class="spacing"></div>
 </div>
 
 <style>

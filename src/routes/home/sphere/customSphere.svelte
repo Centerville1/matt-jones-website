@@ -1,5 +1,4 @@
 <script>
-  import { onMount } from 'svelte';
   import Sphere from './sphere.svelte';
 
   let longitudeLines = 9,
@@ -27,8 +26,11 @@
 <div id="page">
   <div class="text">
     <h3>CSS 3D Wireframe Sphere</h3>
-    <p>Remember the sphere from the intro animation?  Well, it was actually rendered
-      using CSS, and here you can play around with it!  (read <strong>implementation</strong> below)
+    <p>
+      Remember the sphere from the intro animation? Well, it was actually
+      rendered using CSS, and here you can play around with it! (read <strong
+        >implementation</strong
+      > below)
     </p>
     <p>Try messing with the sliders below!</p>
   </div>
@@ -36,10 +38,7 @@
   <div class="slider-container">
     <div>
       <label for="animate">Play Animation:</label>
-      <input
-      id="animate"
-      type="checkbox"
-      bind:checked={animate} />
+      <input id="animate" type="checkbox" bind:checked={animate} />
     </div>
     <div>
       <label for="speed">Rotation Speed</label>
@@ -99,39 +98,39 @@
       />
     </div>
     {#if !animate}
-    <div>
-      <label for="rotateX">Xrot: {rotateX}°</label>
-      <input
-        type="range"
-        min="0"
-        max="360"
-        class="slider"
-        id="rotateX"
-        bind:value={rotateX}
-      />
-    </div>
-    <div>
-      <label for="rotateY">Yrot: {rotateY}°</label>
-      <input
-        type="range"
-        min="0"
-        max="360"
-        class="slider"
-        id="rotateY"
-        bind:value={rotateY}
-      />
-    </div>
-    <div>
-      <label for="rotateZ">Zrot: {rotateZ}°</label>
-      <input
-        type="range"
-        min="0"
-        max="360"
-        class="slider"
-        id="rotateZ"
-        bind:value={rotateZ}
-      />
-    </div>
+      <div>
+        <label for="rotateX">Xrot: {rotateX}°</label>
+        <input
+          type="range"
+          min="0"
+          max="360"
+          class="slider"
+          id="rotateX"
+          bind:value={rotateX}
+        />
+      </div>
+      <div>
+        <label for="rotateY">Yrot: {rotateY}°</label>
+        <input
+          type="range"
+          min="0"
+          max="360"
+          class="slider"
+          id="rotateY"
+          bind:value={rotateY}
+        />
+      </div>
+      <div>
+        <label for="rotateZ">Zrot: {rotateZ}°</label>
+        <input
+          type="range"
+          min="0"
+          max="360"
+          class="slider"
+          id="rotateZ"
+          bind:value={rotateZ}
+        />
+      </div>
     {/if}
   </div>
 
@@ -143,7 +142,7 @@
       numLongLines={longitudeLines}
       numLatLines={latitudeLines}
       animationSpeed={animationSpeedSteps / animationSpeed}
-      animate={animate}
+      {animate}
       color={colors[color].variable}
       {rotateX}
       {rotateY}
@@ -155,30 +154,40 @@
 
   <div class="text">
     <h3>About</h3>
-    <p>This sphere uses 3D CSS rendering.  Each latitude and longitude line is actually
-      a transparent div with a solid border, manually oriented and scaled in 3D space.  Javascript is used
-      to do all the math (mostly a bunch of trigonometry) for placing the latitude and longitude lines, and with a bit of 
-      Svelte's built in reactive updates, you can customize the number of lines
-      in the sphere's frame by simply manipulating a handful of variables using the sliders.
+    <p>
+      This sphere uses 3D CSS rendering. Each latitude and longitude line is
+      actually a transparent div with a solid border, manually oriented and
+      scaled in 3D space. Javascript is used to do all the math (mostly a bunch
+      of trigonometry) for placing the latitude and longitude lines, and with a
+      bit of Svelte's built in reactive updates, you can customize the number of
+      lines in the sphere's frame by simply manipulating a handful of variables
+      using the sliders.
     </p>
 
-    <p>Using the browser developer tools to inspect the sphere while changing the sliders can give you a pretty good idea
-      of how it works.  <strong>Try it out!</strong>
+    <p>
+      Using the browser developer tools to inspect the sphere while changing the
+      sliders can give you a pretty good idea of how it works. <strong
+        >Try it out!</strong
+      >
     </p>
 
-    <p>See how the individual div elements are positioned to create the latitude and longitude
-      lines?
+    <p>
+      See how the individual div elements are positioned to create the latitude
+      and longitude lines?
     </p>
 
-    <p>Thanks for checking out the sphere!  Feel free to take a look at the 
-      <a href="https://github.com/Centerville1/matt-jones-website/tree/main/src/routes/home/sphere">source code</a>
-      on Github if you're curious.  I can't promise it's the cleanest code, 
-      but it works, and that's what matters :D
+    <p>
+      Thanks for checking out the sphere! Feel free to take a look at the
+      <a
+        href="https://github.com/Centerville1/matt-jones-website/tree/main/src/routes/home/sphere"
+        >source code</a
+      >
+      on Github if you're curious. I can't promise it's the cleanest code, but it
+      works, and that's what matters :D
     </p>
 
     <h2>Thanks,</h2>
-    <img src="/MJ_Signature-nobg.png" width=250 alt="Matt Jones' signature" />
-
+    <img src="/MJ_Signature-nobg.png" width="250" alt="Matt Jones' signature" />
   </div>
 </div>
 

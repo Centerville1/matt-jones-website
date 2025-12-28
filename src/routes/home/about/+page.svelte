@@ -16,7 +16,7 @@
   </p>
 
 
-  <div class="spacing" />
+  <div class="spacing"></div>
 
   <h3>Original Project Pitch</h3>
   <p>This will be a personal project to expand my skills with frontend 
@@ -26,7 +26,7 @@
     less formal and far more custom format than 
     on LinkedIn</p>
 
-  <div class="spacing" />
+  <div class="spacing"></div>
 
   <h3>Contributors</h3>
 

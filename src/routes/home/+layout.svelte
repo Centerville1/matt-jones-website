@@ -152,7 +152,7 @@
     width: 100vw;
     background-color: var(--neutral-gray);
     z-index: 2;
-    animation: move-up 1.7s cubic-bezier(0.34, 0.13, 0.06, 0.96) both;;
+    animation: move-up 1.7s cubic-bezier(0.34, 0.13, 0.06, 0.96) both;
   }
 
   @keyframes move-up {

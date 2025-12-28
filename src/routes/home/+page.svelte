@@ -82,7 +82,7 @@
 
 <div id="page">
   <div class="banner">
-    <img src="/pictures/banner.png" alt="Banner, welcome to my website"/>
+    <img src="/pictures/banner.png" alt="Banner, welcome to my website" />
   </div>
   <div class="sticker">
     <span id="lego-wave">
@@ -106,10 +106,13 @@
     </div>
     <div class="text-box">
       <h1>So What's Here</h1>
-      <h3>This site is my personal portfolio, blog, project showcase, and more:</h3>
+      <h3>
+        This site is my personal portfolio, blog, project showcase, and more:
+      </h3>
       <h2>You can find:</h2>
       <ul>
-        <li><a href="/home/projects">My portfolio, including:</a>
+        <li>
+          <a href="/home/projects">My portfolio, including:</a>
           <ul>
             <li>My Tech Experience</li>
             <li>Personal Projects Showcase</li>
@@ -121,13 +124,14 @@
     </div>
     <div class="text-box">
       <h1>Site Story</h1>
-      <p>This is an open source project, for more about the project, read the below:</p>
+      <p>
+        This is an open source project, for more about the project, read the
+        below:
+      </p>
       <ul>
         <li>
           <h4>
-            <a href="/home/about" class="inline-link">
-              About Site
-            </a>
+            <a href="/home/about" class="inline-link"> About Site </a>
           </h4>
         </li>
         <li>
@@ -149,8 +153,13 @@
       <hr />
       <br />
       <h2>Inquiries? Feel free to reach out!</h2>
-      <h4>Email: <a href="mailto:matt.jones3054@gmail.com" class="inline-link">matt.jones3054@gmail.com</a></h4>
-      <h4>LinkedIn:
+      <h4>
+        Email: <a href="mailto:matt.jones3054@gmail.com" class="inline-link"
+          >matt.jones3054@gmail.com</a
+        >
+      </h4>
+      <h4>
+        LinkedIn:
         <a href="https://www.linkedin.com/in/matt-jones-a7b389292/">
           My Profile
         </a>
@@ -246,12 +255,17 @@
   }
 
   .banner {
-    transform: translateY(0px); 
+    transform: translateY(0px);
     opacity: 1;
     width: 100vw;
     height: fit-content;
-    mask-image: linear-gradient(180deg, rgba(0,0,0,0.2) 0%, rgba(0,0,0,100) 5%,
-    rgba(0,0,0,100) 70%, rgba(0,0,0,0) 99%);
+    mask-image: linear-gradient(
+      180deg,
+      rgba(0, 0, 0, 0.2) 0%,
+      rgba(0, 0, 0, 100) 5%,
+      rgba(0, 0, 0, 100) 70%,
+      rgba(0, 0, 0, 0) 99%
+    );
     background-size: cover;
     animation: slide-down cubic-bezier(0.58, 0, 0.48, 0.9) forwards;
     animation-timeline: view();
@@ -265,7 +279,10 @@
   }
 
   @keyframes slide-down {
-    to { transform: translateY(-100px); opacity: 0;}
+    to {
+      transform: translateY(-100px);
+      opacity: 0;
+    }
   }
 
   @media screen and (max-width: 440px) {
@@ -362,7 +379,10 @@
   }
 
   @keyframes slide-up {
-    to { transform: translateY(0px); opacity: 1;}
+    to {
+      transform: translateY(0px);
+      opacity: 1;
+    }
   }
 
   .link {
@@ -383,9 +403,5 @@
   .link img {
     width: 30px;
     height: 30px;
-  }
-
-  .a {
-    width: fit-content;
   }
 </style>

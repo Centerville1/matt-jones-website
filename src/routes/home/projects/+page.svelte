@@ -114,7 +114,7 @@
         </div>
       </div>
     </form>
-    <div class="transition" />
+    <div class="transition"></div>
   </nav>
   <div id="tab-content">
     {#if $page.url.hash === '#other'}

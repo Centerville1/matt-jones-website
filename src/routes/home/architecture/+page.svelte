@@ -10,13 +10,13 @@
     <li>Prisma (Coming Soon) - Database management</li>
   </ul>
 
-  <div class="spacing" />
+  <div class="spacing"></div>
 
   <h3>SvelteKit</h3>
   <img src="/sveltekit.png" alt="SvelteKit logo"/>
   <p>This site is built using <a href="https://kit.svelte.dev/">SvelteKit</a>.  </p>
 
-  <div class="spacing" />
+  <div class="spacing"></div>
 
   <h3>Color and Styling</h3>
   <p>I'm particularly interested in ways of handling color palettes and css colors.
@@ -31,7 +31,7 @@
     I'm biased I know).
   </p>
 
-  <div class="spacing" />
+  <div class="spacing"></div>
 
   <h3>Architecture</h3>
   <p>As of summer 2024, this site has no API or database, and is purely a frontent app

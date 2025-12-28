@@ -33,11 +33,11 @@
 		let longLines = document.getElementsByClassName('long-line');
 		if (latLines !== null && longLines !== null) {
 			for (let i = 0; i < latLines.length; i++) {
-				let latLine = latLines[i];
+				let latLine = /** @type {HTMLElement} */ (latLines[i]);
 				latLine.style.borderColor = 'var(' + colorVarName + ')';
 			}
 			for (let i = 0; i < longLines.length; i++) {
-				let longLine = longLines[i];
+				let longLine = /** @type {HTMLElement} */ (longLines[i]);
 				longLine.style.borderColor = 'var(' + colorVarName + ')';
 			}
 		}
@@ -57,6 +57,7 @@
 	 * @param {number} numLongLines the number of longitude lines to draw
 	 * @param {number} numLatLines the number of latitude lines to draw
 	 * @param {number} animationSpeed the speed of the rotation in seconds
+	 * @param {string} color the color variable name for the sphere
 	 */
 	function buildSphere(
 		diameter,
@@ -128,12 +129,12 @@
 				let longLines = document.getElementsByClassName('long-line');
 				if (latLines !== null && longLines !== null) {
 					for (let i = 0; i < latLines.length; i++) {
-						let latLine = latLines[i];
+						let latLine = /** @type {HTMLElement} */ (latLines[i]);
 						latLine.style.height = latLine.clientWidth + 'px';
 						latLine.style.borderColor = 'var(' + color + ')';
 					}
 					for (let i = 0; i < longLines.length; i++) {
-						let longLine = longLines[i];
+						let longLine = /** @type {HTMLElement} */ (longLines[i]);
 						longLine.style.height = longLine.clientWidth + 'px';
 						longLine.style.borderColor = 'var(' + color + ')';
 					}

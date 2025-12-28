@@ -36,11 +36,11 @@
     const longLines = document.getElementsByClassName('long-line');
     if (latLines !== null && longLines !== null) {
       for (let i = 0; i < latLines.length; i++) {
-        let latLine = latLines[i];
+        let latLine = /** @type {HTMLElement} */ (latLines[i]);
         latLine.style.borderColor = 'var(' + colorVarName + ')';
       }
       for (let i = 0; i < longLines.length; i++) {
-        let longLine = longLines[i];
+        let longLine = /** @type {HTMLElement} */ (longLines[i]);
         longLine.style.borderColor = 'var(' + colorVarName + ')';
       }
     }
@@ -54,7 +54,7 @@
   function updateAnimation(
     isSpinning,
     animationDuration = null,
-    animTiming = null
+    animTiming = null,
   ) {
     if (!browser) return;
     const sphere = document.getElementById('sphere');
@@ -163,12 +163,12 @@
       let longLines = document.getElementsByClassName('long-line');
       if (latLines !== null && longLines !== null) {
         for (let i = 0; i < latLines.length; i++) {
-          let latLine = latLines[i];
+          let latLine = /** @type {HTMLElement} */ (latLines[i]);
           latLine.style.height = latLine.clientWidth + 'px';
           latLine.style.borderColor = 'var(' + color + ')';
         }
         for (let i = 0; i < longLines.length; i++) {
-          let longLine = longLines[i];
+          let longLine = /** @type {HTMLElement} */ (longLines[i]);
           longLine.style.height = longLine.clientWidth + 'px';
           longLine.style.borderColor = 'var(' + color + ')';
         }

@@ -301,7 +301,7 @@
     {/if}
   </button>
   <button id="play" on:click = {resetSim}>Restart</button>
-  <canvas id="fireSimCanvas" width={width} height={height} />
+  <canvas id="fireSimCanvas" width={width} height={height}></canvas>
 </div>
 
 <style>

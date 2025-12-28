@@ -82,11 +82,11 @@
       let longLines = document.getElementsByClassName('long-line');
       if (latLines !== null && longLines !== null) {
         for (let i = 0; i < latLines.length; i++) {
-          let latLine = latLines[i];
+          let latLine = /** @type {HTMLElement} */ (latLines[i]);
           latLine.style.height = latLine.clientWidth + 'px';
         }
         for (let i = 0; i < longLines.length; i++) {
-          let longLine = longLines[i];
+          let longLine = /** @type {HTMLElement} */ (longLines[i]);
           longLine.style.height = longLine.clientWidth + 'px';
         }
       }

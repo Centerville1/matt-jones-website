@@ -42,7 +42,7 @@
       </div>
       <h3>Email: <a href="mailto:matt.jones3054@gmail.com" class="inline-link">matt.jones3054@gmail.com</a></h3>
     </div>
-    <div class="horizontal-divider" />
+    <div class="horizontal-divider"></div>
     <div class="navigation">
       <h3><i>Site Navigation and Info</i></h3>
       <div class="navigation-layout">

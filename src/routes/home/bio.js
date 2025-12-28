@@ -1,5 +1,3 @@
-import bioJSON from './bios.json';
-
 /**
  * @param {string} startString
  * @param {string} endString
@@ -69,5 +67,3 @@ export function stringTransformSteps(startString, endString, steps) {
   stepFrames[steps] = endString;
   return stepFrames;
 }
-
-export let bios = bioJSON;

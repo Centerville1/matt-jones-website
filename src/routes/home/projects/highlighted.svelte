@@ -1,10 +1,10 @@
 <script>
-  import experiences from './experiences.json';
   import Card from './card.svelte';
   import { useMediaQuery } from '$lib/mediaQuery.svelte.js';
 
   const isWideScreen = useMediaQuery('(min-width: 700px)');
 
+  export let experiences;
   let experienceList = experiences.experiences;
 
   let countHighlights = 0;

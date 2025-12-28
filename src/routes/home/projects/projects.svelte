@@ -1,7 +1,7 @@
 <script>
-  import experiences from './experiences.json';
   import Card from './card.svelte';
 
+  export let experiences;
   let projects = experiences.projects;
 </script>
 

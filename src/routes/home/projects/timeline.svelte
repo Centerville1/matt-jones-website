@@ -1,12 +1,12 @@
 <script>
-  import experiences from './experiences.json';
   import Highlighted from './highlighted.svelte';
   import Card from './card.svelte';
 
+  export let experiences;
   let experienceList = experiences.experiences;
 </script>
 
-<Highlighted />
+<Highlighted {experiences} />
 <div class="upper-container">
   <h1>All Experience</h1>
 </div>

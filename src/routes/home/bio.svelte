@@ -1,12 +1,14 @@
 <script>
   import { onMount } from 'svelte';
-  import { bios, stringTransformSteps } from './bio';
+  import { stringTransformSteps } from './bio';
   import { browser } from '$app/environment';
   import { useMediaQuery } from '$lib/mediaQuery.svelte.js';
 
   const isDesktop = useMediaQuery('(min-width: 440px)');
 
   export let height = 0;
+  /** @type {Record<string, { default: string[] }>} */
+  export let bios;
 
   // Keep track of screen width (using react:window below)
   let prevWidth = 0;

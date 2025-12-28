@@ -1,9 +1,9 @@
 <script>
   // @ts-nocheck
 
-  import experiences from './experiences.json';
   import Card from './card.svelte';
 
+  export let experiences;
   let experienceList = experiences.other;
 </script>
 

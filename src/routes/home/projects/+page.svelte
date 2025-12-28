@@ -5,6 +5,9 @@
   import { page } from '$app/stores';
   import { browser } from '$app/environment';
 
+  /** @type {import('./$types').PageData} */
+  export let data;
+
   // Animation constants
   const ANIMATION_TIMINGS = {
     EXIT: 800,
@@ -275,11 +278,11 @@
   </nav>
   <div id="tab-content" bind:this={tabContentElement}>
     {#if $page.url.hash === '#other'}
-      <Experiments />
+      <Experiments experiences={data.experiences} />
     {:else if $page.url.hash === '#timeline'}
-      <Timeline />
+      <Timeline experiences={data.experiences} />
     {:else if $page.url.hash !== '#timeline' && $page.url.hash !== '#other'}
-      <Projects />
+      <Projects experiences={data.experiences} />
     {/if}
   </div>
 </div>

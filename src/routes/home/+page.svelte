@@ -6,6 +6,9 @@
   import { themeMode } from '../../store';
   import notesJSON from './notes.json';
 
+  /** @type {import('./$types').PageData} */
+  export let data;
+
   let bioHeight = 0;
 
   $: updateBioHeight(bioHeight);
@@ -100,7 +103,11 @@
   <div id="text-container">
     <div id="bio-box" class="text-box">
       <h1>Hi there! Welcome to my website</h1>
-      <Bio bind:height={bioHeight} onButtonClick={playRandomNote} />
+      <Bio
+        bind:height={bioHeight}
+        onButtonClick={playRandomNote}
+        bios={data.bios}
+      />
       <h3>Matt Jones</h3>
     </div>
     <div class="text-box">

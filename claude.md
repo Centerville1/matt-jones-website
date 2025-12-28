@@ -42,11 +42,16 @@ src/routes/
 
 - [src/store.js](src/store.js) - Svelte stores (themeMode, animatePageLoad key)
 
+**Database Layer:**
+
+- [src/lib/db/index.js](src/lib/db/index.js) - Turso (LibSQL) database connection using Drizzle ORM
+- [src/lib/db/schema/](src/lib/db/schema/) - Database schemas (categories, portfolioItems, bios, siteMetadata)
+- [src/lib/db/queries/](src/lib/db/queries/) - Query functions for fetching data
+- [drizzle.config.js](drizzle.config.js) - Drizzle Kit configuration for schema management
+
 **Data Files:**
 
-- [src/routes/home/bios.json](src/routes/home/bios.json) - Bio content (short, mid, long)
-- [src/routes/home/projects/experiences.json](src/routes/home/projects/experiences.json) - Portfolio data
-- [src/routes/home/notes.json](src/routes/home/notes.json) - Musical note frequencies
+- [src/routes/home/notes.json](src/routes/home/notes.json) - Musical note frequencies (only remaining JSON data)
 
 **Reusable Components:**
 
@@ -117,9 +122,10 @@ if (!browser) return; // Prevent SSR errors
 
 ### Adding New Content
 
-1. Portfolio items: Edit [src/routes/home/projects/experiences.json](src/routes/home/projects/experiences.json)
-2. Bio versions: Edit [src/routes/home/bios.json](src/routes/home/bios.json)
-3. Images: Place in [static/](static/) folder (auto-served)
+1. **Portfolio items:** Update directly in Turso database or use future admin interface
+2. **Bio content:** Update directly in Turso database or use future admin interface
+3. **Site metadata:** Update via `siteMetadata` table in database
+4. **Images:** Place in [static/](static/) folder (auto-served)
 
 ### Color Usage
 
@@ -131,6 +137,16 @@ Use CSS custom properties from [global.css](src/global.css):
 - Opacity variants: `var(--neutral-dark-gray-op-50)`
 
 ## Recent Improvements
+
+### Turso Database Integration (2025-12-27)
+
+Migrated from static JSON files to Turso (LibSQL) cloud database:
+
+- **Database:** Turso with Drizzle ORM for type-safe queries
+- **Schema:** Categories, portfolio items, bios, and site metadata tables
+- **Migration:** Automated script migrated all JSON data to database
+- **Dual-mode imports:** Database client works in both SvelteKit (`$env/static/private`) and Node.js scripts (`process.env`)
+- **Server-side loading:** SvelteKit `+page.server.js` files fetch data asynchronously from database
 
 ### Tab Navigation System (2025-12-27)
 
@@ -148,7 +164,7 @@ The projects page now features a Chrome-style tab navigation with:
 
 1. **No Test Coverage:** Project has no test suite. Consider Vitest + Testing Library.
 
-2. **Hardcoded Content:** JSON files require deployment to update. Database integration (Prisma) is planned.
+2. **No Admin Interface:** Content updates require direct database access or running migration scripts.
 
 ### Medium Priority
 
@@ -158,11 +174,13 @@ The projects page now features a Chrome-style tab navigation with:
 
 5. **Self-Closing Tags:** Svelte 5 warns about self-closing non-void elements. These are warnings only but should be fixed for cleanliness.
 
+6. **Site Metadata Not Used:** `siteMetadata` table exists but not integrated site-wide (still using hardcoded values).
+
 ### Low Priority
 
 7. **Accessibility:** No reduced-motion media queries despite heavy animations.
 
-8. **Type Safety:** JSON data files have no validation or type checking.
+8. **Musical Notes Data:** [notes.json](src/routes/home/notes.json) is the only remaining JSON file - could be migrated to database for consistency.
 
 ## Development Workflow
 
@@ -177,6 +195,20 @@ npm run lint         # Run ESLint
 npm run format       # Format with Prettier
 ```
 
+### Database Management
+
+```bash
+# Setup (one-time)
+cp .env.example .env              # Copy environment template
+# Fill in TURSO_DATABASE_URL and TURSO_AUTH_TOKEN in .env
+npx drizzle-kit push              # Push schema to database
+node scripts/migrate-json-to-db.js # Migrate data (if needed)
+
+# Schema changes
+npx drizzle-kit push              # Push schema changes to Turso
+npx drizzle-kit studio            # Open Drizzle Studio (GUI browser)
+```
+
 ### Code Quality Tools
 
 - **ESLint:** Configured with Svelte plugin
@@ -188,6 +220,7 @@ npm run format       # Format with Prettier
 - Automatic deployment via Vercel
 - Uses @sveltejs/adapter-auto
 - Analytics via @vercel/analytics
+- **IMPORTANT:** Add `TURSO_DATABASE_URL` and `TURSO_AUTH_TOKEN` to Vercel environment variables for production
 
 ## Design Philosophy
 
@@ -210,15 +243,44 @@ npm run format       # Format with Prettier
 - Minimal JavaScript for core functionality
 - CSS-based animations for performance
 
-## Future Architecture Plans
+## Next Steps & Future Features
 
-Based on [architecture page](src/routes/home/architecture/+page.svelte):
+### Immediate Priorities
 
-1. **Database Layer:** Prisma for content management
-2. **Backend API:** Potential Node.js/Express for dynamic features
-3. **Testing Suite:** Unit and integration tests
-4. **CI/CD Pipeline:** Automated testing and deployment
-5. **Blog System:** Dynamic blog posts (mentioned but not implemented)
+1. **Admin Interface:** Build a `/admin` route for managing content without database access
+   - CRUD operations for portfolio items, bios, and categories
+   - Authentication (consider SvelteKit's built-in auth or Lucia)
+   - Rich text editor for bio content
+   - Image upload integration
+
+2. **Site Metadata Integration:** Use the `siteMetadata` table site-wide
+   - Replace hardcoded site title, description, owner info
+   - Make it editable via admin interface
+   - Use in meta tags for SEO
+
+3. **Blog System:** Implement the planned blog feature
+   - Create `blogPosts` table (title, slug, content, publishedAt, tags)
+   - Markdown rendering with syntax highlighting
+   - Tag/category filtering
+   - RSS feed generation
+
+### Future Enhancements
+
+4. **Testing Suite:** Add Vitest + Testing Library for unit and integration tests
+
+5. **Analytics Dashboard:** Visualize visitor data from Vercel Analytics
+
+6. **Theme System Completion:** Implement light mode and additional color schemes
+
+7. **Accessibility Improvements:**
+   - Add `prefers-reduced-motion` media queries
+   - Keyboard navigation improvements
+   - Screen reader optimization
+
+8. **Performance Optimizations:**
+   - Image optimization (WebP, lazy loading)
+   - Consider migrating [notes.json](src/routes/home/notes.json) to database
+   - Database query caching for frequently accessed data
 
 ## When Making Changes
 
@@ -243,7 +305,9 @@ Based on [architecture page](src/routes/home/architecture/+page.svelte):
 - Use scoped CSS in .svelte files
 - Add JSDoc type annotations
 - Consider SSR implications (use browser checks)
-- Update [experiences.json](src/routes/home/projects/experiences.json) if portfolio-related
+- For portfolio-related features, update database schema and queries
+- Create `+page.server.js` files for database queries (SSR)
+- Keep database queries in `src/lib/db/queries/` for reusability
 
 ### Refactoring Guidelines
 
@@ -264,15 +328,29 @@ export const animatePageLoadLocalStorageKey = 'animatePageLoad';
 
 Set to prevent replay on page refresh.
 
-### Portfolio Data Structure
+### Database Schema Overview
 
-[experiences.json](src/routes/home/projects/experiences.json) has three arrays:
+**Categories** (slug, name, description, order, hasTab):
 
-- `work[]` - Professional experience
-- `projects[]` - Personal projects
-- `experiments[]` - Fun/experimental creations
+- `experiences` - Professional experience and leadership roles
+- `projects` - Personal and academic projects
+- `other` - Experiments, CSS art, interactive demos
 
-Each entry: `{img, title, about, github?, live?, tech[]}`
+**Portfolio Items** (categoryId, title, description, startDate, endDate, url, image, highlight, displayOrder):
+
+- Linked to categories via `categoryId`
+- Ordered by `displayOrder` within each category
+- `highlight` boolean for featured items
+
+**Bios** (type, content, updatedAt):
+
+- Three types: `short`, `mid`, `long`
+- Content stored as newline-separated paragraphs
+
+**Site Metadata** (key, value, description, updatedAt):
+
+- Key-value pairs for site-wide configuration
+- Examples: `site_title`, `site_description`, `owner_name`, `owner_email`
 
 ### Responsive Breakpoints
 

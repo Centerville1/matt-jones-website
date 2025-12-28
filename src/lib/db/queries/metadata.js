@@ -8,10 +8,10 @@ import { eq } from 'drizzle-orm';
 
 /**
  * Get all site metadata as a key-value object
- * @returns {Record<string, string>} e.g., { site_title: 'Matt Jones - Portfolio', ... }
+ * @returns {Promise<Record<string, string>>} e.g., { site_title: 'Matt Jones - Portfolio', ... }
  */
-export function getSiteMetadata() {
-  const allMetadata = db.select().from(siteMetadata).all();
+export async function getSiteMetadata() {
+  const allMetadata = await db.select().from(siteMetadata).all();
 
   /** @type {Record<string, string>} */
   const result = {};
@@ -25,9 +25,10 @@ export function getSiteMetadata() {
 /**
  * Get a specific metadata value by key
  * @param {string} key - e.g., 'site_title'
+ * @returns {Promise<string | null>}
  */
-export function getMetadataValue(key) {
-  const meta = db
+export async function getMetadataValue(key) {
+  const meta = await db
     .select()
     .from(siteMetadata)
     .where(eq(siteMetadata.key, key))

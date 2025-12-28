@@ -3,6 +3,7 @@
   import { onMount } from 'svelte';
   import Bio from './bio.svelte';
   import Icons from '../icons.svelte';
+  import SEO from '$lib/components/SEO.svelte';
   import { themeMode } from '../../store';
   import notesJSON from './notes.json';
 
@@ -81,6 +82,20 @@
     }
   }
 </script>
+
+<SEO
+  title="Home"
+  description="Explore Matt Jones's portfolio featuring web development projects, creative experiments, and professional experience"
+  keywords={[
+    'Matt Jones',
+    'web developer',
+    'portfolio',
+    'projects',
+    'software engineer',
+    'creative coding',
+    'CSS art',
+  ]}
+/>
 
 <div id="page">
   <div class="banner">

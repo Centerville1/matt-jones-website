@@ -2,6 +2,7 @@
   import Timeline from './timeline.svelte';
   import Experiments from './experiments.svelte';
   import Projects from './projects.svelte';
+  import SEO from '$lib/components/SEO.svelte';
   import { page } from '$app/stores';
   import { browser } from '$app/environment';
 
@@ -203,6 +204,18 @@
     return () => window.removeEventListener('resize', updateBackgroundPosition);
   });
 </script>
+
+<SEO
+  title="Projects & Experience"
+  description="Browse Matt Jones's professional experience, personal projects, and creative experiments including web development, CSS art, and interactive demos"
+  keywords={[
+    'portfolio projects',
+    'web development projects',
+    'CSS experiments',
+    'creative coding',
+    'interactive demos',
+  ]}
+/>
 
 <div id="projects-page">
   <!-- Sliding background with 3 sections: dark | transparent | dark -->

@@ -3,94 +3,244 @@
   import Experiments from './experiments.svelte';
   import Projects from './projects.svelte';
   import { page } from '$app/stores';
+  import { browser } from '$app/environment';
+
+  // Animation constants
+  const ANIMATION_TIMINGS = {
+    EXIT: 800,
+    INSTANT_SWITCH: 20,
+    ENTER: 500,
+  };
+
+  const EASING = {
+    EXIT: 'cubic-bezier(1,-0.3,0.9,0.5)',
+    ENTER: 'cubic-bezier(0,0,.3,1.3)',
+  };
 
   let animateRight = true;
+  let isAnimating = false;
+  /** @type {HTMLDivElement | null} */
+  let tabContentElement = null;
+  /** @type {HTMLElement | null} */
+  let mainElement = null;
+
+  // Tab cutout state
+  /** @type {HTMLLabelElement | null} */
+  let projectsLabel = null;
+  /** @type {HTMLLabelElement | null} */
+  let timelineLabel = null;
+  /** @type {HTMLLabelElement | null} */
+  let otherLabel = null;
+  /** @type {HTMLElement | null} */
+  let navElement = null;
 
   /**
+   * Get current tab from hash
+   * @param {string} hash
+   * @returns {string}
+   */
+  function getCurrentTab(hash) {
+    if (hash === '#timeline') return 'timeline';
+    if (hash === '#other') return 'other';
+    return 'projects';
+  }
+
+  /**
+   * Scroll main container to top
+   */
+  function scrollToTop() {
+    if (!mainElement && browser) {
+      mainElement = document.getElementsByTagName('main')[0] || null;
+    }
+    mainElement?.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  /**
+   * Apply transform styles to tab content
+   * @param {string} translateX - CSS translateX value
+   * @param {string} transition - CSS transition value
+   */
+  function applyTransform(translateX, transition) {
+    if (!tabContentElement) return;
+    tabContentElement.style.transition = transition;
+    tabContentElement.style.transform = `translateX(${translateX})`;
+  }
+
+  /**
+   * Phase 1: Slide out current content off-screen
    * @param {{ currentTarget: { value: string; }; }} event
    */
   function onTabChange(event) {
-    animateRight = true;
-    let target = event?.currentTarget.value;
-    let current = window.location.hash;
-    if (current==="#timeline" && target==="projects") {
-      animateRight = false;
-    }
-    else if (current==="#other") {
-      animateRight = false;
-    }
-    let page = document.getElementById("tab-content");
-    // @ts-ignore
-    page.style.transition="transform 0.8s cubic-bezier(1,-0.3,0.9,0.5)";
-    if (animateRight) {
-      // @ts-ignore
-      page.style.transform="translateX(-100vw)";
-    }
-    else {
-      // @ts-ignore
-      page.style.transform="translateX(100vw)";
-    }
-    let main = document.getElementsByTagName("main")[0];
-    main?.scrollTo({top: 0, behavior: "smooth"});
-    
-    setTimeout(() => {changeTab(target)}, 800);
+    // Prevent tab changes during animation
+    if (isAnimating) return;
+
+    const target = event?.currentTarget.value;
+    const current = window.location.hash;
+
+    // Lock tabs during animation
+    isAnimating = true;
+
+    // Determine animation direction based on tab order
+    animateRight = !(
+      (current === '#timeline' && target === 'projects') ||
+      current === '#other'
+    );
+
+    // Phase 1: Slide out current content
+    applyTransform(
+      animateRight ? '-100vw' : '100vw',
+      `transform ${ANIMATION_TIMINGS.EXIT}ms ${EASING.EXIT}`,
+    );
+    scrollToTop();
+
+    setTimeout(() => {
+      changeTab(target);
+    }, ANIMATION_TIMINGS.EXIT);
   }
 
   /**
+   * Phase 2: Update hash and position new content off-screen (opposite side)
    * @param {string} target
    */
   function changeTab(target) {
+    // Update URL hash
     window.location.hash = target;
-    let page = document.getElementById("tab-content");
-    // @ts-ignore
-    page.style.transition="transform 0s";
-    if (animateRight) {
-      // @ts-ignore
-      page.style.transform="translateX(100vw)";
-    }
-    else {
-      // @ts-ignore
-      page.style.transform="translateX(-100vw)";
-    }
-    let main = document.getElementsByTagName("main")[0];
-    main?.scrollTo({top: 0, behavior: "smooth"});
-    setTimeout(() => {animateEnd()}, 20)
+
+    // Phase 2: Instantly position new content off-screen (opposite side)
+    applyTransform(animateRight ? '100vw' : '-100vw', 'transform 0s');
+    scrollToTop();
+
+    setTimeout(() => {
+      animateEnd();
+    }, ANIMATION_TIMINGS.INSTANT_SWITCH);
   }
 
+  /**
+   * Phase 3: Slide new content into view   */
   function animateEnd() {
-    let page = document.getElementById("tab-content");
-    // @ts-ignore
-    page.style.transition="transform 0.5s cubic-bezier(0,0,.3,1.3)";
-    // @ts-ignore
-    page.style.transform="translateX(0)";
-    let main = document.getElementsByTagName("main")[0];
-    main?.scrollTo({top: 0, behavior: "smooth"});
-    setTimeout(() => {resetTranslation()}, 500)
+    applyTransform(
+      '0',
+      `transform ${ANIMATION_TIMINGS.ENTER}ms ${EASING.ENTER}`,
+    );
+    scrollToTop();
+
+    setTimeout(() => {
+      resetTranslation();
+    }, ANIMATION_TIMINGS.ENTER);
   }
 
-  // Needed to keep position:fixed working on nav bar
+  /**
+   * Clear inline styles to restore position:fixed behavior on nav bar
+   */
   function resetTranslation() {
-    let page = document.getElementById("tab-content");
-    // @ts-ignore
-    page.style = "";
+    if (tabContentElement) {
+      tabContentElement.style.cssText = '';
+    }
+    // Unlock tabs after animation completes
+    isAnimating = false;
   }
+
+  /**
+   * Calculate widths of the three background sections
+   * All three should add up to 100vw
+   */
+  let bgLeftWidth = 0;
+  let bgMiddleWidth = 100;
+  let bgRightWidth = 0;
+  let enableTabAnimation = false;
+  let isFirstLoad = true;
+
+  function updateBackgroundPosition() {
+    if (!browser || !navElement) return;
+
+    const activeLabel =
+      currentTab === 'timeline'
+        ? timelineLabel
+        : currentTab === 'other'
+          ? otherLabel
+          : projectsLabel;
+
+    if (!activeLabel) return;
+
+    const labelRect = activeLabel.getBoundingClientRect();
+    const viewportWidth = window.innerWidth;
+
+    // Calculate widths based on tab position within viewport
+    bgLeftWidth = labelRect.left; // From left edge of viewport to tab
+    bgMiddleWidth = labelRect.width; // Width of the tab (transparent)
+    bgRightWidth = viewportWidth - labelRect.left - labelRect.width; // Remaining space
+  }
+
+  // Reactive statement to update background position when tab changes
+  $: currentTab = getCurrentTab($page.url.hash);
+  $: if (
+    browser &&
+    navElement &&
+    (projectsLabel || timelineLabel || otherLabel) &&
+    currentTab // Add currentTab as dependency to trigger on tab change
+  ) {
+    // Only enable animation after first load
+    if (!isFirstLoad) {
+      enableTabAnimation = true; // Enable animation for tab changes
+      // Disable animation after transition completes
+      setTimeout(() => {
+        enableTabAnimation = false;
+      }, 500); // Match the transition duration
+    }
+    updateBackgroundPosition();
+    isFirstLoad = false;
+  }
+
+  // Update on mount and resize
+  import { onMount } from 'svelte';
+
+  onMount(() => {
+    updateBackgroundPosition();
+    window.addEventListener('resize', updateBackgroundPosition);
+    return () => window.removeEventListener('resize', updateBackgroundPosition);
+  });
 </script>
 
 <div id="projects-page">
-  <nav>
-    <hr>
+  <!-- Sliding background with 3 sections: dark | transparent | dark -->
+  <div class="nav-background">
+    <div
+      class="bg-left"
+      class:animate={enableTabAnimation}
+      style="width: {bgLeftWidth}px;"
+    ></div>
+    <div
+      class="bg-middle"
+      class:animate={enableTabAnimation}
+      style="width: {bgMiddleWidth}px;"
+    ></div>
+    <div
+      class="bg-right"
+      class:animate={enableTabAnimation}
+      style="width: {bgRightWidth}px;"
+    ></div>
+  </div>
+
+  <nav bind:this={navElement}>
+    <hr />
     <form>
-      <div class="title"><h3>My Portfolio:</h3></div>
+      <div class="title"><h3>Portfolio:</h3></div>
       <div class="tabs">
         <div class="tab">
           <input
             type="radio"
             id="projects"
             value="projects"
-            checked={$page.url.hash !== "#timeline" && $page.url.hash !== '#other'}
+            checked={$page.url.hash !== '#timeline' &&
+              $page.url.hash !== '#other'}
+            disabled={isAnimating}
             on:change={onTabChange}
           />
-          <label for="projects">Projects</label>
+          <label
+            for="projects"
+            class:loading={isAnimating}
+            bind:this={projectsLabel}>Projects</label
+          >
         </div>
         <div class="tab">
           <input
@@ -98,9 +248,14 @@
             id="timeline"
             value="timeline"
             checked={$page.url.hash === '#timeline'}
+            disabled={isAnimating}
             on:change={onTabChange}
           />
-          <label for="timeline">My Experience</label>
+          <label
+            for="timeline"
+            class:loading={isAnimating}
+            bind:this={timelineLabel}>My Experience</label
+          >
         </div>
         <div class="tab">
           <input
@@ -108,32 +263,34 @@
             id="other"
             value="other"
             checked={$page.url.hash === '#other'}
+            disabled={isAnimating}
             on:change={onTabChange}
           />
-          <label for="other">Creations</label>
+          <label for="other" class:loading={isAnimating} bind:this={otherLabel}
+            >Creations</label
+          >
         </div>
       </div>
     </form>
-    <div class="transition"></div>
   </nav>
-  <div id="tab-content">
+  <div id="tab-content" bind:this={tabContentElement}>
     {#if $page.url.hash === '#other'}
       <Experiments />
-    {:else if $page.url.hash === "#timeline"}
+    {:else if $page.url.hash === '#timeline'}
       <Timeline />
-    {:else if $page.url.hash !== "#timeline" && $page.url.hash !== '#other'}
+    {:else if $page.url.hash !== '#timeline' && $page.url.hash !== '#other'}
       <Projects />
     {/if}
   </div>
 </div>
 
 <style>
-  @keyframes move-left {
+  @keyframes shimmer {
     0% {
-      transform: translateX(0);
+      background-position: -200% 0;
     }
     100% {
-      transform: translateX(-100vw);
+      background-position: 200% 0;
     }
   }
 
@@ -163,12 +320,14 @@
           transparent
         )
         30px 30px,
-      linear-gradient(var(--neutral-dark-gray-op-50) 2.6px, transparent 2.6px) 0 -1.3px,
+      linear-gradient(var(--neutral-dark-gray-op-50) 2.6px, transparent 2.6px)
+        0 -1.3px,
       linear-gradient(
           90deg,
           var(--neutral-dark-gray-op-50) 2.6px,
           var(--neutral-white) 2.6px
-        ) -1.3px 0;
+        ) -1.3px
+        0;
     background-size:
       60px 60px,
       60px 60px,
@@ -176,11 +335,80 @@
       30px 30px;
   }
 
+  /* Sliding background behind nav */
+  .nav-background {
+    position: fixed;
+    width: 100vw;
+    height: 59px;
+    display: flex;
+    z-index: 9;
+  }
+
+  .bg-left {
+    background-color: var(--neutral-dark-gray);
+    border-bottom-right-radius: 8px;
+    /* Width set dynamically via inline style */
+  }
+
+  .bg-left.animate {
+    transition: width 500ms cubic-bezier(0, 0, 0.3, 1.3);
+  }
+
+  .bg-middle {
+    background-color: transparent;
+    position: relative;
+    /* Width set dynamically via inline style */
+  }
+
+  /* Left curve notch */
+  .bg-middle::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 16px;
+    height: 16px;
+    background: radial-gradient(
+      circle at bottom right,
+      transparent 16px,
+      var(--neutral-dark-gray) 16px
+    );
+  }
+
+  /* Right curve notch */
+  .bg-middle::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 16px;
+    height: 16px;
+    background: radial-gradient(
+      circle at bottom left,
+      transparent 16px,
+      var(--neutral-dark-gray) 16px
+    );
+  }
+
+  .bg-middle.animate {
+    transition: width 500ms cubic-bezier(0, 0, 0.3, 1.3);
+  }
+
+  .bg-right {
+    background-color: var(--neutral-dark-gray);
+    border-bottom-left-radius: 8px;
+    /* Width set dynamically via inline style */
+  }
+
+  .bg-right.animate {
+    transition: width 500ms cubic-bezier(0, 0, 0.3, 1.3);
+  }
+
   nav {
     width: 450vw;
     padding-left: 220vw;
     margin-left: -220vw;
-    background-color: var(--neutral-dark-gray);
+    background-color: transparent;
     position: fixed;
     z-index: 10;
   }
@@ -204,14 +432,6 @@
     height: fit-content;
   }
 
-  .transition {
-    padding-left: 220vw;
-    margin-left: -220vw;
-    width: 450vw;
-    height: 10px;
-    background: var(--neutral-gray);
-  }
-
   nav form {
     padding-left: 220vw;
     margin-left: -220vw;
@@ -220,40 +440,113 @@
     margin-right: auto;
     display: flex;
     width: 40vw;
-    border-radius: 10px;
+    padding-bottom: 0;
   }
 
   .tabs {
     display: flex;
+    gap: 4px;
+    align-items: flex-end;
+  }
+
+  .tab {
+    position: relative;
   }
 
   .tab label {
     display: block;
-    border-left: 2px var(--neutral-gray) solid;
-    border-right: 2px var(--neutral-gray) solid;
-    padding: 5px 10px 5px 10px;
-    margin: 0px 5px 0px 5px;
-    transition: background-color 0.5s;
-    border-radius: 10px 10px 0 0;
+    padding: 8px 20px;
+    margin: 0;
+    transition: all 0.2s ease;
+    border-radius: 8px;
+    background: transparent;
+    position: relative;
+    cursor: pointer;
+    z-index: 90;
+    line-height: 1.8em;
+    overflow: hidden;
+    user-select: none;
+    -webkit-user-select: none;
   }
 
   .tab label:hover {
-    background-color: var(--neutral-gray-op-50);
+    background-color: rgba(77, 180, 224, 0.221);
   }
 
   .tab input[type='radio'] {
     height: 0;
     position: absolute;
+    opacity: 0;
   }
 
   .tab input[type='radio']:checked + label {
-    background: var(--neutral-gray);
+    background: transparent;
+    color: var(--neutral-black);
+    position: relative;
+    z-index: 2;
   }
 
-  .tab label {
-    cursor: pointer;
-    z-index: 90;
-    line-height: 1.8em;
+  /* Curved notches on left side of active tab */
+  .tab input[type='radio']:checked + label::before {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: -8px;
+    width: 8px;
+    height: 8px;
+    background: var(--neutral-dark-gray);
+    border-bottom-right-radius: 8px;
+  }
+
+  /* Curved notches on right side of active tab */
+  .tab input[type='radio']:checked + label::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    right: -8px;
+    width: 8px;
+    height: 8px;
+    background: var(--neutral-dark-gray);
+    border-bottom-left-radius: 8px;
+  }
+
+  .tab label.loading {
+    cursor: not-allowed;
+    pointer-events: none;
+  }
+
+  .tab label.loading::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(
+      90deg,
+      transparent 0%,
+      var(--neutral-white) 20%,
+      var(--neutral-white) 40%,
+      transparent 60%
+    );
+    background-size: 200% 100%;
+    animation: shimmer 1.3s infinite linear;
+    opacity: 0.15;
+    transition: opacity 0.3s ease-out;
+  }
+
+  .tab label:not(.loading)::before {
+    opacity: 0;
+  }
+
+  .tab input[type='radio']:disabled + label {
+    opacity: 0.7;
+    transition: opacity 0.3s ease-out;
+  }
+
+  .tab input[type='radio']:not(:disabled) + label {
+    opacity: 1;
+    transition: opacity 0.3s ease-out;
   }
 
   #tab-content {

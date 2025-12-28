@@ -46,7 +46,6 @@
     let gain = context.createGain();
     sound.type = 'sine';
     sound.connect(gain);
-    sound.connect(gain);
     gain.connect(context.destination);
     gain.gain.value = 0.1;
     sound.start();

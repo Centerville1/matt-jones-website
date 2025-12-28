@@ -104,6 +104,7 @@ element.style.color = 'red';
 - onMount lifecycle for browser-only code
 - Conditional rendering: `{#if condition}...{:else}...{/if}`
 - Component props with bind: `bind:height={bioHeight}`
+- Conditional classes: `class:animate={enableTabAnimation}`
 
 ## Common Patterns
 
@@ -129,31 +130,39 @@ Use CSS custom properties from [global.css](src/global.css):
 - `var(--main-blue)`, `var(--main-blue-light)`
 - Opacity variants: `var(--neutral-dark-gray-op-50)`
 
+## Recent Improvements
+
+### Tab Navigation System (2025-12-27)
+
+The projects page now features a Chrome-style tab navigation with:
+
+- **Transparent cutout effect**: Active tab reveals the patterned background through a "hole" in the dark nav bar
+- **Smooth beveled corners**: 8px border-radius on both sides of the cutout for modern browser-tab aesthetics
+- **Conditional animations**: Tabs animate smoothly (500ms, elastic bezier) on click, but resize instantly with no animation lag
+- **Three-section background**: Dynamic width calculation using viewport-based positioning
+- **Implementation**: Uses reactive Svelte patterns with conditional CSS classes instead of imperative DOM manipulation
+
 ## Known Technical Debt
 
 ### High Priority
 
-1. **Tab Animations** ([projects/+page.svelte](src/routes/home/projects/+page.svelte)): Imperative DOM manipulation with multiple `@ts-ignore` comments. Should be refactored to use Svelte transitions.
+1. **No Test Coverage:** Project has no test suite. Consider Vitest + Testing Library.
 
-2. **No Test Coverage:** Project has no test suite. Consider Vitest + Testing Library.
-
-3. **Hardcoded Content:** JSON files require deployment to update. Database integration (Prisma) is planned.
+2. **Hardcoded Content:** JSON files require deployment to update. Database integration (Prisma) is planned.
 
 ### Medium Priority
 
-4. **Audio Code Duplication:** [home/+page.svelte:48-49](src/routes/home/+page.svelte#L48-L49) has duplicate `sound.connect(gain)` call.
+3. **Magic Numbers:** Timeouts and dimensions hardcoded throughout (e.g., 800ms, 7.6s, 220vw).
 
-5. **Magic Numbers:** Timeouts and dimensions hardcoded throughout (e.g., 800ms, 7.6s, 220vw).
+4. **Theme System:** Infrastructure exists but only dark mode implemented.
 
-6. **Theme System:** Infrastructure exists but only dark mode implemented.
-
-7. **Self-Closing Tags:** Svelte 5 warns about self-closing non-void elements. These are warnings only but should be fixed for cleanliness.
+5. **Self-Closing Tags:** Svelte 5 warns about self-closing non-void elements. These are warnings only but should be fixed for cleanliness.
 
 ### Low Priority
 
-8. **Accessibility:** No reduced-motion media queries despite heavy animations.
+7. **Accessibility:** No reduced-motion media queries despite heavy animations.
 
-9. **Type Safety:** JSON data files have no validation or type checking.
+8. **Type Safety:** JSON data files have no validation or type checking.
 
 ## Development Workflow
 

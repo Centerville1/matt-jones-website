@@ -8,14 +8,29 @@
       <h1>{$page.status} {$page.error?.message}</h1>
       <hr />
       <h2>Sorry, but that page doesn't exist! ¯\_(ツ)_/¯</h2>
-      <p><i>If you think there should be a page here</i>: let me know what went wrong at my <a class="inline-anchor" href="https://github.com/Centerville1/matt-jones-website/issues">github repo</a>, and I'll try to fix the issue!</p>
+      <p>
+        <i>If you think there should be a page here</i>: let me know what went
+        wrong at my
+        <a
+          class="inline-anchor"
+          href="https://github.com/Centerville1/matt-jones-website/issues"
+          >github repo</a
+        >, and I'll try to fix the issue!
+      </p>
       <a class="button" href="/home">Return Home</a>
     {:else if $page.status === 500}
       <h1>{$page.status} {$page.error?.message}</h1>
-      <p>Guess I messed up... </p><h1>🤦</h1>
+      <p>Guess I messed up...</p>
+      <h1>🤦</h1>
       <hr />
-      <p>Please let me know what went wrong on my <a class="inline-anchor" href="https://github.com/Centerville1/matt-jones-website/issues">github repo</a> and I'll try to fix the issue!</p>
-        <a class="button" href="/home">Return Home</a>
+      <p>
+        Please let me know what went wrong on my <a
+          class="inline-anchor"
+          href="https://github.com/Centerville1/matt-jones-website/issues"
+          >github repo</a
+        > and I'll try to fix the issue!
+      </p>
+      <a class="button" href="/home">Return Home</a>
     {:else}
       <h1>{$page.status}</h1>
       <p>{$page.error?.message}</p>
@@ -56,6 +71,6 @@
   }
 
   .inline-anchor:visited {
-    color: var(--main-blue)
+    color: var(--main-blue);
   }
 </style>

@@ -10,7 +10,7 @@
 
   export let title = 'Placeholder';
   export let description = 'Placeholder';
-    /**
+  /**
    * @type {String | null}
    */
   export let started = '';
@@ -62,10 +62,10 @@
     endDate = 'Present';
   }
 
-    /**
+  /**
    * @type {string | (() => void)}
    */
-  let url = "";
+  let url = '';
 
   /**
    * @type HTMLElement | null
@@ -73,7 +73,7 @@
   let thisCard = null;
 
   onMount(() => {
-    if (linkUrl !== "") {
+    if (linkUrl !== '') {
       url = () => {
         if (linkUrl !== '') {
           if (linkUrl.startsWith('https://')) {
@@ -83,27 +83,23 @@
             goto(linkUrl);
           }
         }
-      }
+      };
     }
     if (minimizeHeight && thisCard) {
-      thisCard.style.height = "fit-content"
-    }
-    else if (thisCard) {
-      thisCard.style.height = "450px"
+      thisCard.style.height = 'fit-content';
+    } else if (thisCard) {
+      thisCard.style.height = '450px';
     }
   });
 </script>
 
 <div>
   {#if allowPopup}
-    <PopupBox
-      bind:this={popup}
-      onClick={url}
-      >
+    <PopupBox bind:this={popup} onClick={url}>
       <div class="popup">
         <h2>{title}</h2>
         {#if startDate !== null}
-          {#if typeof(endDate) !== typeof("") && endDate !== null}
+          {#if typeof endDate !== typeof '' && endDate !== null}
             <h4>
               {startMonth}
               {startDate.getFullYear()} - {endMonth}
@@ -131,14 +127,16 @@
       </div>
     </PopupBox>
     <div class="outer-boundary" style="cursor: pointer;">
-      <div class="card" id="card" title="click to expand" bind:this={thisCard}> 
+      <div class="card" id="card" title="click to expand" bind:this={thisCard}>
         <button
-          on:click={() => {popup.openPopup()}}
+          on:click={() => {
+            popup.openPopup();
+          }}
           style="cursor: pointer;"
         >
           <h2>{title}</h2>
           {#if startDate !== null}
-            {#if typeof(endDate) !== typeof("") && endDate !== null}
+            {#if typeof endDate !== typeof '' && endDate !== null}
               <h5>
                 {startMonth}
                 {startDate.getFullYear()} - {endMonth}
@@ -154,7 +152,7 @@
           {#if image !== ''}
             <div id="img-container">
               <img
-                class={minimizeHeight ? "image-wide" : "image"}
+                class={minimizeHeight ? 'image-wide' : 'image'}
                 src="/experiences/{image}"
                 alt="Image uploaded to represent {title}"
               />
@@ -167,7 +165,7 @@
     </div>
   {:else}
     <div class="outer-boundary">
-      <div class="card"> 
+      <div class="card">
         <button
           on:click={() => {
             if (linkUrl !== '') {
@@ -182,7 +180,7 @@
         >
           <h2>{title}</h2>
           {#if startDate !== null}
-            {#if typeof(endDate) !== typeof("") && endDate !== null}
+            {#if typeof endDate !== typeof '' && endDate !== null}
               <h5>
                 {startMonth}
                 {startDate.getFullYear()} - {endMonth}
@@ -197,8 +195,8 @@
           {/if}
           {#if image !== ''}
             <div id="img-container">
-              <img 
-                class={minimizeHeight ? "image-wide" : "image"}
+              <img
+                class={minimizeHeight ? 'image-wide' : 'image'}
                 src="/experiences/{image}"
                 alt="Image uploaded to represent {title}"
               />
@@ -213,8 +211,8 @@
 
 <style>
   .outer-boundary {
-    padding-left:2%;
-    padding-right:2%;
+    padding-left: 2%;
+    padding-right: 2%;
   }
 
   .card {
@@ -225,8 +223,8 @@
     display: flex;
     flex-direction: column;
     margin-bottom: 20px;
-    transition: background 0.25s cubic-bezier(.72,0,.83,.67);
-    transition: transform .2s ease-out;
+    transition: background 0.25s cubic-bezier(0.72, 0, 0.83, 0.67);
+    transition: transform 0.2s ease-out;
   }
 
   .card button {

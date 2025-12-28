@@ -4,24 +4,24 @@
  * @returns {{matches: boolean}} - Reactive object with matches property
  */
 export function useMediaQuery(query) {
-	let matches = $state(false);
+  let matches = $state(false);
 
-	if (typeof window !== 'undefined') {
-		const mediaQuery = window.matchMedia(query);
-		matches = mediaQuery.matches;
+  if (typeof window !== 'undefined') {
+    const mediaQuery = window.matchMedia(query);
+    matches = mediaQuery.matches;
 
-		const handler = (/** @type {MediaQueryListEvent} */ e) => {
-			matches = e.matches;
-		};
+    const handler = (/** @type {MediaQueryListEvent} */ e) => {
+      matches = e.matches;
+    };
 
-		mediaQuery.addEventListener('change', handler);
+    mediaQuery.addEventListener('change', handler);
 
-		// Cleanup handled by Svelte when component unmounts
-	}
+    // Cleanup handled by Svelte when component unmounts
+  }
 
-	return {
-		get matches() {
-			return matches;
-		}
-	};
+  return {
+    get matches() {
+      return matches;
+    },
+  };
 }

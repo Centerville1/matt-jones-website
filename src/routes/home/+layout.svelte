@@ -37,13 +37,12 @@
   onMount(() => {
     // remove scroll-up animation if we aren't coming from the
     // sphere loader page (prevents animation playing on reload)
-    let animatePageLoad = localStorage.getItem(animatePageLoadLocalStorageKey)
-    if (animatePageLoad === "true") {
-      localStorage.setItem(animatePageLoadLocalStorageKey, "false")
-    }
-    else {
+    let animatePageLoad = localStorage.getItem(animatePageLoadLocalStorageKey);
+    if (animatePageLoad === 'true') {
+      localStorage.setItem(animatePageLoadLocalStorageKey, 'false');
+    } else {
       // @ts-ignore
-      document.getElementById('outer-container').style.animation = 'none'
+      document.getElementById('outer-container').style.animation = 'none';
     }
     document.onclick = function (e) {
       if (window.screen.width <= 439) {
@@ -59,8 +58,8 @@
 
   // Ensure that the main element's scroll position is reset on navigation
   afterNavigate(() => {
-    document.getElementById("main")?.scrollTo(0,0)
-  })
+    document.getElementById('main')?.scrollTo(0, 0);
+  });
 
   /**
    * @type {string}
@@ -91,13 +90,11 @@
     {#if isDesktop.matches}
       <div id="links">
         <a class="plain" href="/home" on:click={scrollTop}>Home</a>
-        <a
-          class="emphasis"
-          href="/home/projects"
-          on:click={scrollTop}>My Portfolio</a
+        <a class="emphasis" href="/home/projects" on:click={scrollTop}
+          >My Portfolio</a
         >
       </div>
-    <!-- Change to hamburger menu on small screens -->
+      <!-- Change to hamburger menu on small screens -->
     {:else}
       <button id="menu-button" on:click={toggleNav}>
         <!-- Hamburger menu icon SVG -->
@@ -188,7 +185,6 @@
     height: 50px;
     margin-left: 10px;
   }
-
 
   /* Custom Styled Scrollbar */
   /* width */

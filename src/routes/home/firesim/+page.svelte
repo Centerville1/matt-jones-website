@@ -1,5 +1,5 @@
 <script>
-  import Sim from "./sim.svelte";
+  import Sim from './sim.svelte';
 </script>
 
-<Sim width={1200} height={600}/>
+<Sim width={1200} height={600} />

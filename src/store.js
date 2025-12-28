@@ -1,5 +1,5 @@
-import { writable } from "svelte/store";
+import { writable } from 'svelte/store';
 
 export const themeMode = writable('dark');
 
-export const animatePageLoadLocalStorageKey = "animatePageLoad";
+export const animatePageLoadLocalStorageKey = 'animatePageLoad';

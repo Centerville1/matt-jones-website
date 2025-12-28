@@ -5,9 +5,8 @@
 
   // Set move-up animation to occur after sphere loader
   onMount(() => {
-    localStorage.setItem(animatePageLoadLocalStorageKey, "true")
-  })
-
+    localStorage.setItem(animatePageLoadLocalStorageKey, 'true');
+  });
 </script>
 
 <div id="page">

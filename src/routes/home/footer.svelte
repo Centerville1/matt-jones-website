@@ -12,8 +12,8 @@
   });
 
   function scroll_top() {
-    let main = document.getElementsByTagName("main")[0];
-    main.scrollTo({top:0})
+    let main = document.getElementsByTagName('main')[0];
+    main.scrollTo({ top: 0 });
   }
 </script>
 
@@ -38,9 +38,13 @@
     <div class="contact">
       <div class="contact-title">
         <h2>Matt Jones</h2>
-        <h3>Inquiries?  Contact me:</h3>
+        <h3>Inquiries? Contact me:</h3>
       </div>
-      <h3>Email: <a href="mailto:matt.jones3054@gmail.com" class="inline-link">matt.jones3054@gmail.com</a></h3>
+      <h3>
+        Email: <a href="mailto:matt.jones3054@gmail.com" class="inline-link"
+          >matt.jones3054@gmail.com</a
+        >
+      </h3>
     </div>
     <div class="horizontal-divider"></div>
     <div class="navigation">
@@ -49,9 +53,7 @@
         <div class="links">
           <h2>Pages</h2>
           <h3>
-            <a href="/home" class="inline-link" on:click={scroll_top}>
-              Home
-            </a>
+            <a href="/home" class="inline-link" on:click={scroll_top}> Home </a>
           </h3>
           <h3>
             <a href="/home/projects" class="inline-link" on:click={scroll_top}>
@@ -59,7 +61,11 @@
             </a>
           </h3>
           <h3>
-            <a href="/home/projects#other" class="inline-link" on:click={scroll_top}>
+            <a
+              href="/home/projects#other"
+              class="inline-link"
+              on:click={scroll_top}
+            >
               Web Creations
             </a>
           </h3>
@@ -72,7 +78,11 @@
             </a>
           </h3>
           <h3>
-            <a href="/home/architecture" class="inline-link" on:click={scroll_top}>
+            <a
+              href="/home/architecture"
+              class="inline-link"
+              on:click={scroll_top}
+            >
               Tech Stack
             </a>
           </h3>
@@ -80,9 +90,12 @@
       </div>
       <hr />
       <div id="github-link">
-        <h3>Check out the project on: </h3>
+        <h3>Check out the project on:</h3>
         {#if mode === 'dark'}
-          <a href="https://github.com/Centerville1/matt-jones-website" class="link">
+          <a
+            href="https://github.com/Centerville1/matt-jones-website"
+            class="link"
+          >
             <img
               id="github"
               src="/social-logos/github-dark.png"
@@ -99,9 +112,7 @@
       </div>
     </div>
 
-    <div id="copyright">
-      © 2025 Matthew A. Jones All Rights Reserved
-    </div>
+    <div id="copyright">© 2025 Matthew A. Jones All Rights Reserved</div>
   </div>
 </footer>
 
@@ -152,7 +163,8 @@
     align-items: center;
     flex-direction: column;
 
-    & h2, & h3  {
+    & h2,
+    & h3 {
       margin-top: 5px;
       margin-bottom: 5px;
     }
@@ -173,7 +185,7 @@
   }
 
   .navigation {
-    overflow: hidden; 
+    overflow: hidden;
     margin-left: 30px;
     padding-left: 40px;
     border-left: 6px solid var(--main-blue-light);
@@ -215,7 +227,7 @@
     flex-direction: row;
     align-items: center;
     margin-bottom: 30px;
-    
+
     & h3 {
       margin: 0;
     }
@@ -236,7 +248,7 @@
     color: var(--contrast-text-light);
     font-size: medium;
   }
-  
+
   .link span {
     overflow: visible;
     text-wrap: nowrap;

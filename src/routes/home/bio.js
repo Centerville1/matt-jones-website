@@ -1,19 +1,21 @@
-import bioJSON from "./bios.json";
+import bioJSON from './bios.json';
 
 /**
  * @param {string} startString
  * @param {string} endString
  */
 function calcDiff(startString, endString) {
-  let longLength = startString.length >= endString.length ? startString.length : endString.length;
+  let longLength =
+    startString.length >= endString.length
+      ? startString.length
+      : endString.length;
   let diffs = [];
   for (let i = 0; i < longLength; i++) {
     if (i > endString.length - 1) {
-      diffs.push({"index": i, "character": ' '});
-    }
-    else {
+      diffs.push({ index: i, character: ' ' });
+    } else {
       if (startString[i] !== endString[i]) {
-        diffs.push({"index": i, "character": endString[i]});
+        diffs.push({ index: i, character: endString[i] });
       }
     }
   }
@@ -24,9 +26,8 @@ function calcDiff(startString, endString) {
  * @param {number} spaceCount
  */
 function generateWhitespace(spaceCount) {
-  let string = "";
-  for (let i = 0; i < spaceCount; i++)
-    string += " ";
+  let string = '';
+  for (let i = 0; i < spaceCount; i++) string += ' ';
   return string;
 }
 
@@ -40,7 +41,9 @@ export function stringTransformSteps(startString, endString, steps) {
   let changesPerStep = diff.length / steps;
 
   let stepFrames = [];
-  let changeCount = 0, prevChangeCount = 0, changesCompleted = 0;
+  let changeCount = 0,
+    prevChangeCount = 0,
+    changesCompleted = 0;
   for (let i = 0; i < steps; i++) {
     changeCount = prevChangeCount + changesPerStep;
     let numChanges = Math.round(changeCount - changesCompleted);
@@ -48,10 +51,15 @@ export function stringTransformSteps(startString, endString, steps) {
       let changeIndex = Math.round(Math.random() * (diff.length - 1));
       let change = diff.splice(changeIndex, 1)[0];
       if (change.index >= startString.length) {
-        startString = startString + generateWhitespace(change.index - startString.length) + change.character;
-      }
-      else {
-        startString = startString.substring(0, change.index) + change.character + startString.substring(change.index + 1);
+        startString =
+          startString +
+          generateWhitespace(change.index - startString.length) +
+          change.character;
+      } else {
+        startString =
+          startString.substring(0, change.index) +
+          change.character +
+          startString.substring(change.index + 1);
       }
     }
     stepFrames.push(startString);

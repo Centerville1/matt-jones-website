@@ -9,7 +9,10 @@
 
 <div id="content">
   <h2>Experiments with Webdev!</h2>
-  <p>Browse the list below to check out all web development experiments, and miscellaneous other projects!</p>
+  <p>
+    Browse the list below to check out all web development experiments, and
+    miscellaneous other projects!
+  </p>
   <hr />
   <div id="cards">
     {#each experienceList as experience}

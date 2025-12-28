@@ -13,6 +13,7 @@ Matt Jones Portfolio Website - A SvelteKit-based personal portfolio showcasing p
 ## Current State
 
 ### Working Features
+
 - Animated 3D wireframe sphere landing page with auto-navigation
 - Three-tab portfolio system (Projects, Experience, Creations)
 - Interactive bio section with musical note playback
@@ -25,6 +26,7 @@ Matt Jones Portfolio Website - A SvelteKit-based personal portfolio showcasing p
 - Vercel analytics integration
 
 ### Architecture
+
 - **Framework:** SvelteKit 2.49.2 with Svelte 5.46.1 ✨ (Upgraded from 4.2.7)
 - **Build Tool:** Vite 5.4.21
 - **Deployment:** Vercel (adapter-auto 3.3.1)
@@ -36,6 +38,7 @@ Matt Jones Portfolio Website - A SvelteKit-based personal portfolio showcasing p
 ## Code Quality Assessment
 
 ### Strengths
+
 - Clean component separation and file organization
 - Consistent use of JSDoc for type annotations
 - Good accessibility practices (semantic HTML, alt text)
@@ -48,20 +51,24 @@ Matt Jones Portfolio Website - A SvelteKit-based personal portfolio showcasing p
 **1. Testing:** No test suite present (no .test.js or .spec.js files)
 
 **2. Technical Debt:**
+
 - Multiple `@ts-ignore` comments in projects page ([projects/+page.svelte:23-75](src/routes/home/projects/+page.svelte#L23-L75))
 - Heavy DOM manipulation in tab transitions (imperative rather than declarative)
 - Duplicate `sound.connect(gain)` call in audio code ([home/+page.svelte:48-49](src/routes/home/+page.svelte#L48-L49))
 - Hardcoded magic numbers (timeouts, dimensions)
 
 **3. State Management:**
+
 - LocalStorage used directly for animation state tracking
 - No server-side rendering considerations (browser checks scattered)
 
 **4. Data Management:**
+
 - Hardcoded content in JSON files (as noted in architecture page, Prisma/database planned)
 - No content validation or type safety for JSON data
 
 **5. Accessibility:**
+
 - Animation-heavy experience may need reduced-motion media query support
 - No ARIA labels on custom interactive elements
 
@@ -77,6 +84,7 @@ Matt Jones Portfolio Website - A SvelteKit-based personal portfolio showcasing p
 ## Active Development Areas
 
 Based on recent commits:
+
 - Projects tab enhancements (bab237f)
 - Fire simulation parameter adjustments (649d389)
 - UI refinements and responsive improvements (ae5e6e5)
@@ -94,6 +102,7 @@ Based on recent commits:
 ## Dependencies Status
 
 **Recently Updated (2025-12-27):**
+
 - ✅ **Svelte:** 4.2.7 → 5.46.1 (major upgrade)
 - ✅ **SvelteKit:** 2.5.18 → 2.49.2
 - ✅ **Vite:** 5.3.2 → 5.4.21
@@ -105,6 +114,7 @@ Based on recent commits:
 - ✅ All build tools and formatters updated
 
 **Security Status:**
+
 - 8 low/moderate vulnerabilities remain in dev dependencies (cookie, esbuild)
 - These are development-only and not exploitable in production
 - No critical or high-severity vulnerabilities

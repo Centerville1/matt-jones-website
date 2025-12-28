@@ -1,17 +1,18 @@
 <script>
   import experiences from './experiences.json';
-  import Card from "./card.svelte";
-
+  import Card from './card.svelte';
 
   let projects = experiences.projects;
-
 </script>
 
 <div id="content">
   <div class="upper-container">
     <h2>My Projects</h2>
     <p>These are the various projects and programs I've worked on.</p>
-    <h4>See <a href="/home/projects#timeline">My Experience</a> for a more detailed overview of my experience.</h4>
+    <h4>
+      See <a href="/home/projects#timeline">My Experience</a> for a more detailed
+      overview of my experience.
+    </h4>
     <hr />
   </div>
   <div id="projects-box">
@@ -31,7 +32,7 @@
 
 <style>
   #content {
-    width:97%;
+    width: 97%;
     margin-left: auto;
     margin-right: auto;
   }

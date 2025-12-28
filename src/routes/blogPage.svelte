@@ -1,14 +1,14 @@
 <script>
-  export let title = "Default Title";
-  export let subtitle = "";
-  export let background = "blocks";
+  export let title = 'Default Title';
+  export let subtitle = '';
+  export let background = 'blocks';
   export let signature = true;
 </script>
 
 <div class="page {background}">
   <div class="title">
     <h1>{title}</h1>
-    {#if subtitle !== ""}
+    {#if subtitle !== ''}
       <h3>{subtitle}</h3>
     {/if}
   </div>
@@ -17,7 +17,7 @@
   </div>
   {#if signature}
     <h2>Thanks,</h2>
-    <img src="/MJ_Signature-nobg.png" width=250 alt="Matt Jones' signature" />
+    <img src="/MJ_Signature-nobg.png" width="250" alt="Matt Jones' signature" />
   {/if}
 </div>
 
@@ -29,27 +29,114 @@
   }
 
   .zigzag {
-    background: linear-gradient(135deg, var(--neutral-dark-gray-op-10) 25%, transparent 25%) -45px 0/ 90px 90px, 
-    linear-gradient(225deg, var(--neutral-dark-gray-op-50) 25%, transparent 25%) -45px 0/ 90px 90px, 
-    linear-gradient(315deg, var(--neutral-dark-gray-op-10) 25%, transparent 25%) 0px 0/ 90px 90px, 
-    linear-gradient(45deg, var(--neutral-dark-gray-op-50) 25%, var(--no-background) 25%) 0px 0/ 90px 90px;
+    background:
+      linear-gradient(
+          135deg,
+          var(--neutral-dark-gray-op-10) 25%,
+          transparent 25%
+        ) -45px
+        0/ 90px 90px,
+      linear-gradient(
+          225deg,
+          var(--neutral-dark-gray-op-50) 25%,
+          transparent 25%
+        ) -45px
+        0/ 90px 90px,
+      linear-gradient(
+          315deg,
+          var(--neutral-dark-gray-op-10) 25%,
+          transparent 25%
+        )
+        0px 0/ 90px 90px,
+      linear-gradient(
+          45deg,
+          var(--neutral-dark-gray-op-50) 25%,
+          var(--no-background) 25%
+        )
+        0px 0/ 90px 90px;
   }
 
   .blocks {
-    background-image:  linear-gradient(30deg, var(--neutral-dark-gray-op-50) 12%, transparent 12.5%, transparent 87%, var(--neutral-dark-gray-op-50) 87.5%, var(--neutral-dark-gray-op-50)), 
-    linear-gradient(150deg, var(--neutral-dark-gray-op-50) 12%, transparent 12.5%, transparent 87%, var(--neutral-dark-gray-op-50) 87.5%, var(--neutral-dark-gray-op-50)), 
-    linear-gradient(30deg, var(--neutral-dark-gray-op-50) 12%, transparent 12.5%, transparent 87%, var(--neutral-dark-gray-op-50) 87.5%, var(--neutral-dark-gray-op-50)), 
-    linear-gradient(150deg, var(--neutral-dark-gray-op-50) 12%, transparent 12.5%, transparent 87%, var(--neutral-dark-gray-op-50) 87.5%, var(--neutral-dark-gray-op-50)), 
-    linear-gradient(60deg, var(--neutral-dark-gray-op-10) 25%, transparent 25.5%, transparent 75%, var(--neutral-dark-gray-op-10) 75%, var(--neutral-dark-gray-op-10)), 
-    linear-gradient(60deg, var(--neutral-dark-gray-op-10) 25%, transparent 25.5%, transparent 75%, var(--neutral-dark-gray-op-10) 75%, var(--neutral-dark-gray-op-10));
+    background-image:
+      linear-gradient(
+        30deg,
+        var(--neutral-dark-gray-op-50) 12%,
+        transparent 12.5%,
+        transparent 87%,
+        var(--neutral-dark-gray-op-50) 87.5%,
+        var(--neutral-dark-gray-op-50)
+      ),
+      linear-gradient(
+        150deg,
+        var(--neutral-dark-gray-op-50) 12%,
+        transparent 12.5%,
+        transparent 87%,
+        var(--neutral-dark-gray-op-50) 87.5%,
+        var(--neutral-dark-gray-op-50)
+      ),
+      linear-gradient(
+        30deg,
+        var(--neutral-dark-gray-op-50) 12%,
+        transparent 12.5%,
+        transparent 87%,
+        var(--neutral-dark-gray-op-50) 87.5%,
+        var(--neutral-dark-gray-op-50)
+      ),
+      linear-gradient(
+        150deg,
+        var(--neutral-dark-gray-op-50) 12%,
+        transparent 12.5%,
+        transparent 87%,
+        var(--neutral-dark-gray-op-50) 87.5%,
+        var(--neutral-dark-gray-op-50)
+      ),
+      linear-gradient(
+        60deg,
+        var(--neutral-dark-gray-op-10) 25%,
+        transparent 25.5%,
+        transparent 75%,
+        var(--neutral-dark-gray-op-10) 75%,
+        var(--neutral-dark-gray-op-10)
+      ),
+      linear-gradient(
+        60deg,
+        var(--neutral-dark-gray-op-10) 25%,
+        transparent 25.5%,
+        transparent 75%,
+        var(--neutral-dark-gray-op-10) 75%,
+        var(--neutral-dark-gray-op-10)
+      );
     background-size: 80px 140px;
-    background-position: 0 0, 0 0, 40px 70px, 40px 70px, 0 0, 40px 70px;
+    background-position:
+      0 0,
+      0 0,
+      40px 70px,
+      40px 70px,
+      0 0,
+      40px 70px;
   }
 
   .checker {
-    background-image:  repeating-linear-gradient(45deg, var(--neutral-dark-gray-op-50) 25%, transparent 25%, transparent 75%, var(--neutral-dark-gray-op-50) 75%, var(--neutral-dark-gray-op-50)), 
-    repeating-linear-gradient(45deg, var(--neutral-dark-gray-op-50) 25%, var(--neutral-dark-gray-op-10) 25%, var(--neutral-dark-gray-op-10) 75%, var(--neutral-dark-gray-op-50) 75%, var(--neutral-dark-gray-op-50));
-    background-position: 0 0, 15px 15px;
+    background-image:
+      repeating-linear-gradient(
+        45deg,
+        var(--neutral-dark-gray-op-50) 25%,
+        transparent 25%,
+        transparent 75%,
+        var(--neutral-dark-gray-op-50) 75%,
+        var(--neutral-dark-gray-op-50)
+      ),
+      repeating-linear-gradient(
+        45deg,
+        var(--neutral-dark-gray-op-50) 25%,
+        var(--neutral-dark-gray-op-10) 25%,
+        var(--neutral-dark-gray-op-10) 75%,
+        var(--neutral-dark-gray-op-50) 75%,
+        var(--neutral-dark-gray-op-50)
+      );
+    background-position:
+      0 0,
+      15px 15px;
     background-size: 30px 30px;
   }
 
@@ -72,12 +159,14 @@
           transparent
         )
         30px 30px,
-      linear-gradient(var(--neutral-dark-gray-op-50) 2.6px, transparent 2.6px) 0 -1.3px,
+      linear-gradient(var(--neutral-dark-gray-op-50) 2.6px, transparent 2.6px)
+        0 -1.3px,
       linear-gradient(
           90deg,
           var(--neutral-dark-gray-op-50) 2.6px,
           var(--neutral-gray) 2.6px
-        ) -1.3px 0;
+        ) -1.3px
+        0;
     background-size:
       60px 60px,
       60px 60px,

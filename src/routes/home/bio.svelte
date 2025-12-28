@@ -9,7 +9,7 @@
   export let height = 0;
 
   // Keep track of screen width (using react:window below)
-  let prevWidth = 0
+  let prevWidth = 0;
   $: innerWidth = 0;
 
   /**
@@ -30,12 +30,12 @@
 
   // Update height of bio container box whenever screen width changes
   $: (() => {
-    (innerWidth); // Listen to changes in the inner width variable
+    innerWidth; // Listen to changes in the inner width variable
     if (Math.abs(innerWidth - prevWidth) > 20) {
       prevWidth = innerWidth;
       height = calcHeight(currentBios);
     }
-  }) ()
+  })();
 
   function setup() {
     const bio = document.getElementById('bio');
@@ -43,8 +43,7 @@
       // @ts-ignore
       generateBio(bios[selectedLength].default);
       height = calcHeight(currentBios);
-    }
-    else {
+    } else {
       setTimeout(setup, 50);
     }
   }

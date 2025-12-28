@@ -11,7 +11,10 @@ import { eq } from 'drizzle-orm';
  * @returns {Promise<Record<string, string>>} e.g., { site_title: 'Matt Jones - Portfolio', ... }
  */
 export async function getSiteMetadata() {
-  const allMetadata = await db.select().from(siteMetadata).all();
+  /** @type {SiteMetadata[]} */
+  const allMetadata = /** @type {SiteMetadata[]} */ (
+    await db.select().from(siteMetadata).all()
+  );
 
   /** @type {Record<string, string>} */
   const result = {};
@@ -28,10 +31,9 @@ export async function getSiteMetadata() {
  * @returns {Promise<string | null>}
  */
 export async function getMetadataValue(key) {
-  const meta = await db
-    .select()
-    .from(siteMetadata)
-    .where(eq(siteMetadata.key, key))
-    .get();
+  /** @type {SiteMetadata | undefined} */
+  const meta = /** @type {SiteMetadata | undefined} */ (
+    await db.select().from(siteMetadata).where(eq(siteMetadata.key, key)).get()
+  );
   return meta?.value || null;
 }

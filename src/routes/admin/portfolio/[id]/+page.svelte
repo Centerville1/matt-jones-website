@@ -62,9 +62,11 @@
       <select id="categoryId" name="categoryId" required>
         <option value="">Select a category</option>
         {#each categories as category}
-          {@const cat = /** @type {Category} */ (category)}
-          <option value={cat.id} selected={itemData.categoryId == cat.id}>
-            {cat.name}
+          <option
+            value={category.id}
+            selected={itemData.categoryId == category.id}
+          >
+            {category.name}
           </option>
         {/each}
       </select>
@@ -180,7 +182,6 @@
   }
 
   input[type='text'],
-  input[type='number'],
   select,
   textarea {
     width: 100%;
@@ -196,7 +197,6 @@
   }
 
   input[type='text']:focus,
-  input[type='number']:focus,
   select:focus,
   textarea:focus {
     outline: none;

@@ -4,6 +4,7 @@ import { sqliteTable, text, integer } from 'drizzle-orm/sqlite-core';
  * Categories table - stores portfolio item categories
  * Initially: 'work', 'projects', 'experiments'
  * Allows for future expansion without schema changes
+ * @typedef {import('./types').Category} Category
  */
 export const categories = sqliteTable('categories', {
   id: integer('id').primaryKey({ autoIncrement: true }),

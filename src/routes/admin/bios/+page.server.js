@@ -30,15 +30,27 @@ export const actions = {
     // Validation
     const errors = {};
 
-    if (!shortContent || typeof shortContent !== 'string' || shortContent.trim() === '') {
+    if (
+      !shortContent ||
+      typeof shortContent !== 'string' ||
+      shortContent.trim() === ''
+    ) {
       errors.short = 'Short bio is required';
     }
 
-    if (!midContent || typeof midContent !== 'string' || midContent.trim() === '') {
+    if (
+      !midContent ||
+      typeof midContent !== 'string' ||
+      midContent.trim() === ''
+    ) {
       errors.mid = 'Mid bio is required';
     }
 
-    if (!longContent || typeof longContent !== 'string' || longContent.trim() === '') {
+    if (
+      !longContent ||
+      typeof longContent !== 'string' ||
+      longContent.trim() === ''
+    ) {
       errors.long = 'Long bio is required';
     }
 

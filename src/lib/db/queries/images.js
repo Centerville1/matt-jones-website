@@ -8,27 +8,33 @@ import { eq } from 'drizzle-orm';
 
 /**
  * Get all images
- * @returns {Promise<Array<object>>}
+ * @returns {Promise<Image[]>}
  */
 export async function getAllImages() {
-  const allImages = await db.select().from(images).all();
+  /** @type {Image[]} */
+  const allImages = /** @type {Image[]} */ (
+    await db.select().from(images).all()
+  );
   return allImages;
 }
 
 /**
  * Get a single image by ID
  * @param {number} id - Image ID
- * @returns {Promise<object | undefined>}
+ * @returns {Promise<Image | undefined>}
  */
 export async function getImageById(id) {
-  const image = await db.select().from(images).where(eq(images.id, id)).get();
+  /** @type {Image | undefined} */
+  const image = /** @type {Image | undefined} */ (
+    await db.select().from(images).where(eq(images.id, id)).get()
+  );
   return image;
 }
 
 /**
  * Create a new image record
  * @param {{ filename: string, originalName: string, path: string, mimeType: string, size: number, alt?: string }} data - Image metadata
- * @returns {Promise<object>} Created image with ID
+ * @returns {Promise<Image>} Created image with ID
  */
 export async function createImage(data) {
   const now = new Date();
@@ -46,12 +52,13 @@ export async function createImage(data) {
     })
     .returning();
 
-  return image;
+  return /** @type {Image} */ (image);
 }
 
 /**
  * Delete an image record
  * @param {number} id - Image ID
+ * @returns {Promise<void>}
  */
 export async function deleteImage(id) {
   await db.delete(images).where(eq(images.id, id));

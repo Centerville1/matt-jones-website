@@ -3,6 +3,7 @@ import { sqliteTable, text, integer } from 'drizzle-orm/sqlite-core';
 /**
  * Images table - stores uploaded images with metadata
  * For managing portfolio images, blog images, etc.
+ * @typedef {import('./types').Image} Image
  */
 export const images = sqliteTable('images', {
   id: integer('id').primaryKey({ autoIncrement: true }),

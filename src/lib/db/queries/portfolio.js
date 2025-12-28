@@ -14,9 +14,11 @@ import { eq } from 'drizzle-orm';
  */
 export async function getPortfolioData() {
   // Get all categories
+  /** @type {Category[]} */
   const allCategories = await db.select().from(categories).all();
 
   // Get all portfolio items
+  /** @type {PortfolioItem[]} */
   const allItems = await db.select().from(portfolioItems).all();
 
   // Transform to match original JSON structure
@@ -48,6 +50,7 @@ export async function getPortfolioData() {
  * @param {string} categorySlug - 'experiences', 'projects', or 'other'
  */
 export async function getPortfolioItemsByCategory(categorySlug) {
+  /** @type {Category | undefined} */
   const category = await db
     .select()
     .from(categories)
@@ -58,6 +61,7 @@ export async function getPortfolioItemsByCategory(categorySlug) {
     return [];
   }
 
+  /** @type {PortfolioItem[]} */
   const items = await db
     .select()
     .from(portfolioItems)

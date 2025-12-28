@@ -49,8 +49,10 @@ src/routes/
 **Database Layer:**
 
 - [src/lib/db/index.js](src/lib/db/index.js) - Turso (LibSQL) database connection using Drizzle ORM
-- [src/lib/db/schema/](src/lib/db/schema/) - Database schemas (categories, portfolioItems, bios, siteMetadata)
-- [src/lib/db/queries/](src/lib/db/queries/) - Query functions for fetching data
+- [src/lib/db/schema/](src/lib/db/schema/) - Database schemas (categories, portfolioItems, bios, siteMetadata, images)
+- [src/lib/db/schema/types.d.ts](src/lib/db/schema/types.d.ts) - TypeScript type definitions for all database tables
+- [src/lib/db/types.d.ts](src/lib/db/types.d.ts) - Re-exports database types for easy importing
+- [src/lib/db/queries/](src/lib/db/queries/) - Typed query functions for fetching data
 - [drizzle.config.js](drizzle.config.js) - Drizzle Kit configuration for schema management
 
 **Data Files:**
@@ -73,6 +75,129 @@ src/routes/
 
 ## Code Style & Conventions
 
+### TypeScript & Type Safety
+
+This project uses **JSDoc comments** for TypeScript type checking (not `.ts` files). All database types are globally available.
+
+#### Database Type System Architecture
+
+1. **Type Definitions** ([src/lib/db/schema/types.d.ts](src/lib/db/schema/types.d.ts))
+   - Contains TypeScript interfaces for all database tables
+   - Single source of truth for database types
+   - Includes inline comments for Drizzle ORM behavior (e.g., boolean conversion)
+
+2. **Global Type Exports** ([src/lib/db/types.d.ts](src/lib/db/types.d.ts))
+   - Re-exports all types from `schema/types.d.ts`
+   - Importable via `import type { Category } from '$lib/db/types'`
+
+3. **Global Scope** ([src/app.d.ts](src/app.d.ts))
+   - Makes types available globally without imports
+   - Use `Category`, `PortfolioItem`, `Bio`, `Image`, `SiteMetadata` anywhere
+
+4. **Schema Files** ([src/lib/db/schema/\*.js](src/lib/db/schema/))
+   - Each schema file includes `@typedef {import('./types').TypeName} TypeName`
+   - Provides JSDoc compatibility for JavaScript files
+
+5. **Query Functions** ([src/lib/db/queries/\*.js](src/lib/db/queries/))
+   - All return types explicitly annotated with database types
+   - Use type assertions: `/** @type {Category[]} */ (await db.select()...)`
+   - Parameter types use literal unions where appropriate (e.g., `'short' | 'mid' | 'long'`)
+
+#### Adding a New Database Table
+
+When creating a new database table, follow this **CRITICAL** pattern:
+
+1. **Create the Drizzle schema** (`src/lib/db/schema/your-table.js`):
+
+   ```javascript
+   import { sqliteTable, text, integer } from 'drizzle-orm/sqlite-core';
+
+   /**
+    * YourTable description
+    * @typedef {import('./types').YourTable} YourTable
+    */
+   export const yourTable = sqliteTable('your_table', {
+     id: integer('id').primaryKey({ autoIncrement: true }),
+     name: text('name').notNull(),
+     isActive: integer('is_active', { mode: 'boolean' }).notNull(),
+     createdAt: integer('created_at', { mode: 'timestamp' }).notNull(),
+   });
+   ```
+
+2. **Add TypeScript interface** (`src/lib/db/schema/types.d.ts`):
+
+   ```typescript
+   /**
+    * YourTable - Description
+    */
+   export interface YourTable {
+     id: number;
+     name: string;
+     isActive: boolean; // Note: Use boolean for { mode: 'boolean' }
+     createdAt: Date; // Note: Use Date for { mode: 'timestamp' }
+   }
+   ```
+
+3. **Export the type** (`src/lib/db/types.d.ts`):
+
+   ```typescript
+   export type { Category, PortfolioItem, YourTable } from './schema/types';
+   ```
+
+4. **Add to global scope** (`src/app.d.ts`):
+
+   ```typescript
+   type YourTable = import('$lib/db/types').YourTable;
+   ```
+
+5. **Create typed query functions** (`src/lib/db/queries/your-table.js`):
+
+   ```javascript
+   /**
+    * Get all items
+    * @returns {Promise<YourTable[]>}
+    */
+   export async function getAllItems() {
+     /** @type {YourTable[]} */
+     const items = /** @type {YourTable[]} */ (
+       await db.select().from(yourTable).all()
+     );
+     return items;
+   }
+   ```
+
+6. **Type server load functions** (`+page.server.js`):
+
+   ```javascript
+   /**
+    * @returns {Promise<{ items: YourTable[] }>}
+    */
+   export async function load() {
+     return {
+       items: await getAllItems(),
+     };
+   }
+   ```
+
+7. **Use types in components** (`+page.svelte`):
+
+   ```svelte
+   <script>
+     /** @type {import('./$types').PageData} */
+     export let data;
+
+     // Types flow through automatically!
+     // data.items is typed as YourTable[]
+   </script>
+   ```
+
+#### Drizzle ORM Type Quirks
+
+- **Boolean fields**: Defined with `integer('field', { mode: 'boolean' })`, Drizzle converts to `boolean` on read
+- **Timestamp fields**: Defined with `integer('field', { mode: 'timestamp' })`, Drizzle converts to `Date` on read
+- **Type assertions**: Always wrap Drizzle queries with type assertions due to generic return types
+- **Nullable fields**: Use `field | null` for optional database fields (e.g., `description: string | null`)
+
 ### Important: Svelte 5 Compatibility
 
 This project now uses **Svelte 5.46.1**. Key things to know:
@@ -83,7 +208,7 @@ This project now uses **Svelte 5.46.1**. Key things to know:
 - DOM element manipulation requires `/** @type {HTMLElement} */` type casting
 - Build and runtime work perfectly with existing code
 
-### Type Annotations
+### JSDoc Type Annotations
 
 Uses JSDoc comments for TypeScript checking (not .ts files):
 
@@ -97,6 +222,10 @@ function playNote(frequency, duration) {}
 // Type casting for DOM manipulation (required in Svelte 5)
 let element = /** @type {HTMLElement} */ (document.getElementById('foo'));
 element.style.color = 'red';
+
+// Svelte component with typed reactive variable
+/** @type {Category[]} */
+$: categories = data.categories;
 ```
 
 ### Naming Conventions

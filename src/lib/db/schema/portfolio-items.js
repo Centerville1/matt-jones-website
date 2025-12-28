@@ -12,6 +12,7 @@ import { categories } from './categories.js';
  * - endDate → ended (parsed to Date or "Present")
  * - url → linkUrl
  * - image → image (from /experiences/ directory)
+ * @typedef {import('./types').PortfolioItem} PortfolioItem
  */
 export const portfolioItems = sqliteTable('portfolio_items', {
   id: integer('id').primaryKey({ autoIncrement: true }),

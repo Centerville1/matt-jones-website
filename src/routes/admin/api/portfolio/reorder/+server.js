@@ -17,7 +17,10 @@ export async function POST({ request, locals }) {
   try {
     // Update each item's display order
     for (const update of updates) {
-      if (typeof update.id !== 'number' || typeof update.displayOrder !== 'number') {
+      if (
+        typeof update.id !== 'number' ||
+        typeof update.displayOrder !== 'number'
+      ) {
         throw error(400, 'Invalid update format');
       }
 

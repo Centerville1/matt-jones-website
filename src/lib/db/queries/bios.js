@@ -13,7 +13,8 @@ import { eq } from 'drizzle-orm';
  * @returns {Promise<Record<string, { default: string[] }>>}
  */
 export async function getBios() {
-  const allBios = await db.select().from(bios).all();
+  /** @type {Bio[]} */
+  const allBios = /** @type {Bio[]} */ (await db.select().from(bios).all());
 
   /** @type {Record<string, { default: string[] }>} */
   const result = {};
@@ -31,10 +32,14 @@ export async function getBios() {
 
 /**
  * Get a specific bio by type
- * @param {string} type - 'short', 'mid', or 'long'
+ * @param {'short' | 'mid' | 'long'} type - Bio type
+ * @returns {Promise<{ default: string[] } | null>}
  */
 export async function getBioByType(type) {
-  const bio = await db.select().from(bios).where(eq(bios.type, type)).get();
+  /** @type {Bio | undefined} */
+  const bio = /** @type {Bio | undefined} */ (
+    await db.select().from(bios).where(eq(bios.type, type)).get()
+  );
 
   if (!bio) {
     return null;
@@ -48,8 +53,9 @@ export async function getBioByType(type) {
 
 /**
  * Update a bio by type
- * @param {string} type - 'short', 'mid', or 'long'
+ * @param {'short' | 'mid' | 'long'} type - Bio type
  * @param {string} content - The new content (newline-separated paragraphs)
+ * @returns {Promise<void>}
  */
 export async function updateBio(type, content) {
   await db

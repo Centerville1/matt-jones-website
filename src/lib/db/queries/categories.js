@@ -7,7 +7,7 @@ import { categories } from '../schema/index.js';
 
 /**
  * Get all categories
- * @returns {Promise<Array<object>>}
+ * @returns {Promise<Category[]>}
  */
 export async function getAllCategories() {
   const allCategories = await db

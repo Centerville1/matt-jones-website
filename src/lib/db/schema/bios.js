@@ -3,6 +3,7 @@ import { sqliteTable, text, integer } from 'drizzle-orm/sqlite-core';
 /**
  * Bios table - stores different length bio versions
  * Replaces: src/routes/home/bios.json
+ * @typedef {import('./types').Bio} Bio
  */
 export const bios = sqliteTable('bios', {
   id: integer('id').primaryKey({ autoIncrement: true }),

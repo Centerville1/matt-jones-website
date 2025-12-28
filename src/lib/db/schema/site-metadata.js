@@ -3,6 +3,7 @@ import { sqliteTable, text, integer } from 'drizzle-orm/sqlite-core';
 /**
  * Site metadata table - stores SEO and site-wide settings
  * Key-value store for flexible site configuration
+ * @typedef {import('./types').SiteMetadata} SiteMetadata
  */
 export const siteMetadata = sqliteTable('site_metadata', {
   id: integer('id').primaryKey({ autoIncrement: true }),

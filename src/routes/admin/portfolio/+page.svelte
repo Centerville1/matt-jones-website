@@ -9,7 +9,9 @@
 
   let selectedCategoryId = 'all';
   let searchQuery = '';
+  /** @type {number | null} */
   let draggedItemId = null;
+  /** @type {number | null} */
   let dragOverItemId = null;
   let isInitialized = false;
 

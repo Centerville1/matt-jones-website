@@ -19,6 +19,10 @@ This document provides context for AI assistants working on the Matt Jones Portf
 src/routes/
 ├── +page.svelte           # Landing page (3D sphere loader)
 ├── +layout.svelte         # Root layout (global styles, analytics)
+├── admin/                 # Admin interface (password-protected)
+│   ├── login/             # Login page
+│   ├── portfolio/         # Portfolio CRUD with search/filtering
+│   └── images/            # Image library with Vercel Blob uploads
 └── home/
     ├── +page.svelte       # Main home page
     ├── +layout.svelte     # Home layout (header/nav)
@@ -58,6 +62,14 @@ src/routes/
 - [src/routes/home/bio.svelte](src/routes/home/bio.svelte) - Bio display with expandable text
 - [src/routes/home/footer.svelte](src/routes/home/footer.svelte) - Footer component
 - [src/routes/icons.svelte](src/routes/icons.svelte) - SVG icon components
+- [src/lib/components/ImagePicker.svelte](src/lib/components/ImagePicker.svelte) - Image library browser with upload
+
+**Admin Infrastructure:**
+
+- [src/lib/server/auth.js](src/lib/server/auth.js) - Session management, rate limiting, password verification
+- [src/lib/server/guards.js](src/lib/server/guards.js) - Auth guards for protected routes
+- [src/lib/server/storage.js](src/lib/server/storage.js) - Vercel Blob image uploads (5MB max)
+- [src/hooks.server.js](src/hooks.server.js) - Session verification middleware
 
 ## Code Style & Conventions
 
@@ -122,10 +134,10 @@ if (!browser) return; // Prevent SSR errors
 
 ### Adding New Content
 
-1. **Portfolio items:** Update directly in Turso database or use future admin interface
-2. **Bio content:** Update directly in Turso database or use future admin interface
-3. **Site metadata:** Update via `siteMetadata` table in database
-4. **Images:** Place in [static/](static/) folder (auto-served)
+1. **Portfolio items:** Use `/admin/portfolio` to create/edit items (login required)
+2. **Bio content:** Update directly in Turso database (admin UI coming soon)
+3. **Site metadata:** Update via `siteMetadata` table in database (admin UI coming soon)
+4. **Images:** Use `/admin/images` to upload to Vercel Blob (5MB max, login required)
 
 ### Color Usage
 

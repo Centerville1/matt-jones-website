@@ -94,6 +94,9 @@ export const actions = {
     }
 
     try {
+      // Get existing item to preserve displayOrder if not provided
+      const existingItem = await getPortfolioItemById(id);
+
       await updatePortfolioItem(id, {
         categoryId: parseInt(/** @type {string} */ (categoryId), 10),
         title: /** @type {string} */ (title).trim(),
@@ -118,7 +121,7 @@ export const actions = {
         displayOrder:
           displayOrder && typeof displayOrder === 'string'
             ? parseInt(displayOrder, 10)
-            : 0,
+            : existingItem?.displayOrder || 0,
       });
 
       return { success: true };

@@ -57,32 +57,20 @@
       {/if}
     </div>
 
-    <div class="form-row">
-      <div class="form-group">
-        <label for="categoryId">Category *</label>
-        <select id="categoryId" name="categoryId" required>
-          <option value="">Select a category</option>
-          {#each categories as category}
-            {@const cat = /** @type {Category} */ (category)}
-            <option value={cat.id} selected={itemData.categoryId == cat.id}>
-              {cat.name}
-            </option>
-          {/each}
-        </select>
-        {#if form?.errors?.categoryId}
-          <p class="error">{form.errors.categoryId}</p>
-        {/if}
-      </div>
-
-      <div class="form-group">
-        <label for="displayOrder">Display Order</label>
-        <input
-          type="number"
-          id="displayOrder"
-          name="displayOrder"
-          value={itemData.displayOrder ?? '0'}
-        />
-      </div>
+    <div class="form-group">
+      <label for="categoryId">Category *</label>
+      <select id="categoryId" name="categoryId" required>
+        <option value="">Select a category</option>
+        {#each categories as category}
+          {@const cat = /** @type {Category} */ (category)}
+          <option value={cat.id} selected={itemData.categoryId == cat.id}>
+            {cat.name}
+          </option>
+        {/each}
+      </select>
+      {#if form?.errors?.categoryId}
+        <p class="error">{form.errors.categoryId}</p>
+      {/if}
     </div>
 
     <div class="form-row">

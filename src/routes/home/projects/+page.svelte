@@ -9,6 +9,16 @@
   /** @type {import('./$types').PageData} */
   export let data;
 
+  /**
+   * @typedef {Object} Category
+   * @property {number} id
+   * @property {string} slug
+   * @property {string} name
+   * @property {string | null} description
+   * @property {number} order
+   * @property {boolean} hasTab
+   */
+
   // Animation constants
   const ANIMATION_TIMINGS = {
     EXIT: 800,
@@ -29,12 +39,8 @@
   let mainElement = null;
 
   // Tab cutout state
-  /** @type {HTMLLabelElement | null} */
-  let projectsLabel = null;
-  /** @type {HTMLLabelElement | null} */
-  let timelineLabel = null;
-  /** @type {HTMLLabelElement | null} */
-  let otherLabel = null;
+  /** @type {Record<string, HTMLLabelElement | null>} */
+  let tabLabels = {};
   /** @type {HTMLElement | null} */
   let navElement = null;
 
@@ -44,9 +50,12 @@
    * @returns {string}
    */
   function getCurrentTab(hash) {
-    if (hash === '#timeline') return 'timeline';
-    if (hash === '#other') return 'other';
-    return 'projects';
+    const slug = hash.replace('#', '');
+    /** @type {Category[]} */
+    const cats = /** @type {Category[]} */ (data.categories);
+    const category = cats.find((cat) => cat.slug === slug);
+    // Default to first category if hash doesn't match
+    return category ? category.slug : cats[0]?.slug || 'projects';
   }
 
   /**
@@ -79,16 +88,17 @@
     if (isAnimating) return;
 
     const target = event?.currentTarget.value;
-    const current = window.location.hash;
+    const current = window.location.hash.replace('#', '');
 
     // Lock tabs during animation
     isAnimating = true;
 
     // Determine animation direction based on tab order
-    animateRight = !(
-      (current === '#timeline' && target === 'projects') ||
-      current === '#other'
-    );
+    /** @type {Category[]} */
+    const cats = /** @type {Category[]} */ (data.categories);
+    const currentIndex = cats.findIndex((cat) => cat.slug === current);
+    const targetIndex = cats.findIndex((cat) => cat.slug === target);
+    animateRight = targetIndex > currentIndex;
 
     // Phase 1: Slide out current content
     applyTransform(
@@ -157,13 +167,7 @@
   function updateBackgroundPosition() {
     if (!browser || !navElement) return;
 
-    const activeLabel =
-      currentTab === 'timeline'
-        ? timelineLabel
-        : currentTab === 'other'
-          ? otherLabel
-          : projectsLabel;
-
+    const activeLabel = tabLabels[currentTab];
     if (!activeLabel) return;
 
     const labelRect = activeLabel.getBoundingClientRect();
@@ -180,7 +184,7 @@
   $: if (
     browser &&
     navElement &&
-    (projectsLabel || timelineLabel || otherLabel) &&
+    Object.keys(tabLabels).length > 0 &&
     currentTab // Add currentTab as dependency to trigger on tab change
   ) {
     // Only enable animation after first load
@@ -242,59 +246,35 @@
     <form>
       <div class="title"><h3>Portfolio:</h3></div>
       <div class="tabs">
-        <div class="tab">
-          <input
-            type="radio"
-            id="projects"
-            value="projects"
-            checked={$page.url.hash !== '#timeline' &&
-              $page.url.hash !== '#other'}
-            disabled={isAnimating}
-            on:change={onTabChange}
-          />
-          <label
-            for="projects"
-            class:loading={isAnimating}
-            bind:this={projectsLabel}>Projects</label
-          >
-        </div>
-        <div class="tab">
-          <input
-            type="radio"
-            id="timeline"
-            value="timeline"
-            checked={$page.url.hash === '#timeline'}
-            disabled={isAnimating}
-            on:change={onTabChange}
-          />
-          <label
-            for="timeline"
-            class:loading={isAnimating}
-            bind:this={timelineLabel}>My Experience</label
-          >
-        </div>
-        <div class="tab">
-          <input
-            type="radio"
-            id="other"
-            value="other"
-            checked={$page.url.hash === '#other'}
-            disabled={isAnimating}
-            on:change={onTabChange}
-          />
-          <label for="other" class:loading={isAnimating} bind:this={otherLabel}
-            >Creations</label
-          >
-        </div>
+        {#each /** @type {Category[]} */ (data.categories) as category (category.id)}
+          <div class="tab">
+            <input
+              type="radio"
+              id={category.slug}
+              value={category.slug}
+              checked={currentTab === category.slug}
+              disabled={isAnimating}
+              on:change={onTabChange}
+            />
+            <label
+              for={category.slug}
+              class:loading={isAnimating}
+              bind:this={tabLabels[category.slug]}
+              title={category.description || ''}
+            >
+              {category.name}
+            </label>
+          </div>
+        {/each}
       </div>
     </form>
   </nav>
   <div id="tab-content" bind:this={tabContentElement}>
-    {#if $page.url.hash === '#other'}
+    {#if currentTab === 'other'}
       <Experiments experiences={data.experiences} />
-    {:else if $page.url.hash === '#timeline'}
+    {:else if currentTab === 'experiences'}
       <Timeline experiences={data.experiences} />
-    {:else if $page.url.hash !== '#timeline' && $page.url.hash !== '#other'}
+    {:else if currentTab === 'projects'}
       <Projects experiences={data.experiences} />
     {/if}
   </div>
@@ -483,6 +463,36 @@
     overflow: hidden;
     user-select: none;
     -webkit-user-select: none;
+  }
+
+  /* Tooltip styling */
+  .tab label[title]:hover::after {
+    content: attr(title);
+    position: absolute;
+    bottom: calc(100% + 8px);
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--neutral-black);
+    color: var(--neutral-white);
+    padding: 6px 12px;
+    border-radius: 4px;
+    white-space: nowrap;
+    font-size: 0.875rem;
+    z-index: 100;
+    pointer-events: none;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  }
+
+  .tab label[title]:hover::before {
+    content: '';
+    position: absolute;
+    bottom: calc(100% + 2px);
+    left: 50%;
+    transform: translateX(-50%);
+    border: 6px solid transparent;
+    border-top-color: var(--neutral-black);
+    z-index: 100;
+    pointer-events: none;
   }
 
   .tab label:hover {

@@ -1,9 +1,33 @@
 <script>
+  import { browser } from '$app/environment';
+  import { onMount } from 'svelte';
+
   /** @type {import('./$types').PageData} */
   export let data;
 
+  const CATEGORY_STORAGE_KEY = 'admin_portfolio_category_filter';
+
   let selectedCategoryId = 'all';
   let searchQuery = '';
+  let draggedItemId = null;
+  let dragOverItemId = null;
+  let isInitialized = false;
+
+  // Load saved category filter on mount
+  onMount(() => {
+    if (browser) {
+      const saved = localStorage.getItem(CATEGORY_STORAGE_KEY);
+      if (saved) {
+        selectedCategoryId = saved;
+      }
+      isInitialized = true;
+    }
+  });
+
+  // Save category filter when it changes (but not during initialization)
+  $: if (browser && isInitialized && selectedCategoryId) {
+    localStorage.setItem(CATEGORY_STORAGE_KEY, selectedCategoryId);
+  }
 
   /**
    * Return image path as-is (all images are now Vercel Blob URLs)
@@ -41,6 +65,131 @@
     } catch (error) {
       alert('Error deleting item');
     }
+  }
+
+  /**
+   * Handle drag start
+   * @param {DragEvent} e
+   * @param {number} itemId
+   */
+  function handleDragStart(e, itemId) {
+    draggedItemId = itemId;
+    if (e.dataTransfer) {
+      e.dataTransfer.effectAllowed = 'move';
+    }
+  }
+
+  /**
+   * Handle drag over
+   * @param {DragEvent} e
+   * @param {number} itemId
+   */
+  function handleDragOver(e, itemId) {
+    e.preventDefault();
+    dragOverItemId = itemId;
+    if (e.dataTransfer) {
+      e.dataTransfer.dropEffect = 'move';
+    }
+  }
+
+  /**
+   * Handle drag leave
+   */
+  function handleDragLeave() {
+    dragOverItemId = null;
+  }
+
+  /**
+   * Handle drop
+   * @param {DragEvent} e
+   * @param {number} targetItemId
+   */
+  async function handleDrop(e, targetItemId) {
+    e.preventDefault();
+
+    if (draggedItemId === null || draggedItemId === targetItemId) {
+      draggedItemId = null;
+      dragOverItemId = null;
+      return;
+    }
+
+    // Find items in the current filtered/sorted list
+    const items = filteredAndSortedItems;
+    const draggedItem = items.find(
+      (/** @type {any} */ item) => item.id === draggedItemId,
+    );
+    const targetItem = items.find(
+      (/** @type {any} */ item) => item.id === targetItemId,
+    );
+
+    if (!draggedItem || !targetItem) {
+      draggedItemId = null;
+      dragOverItemId = null;
+      return;
+    }
+
+    // Only allow reordering within the same category
+    if (draggedItem.categoryId !== targetItem.categoryId) {
+      alert('You can only reorder items within the same category');
+      draggedItemId = null;
+      dragOverItemId = null;
+      return;
+    }
+
+    const draggedIndex = items.indexOf(draggedItem);
+    const targetIndex = items.indexOf(targetItem);
+
+    // Reorder the items array
+    const reorderedItems = [...items];
+    const [removed] = reorderedItems.splice(draggedIndex, 1);
+
+    // Adjust target index if we removed an item before the target
+    let insertIndex = targetIndex;
+    if (draggedIndex < targetIndex) {
+      insertIndex = targetIndex - 1;
+    }
+
+    reorderedItems.splice(insertIndex, 0, removed);
+
+    // Create update payload with new display orders (only for this category)
+    const updates = reorderedItems
+      .filter(
+        (/** @type {any} */ item) => item.categoryId === draggedItem.categoryId,
+      )
+      .map((/** @type {any} */ item, index) => ({
+        id: item.id,
+        displayOrder: index,
+      }));
+
+    try {
+      const response = await fetch('/admin/api/portfolio/reorder', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ updates }),
+      });
+
+      if (response.ok) {
+        // Reload to show new order
+        window.location.reload();
+      } else {
+        alert('Failed to reorder items');
+      }
+    } catch (error) {
+      alert('Error reordering items');
+    }
+
+    draggedItemId = null;
+    dragOverItemId = null;
+  }
+
+  /**
+   * Handle drag end
+   */
+  function handleDragEnd() {
+    draggedItemId = null;
+    dragOverItemId = null;
   }
 
   // Create a category order map
@@ -114,6 +263,7 @@
     <table>
       <thead>
         <tr>
+          <th></th>
           <th>Image</th>
           <th>Title</th>
           <th>Category</th>
@@ -124,7 +274,19 @@
       </thead>
       <tbody>
         {#each filteredAndSortedItems as item}
-          <tr>
+          <tr
+            draggable="true"
+            on:dragstart={(e) => handleDragStart(e, item.id)}
+            on:dragover={(e) => handleDragOver(e, item.id)}
+            on:dragleave={handleDragLeave}
+            on:drop={(e) => handleDrop(e, item.id)}
+            on:dragend={handleDragEnd}
+            class:dragging={draggedItemId === item.id}
+            class:drag-over={dragOverItemId === item.id}
+          >
+            <td class="drag-handle">
+              <span class="handle-icon">⋮⋮</span>
+            </td>
             <td>
               {#if item.image}
                 <img
@@ -306,8 +468,38 @@
     color: var(--neutral-black);
   }
 
+  tbody tr {
+    cursor: move;
+    transition: all 0.2s;
+  }
+
   tbody tr:hover {
     background-color: var(--neutral-dark-gray-op-10);
+  }
+
+  tbody tr.dragging {
+    opacity: 0.5;
+  }
+
+  tbody tr.drag-over {
+    border-top: 3px solid var(--main-blue);
+  }
+
+  .drag-handle {
+    width: 40px;
+    text-align: center;
+    cursor: grab;
+  }
+
+  .drag-handle:active {
+    cursor: grabbing;
+  }
+
+  .handle-icon {
+    color: var(--neutral-black);
+    opacity: 0.3;
+    font-size: 18px;
+    user-select: none;
   }
 
   .thumbnail {

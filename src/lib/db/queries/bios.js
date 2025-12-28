@@ -45,3 +45,19 @@ export async function getBioByType(type) {
     default: paragraphs,
   };
 }
+
+/**
+ * Update a bio by type
+ * @param {string} type - 'short', 'mid', or 'long'
+ * @param {string} content - The new content (newline-separated paragraphs)
+ */
+export async function updateBio(type, content) {
+  await db
+    .update(bios)
+    .set({
+      content,
+      updatedAt: new Date(),
+    })
+    .where(eq(bios.type, type))
+    .run();
+}

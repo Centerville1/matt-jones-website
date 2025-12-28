@@ -32,6 +32,9 @@
           <li class:active={$page.url.pathname.startsWith('/admin/portfolio')}>
             <a href="/admin/portfolio">Portfolio Items</a>
           </li>
+          <li class:active={$page.url.pathname.startsWith('/admin/bios')}>
+            <a href="/admin/bios">Bios</a>
+          </li>
           <li class:active={$page.url.pathname.startsWith('/admin/images')}>
             <a href="/admin/images">Images</a>
           </li>

@@ -1,6 +1,5 @@
 <script>
   import experiences from './experiences.json';
-  import MediaQuery from "svelte-media-query";
   import Card from "./card.svelte";
 
 

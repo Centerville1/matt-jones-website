@@ -2,7 +2,9 @@
   import { onMount } from 'svelte';
   import { bios, stringTransformSteps } from './bio';
   import { browser } from '$app/environment';
-  import MediaQuery from 'svelte-media-query';
+  import { useMediaQuery } from '$lib/mediaQuery.svelte.js';
+
+  const isDesktop = useMediaQuery('(min-width: 440px)');
 
   export let height = 0;
 
@@ -158,11 +160,9 @@
 <svelte:window bind:innerWidth />
 
 <div id="bio-container">
-  <MediaQuery query="(min-width: 440px)" let:matches>
-    {#if matches}
-      <div id="bio"></div>
-    {/if}
-  </MediaQuery>
+  {#if isDesktop.matches}
+    <div id="bio"></div>
+  {/if}
   <form id="length">
     <div>
       <input
@@ -195,11 +195,9 @@
       <label for="long">Long</label>
     </div>
   </form>
-  <MediaQuery query="(max-width: 440px)" let:matches>
-    {#if matches}
-      <div id="bio"></div>
-    {/if}
-  </MediaQuery>
+  {#if !isDesktop.matches}
+    <div id="bio"></div>
+  {/if}
 </div>
 
 <style>

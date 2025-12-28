@@ -1,7 +1,9 @@
 <script>
   import experiences from './experiences.json';
   import Card from './card.svelte';
-  import MediaQuery from 'svelte-media-query';
+  import { useMediaQuery } from '$lib/mediaQuery.svelte.js';
+
+  const isWideScreen = useMediaQuery('(min-width: 700px)');
 
   let experienceList = experiences.experiences;
 
@@ -19,34 +21,11 @@
     <hr />
   </div>
     <div id="carousel-box">
-      <MediaQuery query="(min-width: 700px)" let:matches>
-        {#if matches}
-            {#if countHighlights > 0}
-              {#each experienceList as experience}
-                {#if experience.highlight}
-                  <Card
-                    title={experience.title}
-                    description={experience.description}
-                    linkUrl={experience.url}
-                    started={experience.startDate || undefined}
-                    ended={experience.endDate}
-                    image={experience.image}
-                    allowPopup={true}
-                  />
-                {/if}
-              {/each}
-            {:else}
-              <Card
-                title={'No Highlighted Experiences!'}
-                description={'    "Click this card" to navigate to the TIMELINE TAB to see all my projects and positions'}
-                linkUrl={'/home/projects#timeline'}
-              />
-            {/if}
-        {:else}
-            {#if countHighlights > 0}
-              {#each experienceList as experience}
-                {#if experience.highlight}
-                  <Card
+      {#if isWideScreen.matches}
+          {#if countHighlights > 0}
+            {#each experienceList as experience}
+              {#if experience.highlight}
+                <Card
                   title={experience.title}
                   description={experience.description}
                   linkUrl={experience.url}
@@ -54,18 +33,39 @@
                   ended={experience.endDate}
                   image={experience.image}
                   allowPopup={true}
-                  />
-                {/if}
-              {/each}
-            {:else}
-              <Card
-                title={'No Highlighted Experiences!'}
-                description={'    "Click this card" to navigate to the TIMELINE TAB to see all my projects and positions'}
-                linkUrl={'/home/projects#timeline'}
-              />
-            {/if}
-        {/if}
-        </MediaQuery>
+                />
+              {/if}
+            {/each}
+          {:else}
+            <Card
+              title={'No Highlighted Experiences!'}
+              description={'    "Click this card" to navigate to the TIMELINE TAB to see all my projects and positions'}
+              linkUrl={'/home/projects#timeline'}
+            />
+          {/if}
+      {:else}
+          {#if countHighlights > 0}
+            {#each experienceList as experience}
+              {#if experience.highlight}
+                <Card
+                title={experience.title}
+                description={experience.description}
+                linkUrl={experience.url}
+                started={experience.startDate || undefined}
+                ended={experience.endDate}
+                image={experience.image}
+                allowPopup={true}
+                />
+              {/if}
+            {/each}
+          {:else}
+            <Card
+              title={'No Highlighted Experiences!'}
+              description={'    "Click this card" to navigate to the TIMELINE TAB to see all my projects and positions'}
+              linkUrl={'/home/projects#timeline'}
+            />
+          {/if}
+      {/if}
     </div>
 </div>
 

@@ -3,11 +3,12 @@
   import '../../global.css';
   // import ThemeSwitch from './themeSwitch.svelte';
   import { onMount } from 'svelte';
-  // svelte-media-query docs: https://www.npmjs.com/package/svelte-media-query
-  import MediaQuery from 'svelte-media-query';
+  import { useMediaQuery } from '$lib/mediaQuery.svelte.js';
   import Footer from './footer.svelte';
   import { themeMode, animatePageLoadLocalStorageKey } from '../../store';
   import { afterNavigate } from '$app/navigation';
+
+  const isDesktop = useMediaQuery('(min-width: 440px)');
 
   // Toggle visibility of the mobile nav dropdown menu
   function toggleNav() {
@@ -87,57 +88,55 @@
         alt="Matt Jones Software Developer, logo"
       />
     {/if}
-    <MediaQuery query="(min-width: 440px)" let:matches>
-      {#if matches}
-        <div id="links">
-          <a class="plain" href="/home" on:click={scrollTop}>Home</a>
-          <a
-            class="emphasis"
-            href="/home/projects"
-            on:click={scrollTop}>My Portfolio</a
-          >
+    {#if isDesktop.matches}
+      <div id="links">
+        <a class="plain" href="/home" on:click={scrollTop}>Home</a>
+        <a
+          class="emphasis"
+          href="/home/projects"
+          on:click={scrollTop}>My Portfolio</a
+        >
+      </div>
+    <!-- Change to hamburger menu on small screens -->
+    {:else}
+      <button id="menu-button" on:click={toggleNav}>
+        <!-- Hamburger menu icon SVG -->
+        <svg
+          width="40px"
+          height="40px"
+          viewBox="0 0 24 24"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M4 18L20 18"
+            stroke="var(--contrast-text-light)"
+            stroke-width="2"
+            stroke-linecap="round"
+          />
+          <path
+            d="M4 12L20 12"
+            stroke="var(--contrast-text-light)"
+            stroke-width="2"
+            stroke-linecap="round"
+          />
+          <path
+            d="M4 6L20 6"
+            stroke="var(--contrast-text-light)"
+            stroke-width="2"
+            stroke-linecap="round"
+          />
+        </svg>
+      </button>
+      <nav id="links">
+        <div>
+          <a on:click={toggleNav} href="/home">Home</a>
         </div>
-      <!-- Change to hamburger menu on small screens -->
-      {:else}
-        <button id="menu-button" on:click={toggleNav}>
-          <!-- Hamburger menu icon SVG -->
-          <svg
-            width="40px"
-            height="40px"
-            viewBox="0 0 24 24"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              d="M4 18L20 18"
-              stroke="var(--contrast-text-light)"
-              stroke-width="2"
-              stroke-linecap="round"
-            />
-            <path
-              d="M4 12L20 12"
-              stroke="var(--contrast-text-light)"
-              stroke-width="2"
-              stroke-linecap="round"
-            />
-            <path
-              d="M4 6L20 6"
-              stroke="var(--contrast-text-light)"
-              stroke-width="2"
-              stroke-linecap="round"
-            />
-          </svg>
-        </button>
-        <nav id="links">
-          <div>
-            <a on:click={toggleNav} href="/home">Home</a>
-          </div>
-          <div>
-            <a on:click={toggleNav} href="/home/projects">My Portfolio</a>
-          </div>
-        </nav>
-      {/if}
-    </MediaQuery>
+        <div>
+          <a on:click={toggleNav} href="/home/projects">My Portfolio</a>
+        </div>
+      </nav>
+    {/if}
   </header>
   <main id="main">
     <div id="page-content">

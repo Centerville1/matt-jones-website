@@ -136,8 +136,6 @@ Use CSS custom properties from [global.css](src/global.css):
 
 9. **Type Safety:** JSON data files have no validation or type checking.
 
-10. **Legacy Packages:** `svelte-carousel` and `svelte-media-query` are missing Svelte 5 exports condition (still work but show warnings).
-
 ## Development Workflow
 
 ### Local Development

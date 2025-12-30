@@ -23,7 +23,6 @@
         started={experience.startDate}
         ended={experience.endDate}
         image={experience.image}
-        allowPopup={true}
       />
     {/each}
   </div>

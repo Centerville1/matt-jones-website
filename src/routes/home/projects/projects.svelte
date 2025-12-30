@@ -24,7 +24,6 @@
         started={project.startDate || undefined}
         ended={project.endDate}
         image={project.image}
-        allowPopup={true}
       />
     {/each}
   </div>

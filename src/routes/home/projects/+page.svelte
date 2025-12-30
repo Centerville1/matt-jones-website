@@ -328,7 +328,7 @@
     width: 100vw;
     height: 59px;
     display: flex;
-    z-index: 9;
+    z-index: 99;
   }
 
   .bg-left {
@@ -397,7 +397,7 @@
     margin-left: -220vw;
     background-color: transparent;
     position: fixed;
-    z-index: 10;
+    z-index: 100;
   }
 
   hr {
@@ -466,20 +466,22 @@
     top: calc(100% + 10px);
     left: 50%;
     transform: translateX(-50%);
-    background: var(--neutral-black);
-    color: var(--neutral-white);
+    background: var(--neutral-dark-gray);
+    color: var(--neutral-black);
     padding: 8px 14px;
     border-radius: 4px;
+    border: 1px solid var(--neutral-gray);
     white-space: nowrap;
     font-size: 0.875rem;
     z-index: 1000;
     pointer-events: none;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
     opacity: 0;
     visibility: hidden;
     transition:
       opacity 0.2s,
       visibility 0.2s;
+    min-width: 200%;
     max-width: min(400px, 90vw);
     white-space: normal;
     text-align: center;
@@ -517,7 +519,7 @@
     left: 50%;
     transform: translateX(-50%);
     border: 6px solid transparent;
-    border-bottom-color: var(--neutral-black);
+    border-bottom-color: var(--neutral-dark-gray);
   }
 
   /* Show tooltip on hover */

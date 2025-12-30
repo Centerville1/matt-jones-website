@@ -32,7 +32,6 @@
               started={experience.startDate || undefined}
               ended={experience.endDate}
               image={experience.image}
-              allowPopup={true}
             />
           {/if}
         {/each}
@@ -53,7 +52,6 @@
             started={experience.startDate || undefined}
             ended={experience.endDate}
             image={experience.image}
-            allowPopup={true}
           />
         {/if}
       {/each}

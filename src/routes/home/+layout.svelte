@@ -7,8 +7,36 @@
   import Footer from './footer.svelte';
   import { themeMode, animatePageLoadLocalStorageKey } from '../../store';
   import { afterNavigate } from '$app/navigation';
+  import { page } from '$app/stores';
 
   const isDesktop = useMediaQuery('(min-width: 440px)');
+
+  let headerVisible = true;
+  /** @type {ReturnType<typeof setTimeout>} */
+  let hideTimeout;
+
+  /**
+   * Hide the header after 5 seconds
+   */
+  function scheduleHeaderHide() {
+    clearTimeout(hideTimeout);
+    hideTimeout = setTimeout(() => {
+      headerVisible = false;
+    }, 5000);
+  }
+
+  /**
+   * Show the header when mouse near top
+   * @param {MouseEvent} e
+   */
+  function handleMouseMove(e) {
+    if (e.clientY < 100) {
+      headerVisible = true;
+      clearTimeout(hideTimeout);
+    } else {
+      headerVisible = false;
+    }
+  }
 
   // Toggle visibility of the mobile nav dropdown menu
   function toggleNav() {
@@ -54,6 +82,17 @@
         }
       }
     };
+
+    // Start the auto-hide timer
+    scheduleHeaderHide();
+
+    // Add mousemove listener for showing header
+    document.addEventListener('mousemove', handleMouseMove);
+
+    return () => {
+      clearTimeout(hideTimeout);
+      document.removeEventListener('mousemove', handleMouseMove);
+    };
   });
 
   // Ensure that the main element's scroll position is reset on navigation
@@ -73,26 +112,40 @@
 
 <div id="outer-container"></div>
 <div id="page">
-  <header>
-    {#if mode === 'dark'}
-      <img
-        id="logo"
-        src="/logo-light-nbg.png"
-        alt="Matt Jones Software Developer, logo"
-      />
-    {:else}
-      <img
-        id="logo"
-        src="/logo-light.png"
-        alt="Matt Jones Software Developer, logo"
-      />
+  <header class:hidden={!headerVisible && isDesktop.matches}>
+    {#if isDesktop.matches}
+      {#if mode === 'dark'}
+        <img
+          id="logo"
+          src="/logo-light-nbg.png"
+          alt="Matt Jones Software Developer, logo"
+        />
+      {:else}
+        <img
+          id="logo"
+          src="/logo-light.png"
+          alt="Matt Jones Software Developer, logo"
+        />
+      {/if}
     {/if}
     {#if isDesktop.matches}
       <div id="links">
-        <a class="plain" href="/home" on:click={scrollTop}>Home</a>
-        <a class="emphasis" href="/home/projects" on:click={scrollTop}
-          >My Portfolio</a
+        <a
+          class="plain"
+          class:active={$page.url.pathname === '/home'}
+          href="/home"
+          on:click={scrollTop}
         >
+          Home
+        </a>
+        <a
+          class="emphasis"
+          class:active={$page.url.pathname === '/home/projects'}
+          href="/home/projects"
+          on:click={scrollTop}
+        >
+          My Portfolio
+        </a>
       </div>
       <!-- Change to hamburger menu on small screens -->
     {:else}
@@ -172,18 +225,29 @@
   header {
     width: 100vw;
     height: var(--header-width);
-    background-color: var(--neutral-dark-gray);
+    background-color: transparent;
     display: flex;
     flex-direction: row;
     align-items: center;
-    box-shadow: 0px -55px 300px 40px var(--constant-black);
-    z-index: 1;
+    justify-content: center;
+    z-index: 1000;
+    position: relative;
+    transform: translateY(0);
+    transition: transform 0.2s ease-out;
+    pointer-events: none;
+  }
+
+  header.hidden {
+    transform: translateY(-100%);
+    transition: transform 0.5s ease-in-out;
   }
 
   #logo {
     width: 50px;
     height: 50px;
-    margin-left: 10px;
+    position: absolute;
+    right: 10px;
+    pointer-events: auto;
   }
 
   /* Custom Styled Scrollbar */
@@ -211,13 +275,13 @@
   /* CSS on large screens */
   @media (min-width: 440px) {
     #links {
-      margin-right: 10px;
       display: flex;
       flex-direction: row;
       align-items: center;
       font-weight: bold;
       font-size: larger;
       z-index: 99;
+      pointer-events: auto;
     }
 
     #links a {
@@ -226,6 +290,13 @@
       justify-content: center;
       text-decoration: none;
       margin-left: 10px;
+      position: relative;
+      padding-bottom: 5px;
+    }
+
+    #links a.active {
+      text-decoration: underline;
+      color: var(--main-blue);
     }
 
     .emphasis {
@@ -255,11 +326,15 @@
     #menu-button {
       background-color: transparent;
       padding: 0;
+      position: absolute;
+      left: 10px;
+      pointer-events: auto;
     }
 
     nav {
       position: absolute;
       top: var(--header-width);
+      left: 0;
       z-index: 99;
       height: fit-content;
       width: 200px;
@@ -270,6 +345,7 @@
       background-color: var(--main-blue-alt);
       border-bottom: 1px solid var(--contrast-text-light);
       border-radius: 5px;
+      pointer-events: auto;
     }
 
     nav div {
@@ -297,8 +373,8 @@
 
   main {
     position: absolute;
-    top: var(--header-width);
-    height: calc(100vh - var(--header-width));
+    top: 0;
+    height: 100vh;
     width: 100vw;
     overflow: scroll;
     overflow-x: clip;

@@ -71,25 +71,21 @@
 
 <div class="outer-boundary">
   <div class="card-wrapper">
-    <div
-      class="card"
-      class:clickable={linkUrl !== ''}
-      role="article"
-      on:click={handleCardClick}
-      on:keydown={(e) => e.key === 'Enter' && handleCardClick()}
-      tabindex={linkUrl !== '' ? 0 : -1}
-    >
-      <!-- Header Image -->
-      {#if image !== ''}
-        <div class="card-image">
-          <img src={image} alt="Image uploaded to represent {title}" />
-        </div>
-      {/if}
+    {#if linkUrl !== ''}
+      <button
+        class="card clickable"
+        on:click={handleCardClick}
+      >
+        <!-- Header Image -->
+        {#if image !== ''}
+          <div class="card-image">
+            <img src={image} alt="Image uploaded to represent {title}" />
+          </div>
+        {/if}
 
-      <!-- Card Content -->
-      <div class="card-content">
-        <!-- Title -->
-        {#if linkUrl !== ''}
+        <!-- Card Content -->
+        <div class="card-content">
+          <!-- Title -->
           <h2>{title}</h2>
           <a
             href={linkUrl}
@@ -119,30 +115,62 @@
             </svg>
             Visit
           </a>
-        {:else}
+
+          <!-- Date Range -->
+          {#if startDate !== null}
+            <h5 class="date-range">
+              {#if typeof endDate !== typeof '' && endDate !== null}
+                {startMonth}
+                {startDate.getFullYear()} - {endMonth}
+                {endDate.getFullYear()}
+              {:else}
+                {startMonth}
+                {startDate.getFullYear()} - {endDate}
+              {/if}
+            </h5>
+          {/if}
+
+          <!-- Description (expands on hover) -->
+          <p class="description">
+            {description}
+          </p>
+        </div>
+      </button>
+    {:else}
+      <div class="card" role="article">
+        <!-- Header Image -->
+        {#if image !== ''}
+          <div class="card-image">
+            <img src={image} alt="Image uploaded to represent {title}" />
+          </div>
+        {/if}
+
+        <!-- Card Content -->
+        <div class="card-content">
+          <!-- Title -->
           <h2>{title}</h2>
-        {/if}
 
-        <!-- Date Range -->
-        {#if startDate !== null}
-          <h5 class="date-range">
-            {#if typeof endDate !== typeof '' && endDate !== null}
-              {startMonth}
-              {startDate.getFullYear()} - {endMonth}
-              {endDate.getFullYear()}
-            {:else}
-              {startMonth}
-              {startDate.getFullYear()} - {endDate}
-            {/if}
-          </h5>
-        {/if}
+          <!-- Date Range -->
+          {#if startDate !== null}
+            <h5 class="date-range">
+              {#if typeof endDate !== typeof '' && endDate !== null}
+                {startMonth}
+                {startDate.getFullYear()} - {endMonth}
+                {endDate.getFullYear()}
+              {:else}
+                {startMonth}
+                {startDate.getFullYear()} - {endDate}
+              {/if}
+            </h5>
+          {/if}
 
-        <!-- Description (expands on hover) -->
-        <p class="description">
-          {description}
-        </p>
+          <!-- Description (expands on hover) -->
+          <p class="description">
+            {description}
+          </p>
+        </div>
       </div>
-    </div>
+    {/if}
     <div class="accent-bar"></div>
   </div>
 </div>
@@ -174,6 +202,13 @@
     margin-bottom: 15px;
     max-height: 525px; /* Fixed height when collapsed */
     border-bottom: 1px solid var(--main-blue-light);
+    /* Reset button styles */
+    border: none;
+    border-bottom: 1px solid var(--main-blue-light);
+    padding: 0;
+    font: inherit;
+    text-align: left;
+    width: 100%;
   }
 
   .card.clickable {
@@ -272,6 +307,7 @@
     max-height: 180px; /* Approximate height for 6 lines */
     transition: max-height 0.4s ease-out;
     position: relative;
+    white-space: pre-line; /* Preserve newlines from database */
     /* Gradient fade-out at bottom to indicate more text */
     mask-image: linear-gradient(to bottom, black 80%, transparent 100%);
     -webkit-mask-image: linear-gradient(to bottom, black 80%, transparent 100%);

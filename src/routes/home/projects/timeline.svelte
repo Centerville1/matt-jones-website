@@ -11,7 +11,7 @@
   let timelineElement = null;
 
   // Constants for positioning
-  const CARD_VERTICAL_SPACING = 70; // Gap between cards (px)
+  const CARD_VERTICAL_SPACING = 80; // Gap between cards (px)
   const CONNECTOR_TOP = 100; // Position of connector line from top of card (px)
 
   /**
@@ -52,7 +52,9 @@
   );
 
   /**
-   * Adjust card positions so they overlap up to the previous card's connector line
+   * Adjust card positions to be the minimum of:
+   * 1. CARD_VERTICAL_SPACING from the horizontal connector line
+   * 2. 30px below the bottom of the previous card in the same column
    */
   function adjustCardPositions() {
     if (!timelineElement) return;
@@ -61,9 +63,11 @@
       timelineElement.querySelectorAll('.timeline-item')
     );
 
+    const MIN_CARD_GAP = 30; // Minimum gap between cards in same column
+
     items.forEach((item, i) => {
       if (i === 0) {
-        // First item has no overlap
+        // First item has no offset
         item.style.marginTop = '0';
         return;
       }
@@ -71,45 +75,85 @@
       const prevItem = items[i - 1];
       const isRightColumn = i % 2 === 1;
 
+      // Get the card element for this item
+      const currentCardElement = item.querySelector('.card');
+      if (!currentCardElement) return;
+
       if (isRightColumn) {
-        // Right column cards: position so connector line is CARD_VERTICAL_SPACING below previous left card's bottom
+        // Right column cards
         const prevCardElement = prevItem.querySelector('.card');
         if (!prevCardElement) return;
 
-        const prevItemTop = prevItem.offsetTop;
+        // Calculate where this item would naturally be (without any margin-top)
+        const prevItemAbsoluteTop = prevItem.offsetTop;
         const prevCardHeight = prevCardElement.clientHeight;
+        const naturalTop = prevItemAbsoluteTop + prevCardHeight;
 
-        // Where we want the connector line to be (previous card bottom + spacing)
+        // Option 1: Position CARD_VERTICAL_SPACING below previous left card's bottom
         const desiredConnectorPosition =
-          prevItemTop + prevCardHeight + CARD_VERTICAL_SPACING;
+          prevItemAbsoluteTop + prevCardHeight + CARD_VERTICAL_SPACING;
+        const desiredTopFromConnector =
+          desiredConnectorPosition - CONNECTOR_TOP;
 
-        // Where this card needs to start (connector position - connector offset from card top)
-        const desiredCardTop = desiredConnectorPosition - CONNECTOR_TOP;
+        // Option 2: Position MIN_CARD_GAP below the previous card in this column (if it exists)
+        let desiredTopFromPrevInColumn = -Infinity;
+        if (i >= 2) {
+          const prevInColumn = items[i - 2];
+          const prevInColumnCard = prevInColumn.querySelector('.card');
+          if (prevInColumnCard) {
+            const prevInColumnAbsoluteTop = prevInColumn.offsetTop;
+            const prevInColumnHeight = prevInColumnCard.clientHeight;
+            desiredTopFromPrevInColumn =
+              prevInColumnAbsoluteTop + prevInColumnHeight + MIN_CARD_GAP;
+          }
+        }
+
+        // Take the maximum (furthest down the page)
+        const desiredTop = Math.max(
+          desiredTopFromConnector,
+          desiredTopFromPrevInColumn,
+        );
 
         // Calculate margin-top needed
-        const currentTop = prevItem.offsetTop + prevCardHeight;
-        const pullUp = currentTop - desiredCardTop;
-
-        item.style.marginTop = `-${pullUp}px`;
+        const marginTop = desiredTop - naturalTop;
+        item.style.marginTop = `${marginTop}px`;
       } else {
-        // Left column cards: position CARD_VERTICAL_SPACING below the previous (right column) card's connector line
+        // Left column cards
         const prevCardElement = prevItem.querySelector('.card');
         if (!prevCardElement) return;
 
-        const prevItemTop = prevItem.offsetTop;
+        // Calculate where this item would naturally be (without any margin-top)
+        const prevItemAbsoluteTop = prevItem.offsetTop;
         const prevCardHeight = prevCardElement.clientHeight;
+        const naturalTop = prevItemAbsoluteTop + prevCardHeight;
 
-        // Position where the connector line is for the previous (right) card
-        const connectorAbsolutePosition = prevItemTop + CONNECTOR_TOP;
+        // Option 1: Position CARD_VERTICAL_SPACING below the previous (right column) card's connector line
+        const connectorAbsolutePosition = prevItemAbsoluteTop + CONNECTOR_TOP;
+        const desiredTopFromConnector =
+          connectorAbsolutePosition + CARD_VERTICAL_SPACING;
 
-        // Where we want this card to start (connector + gap)
-        const desiredTop = connectorAbsolutePosition + CARD_VERTICAL_SPACING;
+        // Option 2: Position MIN_CARD_GAP below the previous card in this column (if it exists)
+        let desiredTopFromPrevInColumn = -Infinity;
+        if (i >= 2) {
+          const prevInColumn = items[i - 2];
+          const prevInColumnCard = prevInColumn.querySelector('.card');
+          if (prevInColumnCard) {
+            const prevInColumnAbsoluteTop = prevInColumn.offsetTop;
+            const prevInColumnHeight = prevInColumnCard.clientHeight;
+            desiredTopFromPrevInColumn =
+              prevInColumnAbsoluteTop + prevInColumnHeight + MIN_CARD_GAP;
+          }
+        }
 
-        // Calculate what margin-top we need to achieve this
-        const currentTop = prevItem.offsetTop + prevCardHeight;
-        const pullUp = currentTop - desiredTop;
+        // Take the maximum (furthest down the page)
+        const desiredTop = Math.max(
+          desiredTopFromConnector,
+          desiredTopFromPrevInColumn,
+        );
 
-        item.style.marginTop = `-${pullUp}px`;
+        // Calculate margin-top needed
+        const marginTop = desiredTop - naturalTop;
+        item.style.marginTop = `${marginTop}px`;
       }
     });
   }

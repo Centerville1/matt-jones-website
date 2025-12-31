@@ -12,4 +12,8 @@ export type {
   Bio,
   Image,
   SiteMetadata,
+  BlogPost,
+  BlogSeries,
+  BlogTag,
+  BlogPostTag,
 } from './schema/types';

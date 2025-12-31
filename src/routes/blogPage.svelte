@@ -159,11 +159,11 @@
           transparent
         )
         30px 30px,
-      linear-gradient(var(--neutral-dark-gray-op-50) 2.6px, transparent 2.6px)
+      linear-gradient(var(--neutral-dark-gray) 2.6px, transparent 2.6px)
         0 -1.3px,
       linear-gradient(
           90deg,
-          var(--neutral-dark-gray-op-50) 2.6px,
+          var(--neutral-dark-gray) 2.6px,
           var(--neutral-gray) 2.6px
         ) -1.3px
         0;

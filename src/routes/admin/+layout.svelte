@@ -32,6 +32,15 @@
           <li class:active={$page.url.pathname.startsWith('/admin/portfolio')}>
             <a href="/admin/portfolio">Portfolio Items</a>
           </li>
+          <li class:active={$page.url.pathname === '/admin/blog' && !$page.url.pathname.includes('/tags') && !$page.url.pathname.includes('/series')}>
+            <a href="/admin/blog">Blog Posts</a>
+          </li>
+          <li class:active={$page.url.pathname.startsWith('/admin/blog/tags')}>
+            <a href="/admin/blog/tags" class="sub-nav">Tags</a>
+          </li>
+          <li class:active={$page.url.pathname.startsWith('/admin/blog/series')}>
+            <a href="/admin/blog/series" class="sub-nav">Series</a>
+          </li>
           <li class:active={$page.url.pathname.startsWith('/admin/bios')}>
             <a href="/admin/bios">Bios</a>
           </li>
@@ -140,6 +149,11 @@
     color: var(--neutral-black);
     text-decoration: none;
     transition: background-color 0.2s;
+  }
+
+  nav a.sub-nav {
+    padding-left: 35px;
+    font-size: 0.9em;
   }
 
   nav a:hover {

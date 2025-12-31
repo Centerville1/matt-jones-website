@@ -26,6 +26,9 @@ export const images = sqliteTable('images', {
   // Alt text for accessibility
   alt: text('alt'),
 
+  // Optional category for filtering (portfolio, blog, general)
+  category: text('category'), // portfolio, blog, general, or null
+
   // Timestamp
   uploadedAt: integer('uploaded_at', { mode: 'timestamp' }).notNull(),
 });

@@ -64,6 +64,7 @@ export interface Image {
   mimeType: string;
   size: number;
   alt: string | null;
+  category: string | null; // portfolio, blog, general, or null
   uploadedAt: Date;
 }
 
@@ -76,4 +77,59 @@ export interface SiteMetadata {
   value: string;
   description: string | null;
   updatedAt: Date;
+}
+
+/**
+ * BlogPost - Blog posts with rich text content
+ */
+export interface BlogPost {
+  id: number;
+  title: string;
+  slug: string;
+  excerpt: string;
+  content: any; // TipTap JSON format
+  background: string; // blocks, zigzag, checker, crosses
+  headerImageId: number | null;
+  status: string; // draft or published
+  publishedAt: Date | null;
+  readTimeMinutes: number;
+  authorName: string;
+  canonicalUrl: string | null;
+  seriesId: number | null;
+  seriesOrder: number | null;
+  featuredOrder: number | null;
+  viewCount: number;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+/**
+ * BlogSeries - Collections of related blog posts
+ */
+export interface BlogSeries {
+  id: number;
+  title: string;
+  slug: string;
+  description: string | null;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+/**
+ * BlogTag - Tags for categorizing blog posts
+ */
+export interface BlogTag {
+  id: number;
+  name: string;
+  slug: string;
+  description: string | null;
+  createdAt: Date;
+}
+
+/**
+ * BlogPostTag - Many-to-many join table for posts and tags
+ */
+export interface BlogPostTag {
+  postId: number;
+  tagId: number;
 }

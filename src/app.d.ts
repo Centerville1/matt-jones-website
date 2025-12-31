@@ -7,6 +7,10 @@ import type {
   Bio,
   Image,
   SiteMetadata,
+  BlogPost,
+  BlogSeries,
+  BlogTag,
+  BlogPostTag,
 } from '$lib/db/types';
 
 declare global {
@@ -27,6 +31,10 @@ declare global {
   type Bio = import('$lib/db/types').Bio;
   type Image = import('$lib/db/types').Image;
   type SiteMetadata = import('$lib/db/types').SiteMetadata;
+  type BlogPost = import('$lib/db/types').BlogPost;
+  type BlogSeries = import('$lib/db/types').BlogSeries;
+  type BlogTag = import('$lib/db/types').BlogTag;
+  type BlogPostTag = import('$lib/db/types').BlogPostTag;
 }
 
 export {};

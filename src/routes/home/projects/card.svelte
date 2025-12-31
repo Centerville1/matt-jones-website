@@ -72,10 +72,7 @@
 <div class="outer-boundary">
   <div class="card-wrapper">
     {#if linkUrl !== ''}
-      <button
-        class="card clickable"
-        on:click={handleCardClick}
-      >
+      <button class="card clickable" on:click={handleCardClick}>
         <!-- Header Image -->
         {#if image !== ''}
           <div class="card-image">

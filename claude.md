@@ -1,523 +1,175 @@
 # Claude AI Context Guide
 
-This document provides context for AI assistants working on the Matt Jones Portfolio Website project.
-
-## Project Identity
+## Project Overview
 
 **Type:** Personal portfolio website
-**Framework:** SvelteKit 2.49.2 with Svelte 5.46.1 ✨
-**Purpose:** Learning project and professional showcase
-**Owner:** Matt Jones
-**Style:** Creative, experimental, interactive
-**Last Major Update:** 2025-12-27 (Upgraded to Svelte 5)
+**Stack:** SvelteKit 2.49.2 + Svelte 5.46.1 + Turso (LibSQL) + Drizzle ORM
+**Style:** Creative, experimental, interactive learning project
+**Owner:** Matt Jones (matt.jones3054@gmail.com)
 
-## Quick Architecture Reference
+## Architecture
 
-### File-Based Routing Structure
+### Key Directories
 
-```
-src/routes/
-├── +page.svelte           # Landing page (3D sphere loader)
-├── +layout.svelte         # Root layout (global styles, analytics)
-├── admin/                 # Admin interface (password-protected)
-│   ├── login/             # Login page
-│   ├── portfolio/         # Portfolio CRUD with search/filtering
-│   └── images/            # Image library with Vercel Blob uploads
-└── home/
-    ├── +page.svelte       # Main home page
-    ├── +layout.svelte     # Home layout (header/nav)
-    ├── projects/          # Portfolio section
-    ├── about/             # About the site
-    ├── architecture/      # Tech stack info
-    ├── sphere/            # CSS 3D sphere demo
-    ├── firesim/           # Fire simulation
-    └── artwork/           # CSS artwork showcase
-```
+- **[src/routes/](src/routes/)** - File-based routing (landing page, `/home/*`, `/admin/*`)
+- **[src/lib/db/](src/lib/db/)** - Database layer (schema, queries, types)
+- **[src/lib/server/](src/lib/server/)** - Server utilities (auth, storage, guards)
+- **[src/global.css](src/global.css)** - Global styles and CSS custom properties
+- **[src/store.js](src/store.js)** - Svelte stores (theme, animation state)
 
-### Key Files by Function
+### Database Schema
 
-**Styling & Theme:**
+- **categories** - Portfolio sections (experiences, projects, other)
+- **portfolioItems** - Work/project entries with category linking
+- **bios** - Three bio lengths (short, mid, long)
+- **siteMetadata** - Key-value config (site title, URLs, SEO data)
+- **images** - Vercel Blob image library (5MB max)
 
-- [src/global.css](src/global.css) - Global styles, CSS custom properties, fonts
-- [src/routes/palette.js](src/routes/palette.js) - Color palette definitions
-- [src/routes/home/themeSwitch.svelte](src/routes/home/themeSwitch.svelte) - Theme switcher component
+## Code Conventions
 
-**State Management:**
+### Type System (JSDoc + TypeScript)
 
-- [src/store.js](src/store.js) - Svelte stores (themeMode, animatePageLoad key)
+Uses **JSDoc comments** for type checking (not `.ts` files). All database types are globally available via [src/app.d.ts](src/app.d.ts).
 
-**Database Layer:**
-
-- [src/lib/db/index.js](src/lib/db/index.js) - Turso (LibSQL) database connection using Drizzle ORM
-- [src/lib/db/schema/](src/lib/db/schema/) - Database schemas (categories, portfolioItems, bios, siteMetadata, images)
-- [src/lib/db/schema/types.d.ts](src/lib/db/schema/types.d.ts) - TypeScript type definitions for all database tables
-- [src/lib/db/types.d.ts](src/lib/db/types.d.ts) - Re-exports database types for easy importing
-- [src/lib/db/queries/](src/lib/db/queries/) - Typed query functions for fetching data
-- [drizzle.config.js](drizzle.config.js) - Drizzle Kit configuration for schema management
-
-**Data Files:**
-
-- [src/routes/home/notes.json](src/routes/home/notes.json) - Musical note frequencies (only remaining JSON data)
-
-**Reusable Components:**
-
-- [src/routes/home/bio.svelte](src/routes/home/bio.svelte) - Bio display with expandable text
-- [src/routes/home/footer.svelte](src/routes/home/footer.svelte) - Footer component
-- [src/routes/icons.svelte](src/routes/icons.svelte) - SVG icon components
-- [src/lib/components/ImagePicker.svelte](src/lib/components/ImagePicker.svelte) - Image library browser with upload
-
-**Admin Infrastructure:**
-
-- [src/lib/server/auth.js](src/lib/server/auth.js) - Session management, rate limiting, password verification
-- [src/lib/server/guards.js](src/lib/server/guards.js) - Auth guards for protected routes
-- [src/lib/server/storage.js](src/lib/server/storage.js) - Vercel Blob image uploads (5MB max)
-- [src/hooks.server.js](src/hooks.server.js) - Session verification middleware
-
-## Code Style & Conventions
-
-### TypeScript & Type Safety
-
-This project uses **JSDoc comments** for TypeScript type checking (not `.ts` files). All database types are globally available.
-
-#### Database Type System Architecture
-
-1. **Type Definitions** ([src/lib/db/schema/types.d.ts](src/lib/db/schema/types.d.ts))
-   - Contains TypeScript interfaces for all database tables
-   - Single source of truth for database types
-   - Includes inline comments for Drizzle ORM behavior (e.g., boolean conversion)
-
-2. **Global Type Exports** ([src/lib/db/types.d.ts](src/lib/db/types.d.ts))
-   - Re-exports all types from `schema/types.d.ts`
-   - Importable via `import type { Category } from '$lib/db/types'`
-
-3. **Global Scope** ([src/app.d.ts](src/app.d.ts))
-   - Makes types available globally without imports
-   - Use `Category`, `PortfolioItem`, `Bio`, `Image`, `SiteMetadata` anywhere
-
-4. **Schema Files** ([src/lib/db/schema/\*.js](src/lib/db/schema/))
-   - Each schema file includes `@typedef {import('./types').TypeName} TypeName`
-   - Provides JSDoc compatibility for JavaScript files
-
-5. **Query Functions** ([src/lib/db/queries/\*.js](src/lib/db/queries/))
-   - All return types explicitly annotated with database types
-   - Use type assertions: `/** @type {Category[]} */ (await db.select()...)`
-   - Parameter types use literal unions where appropriate (e.g., `'short' | 'mid' | 'long'`)
-
-#### Adding a New Database Table
-
-When creating a new database table, follow this **CRITICAL** pattern:
-
-1. **Create the Drizzle schema** (`src/lib/db/schema/your-table.js`):
-
-   ```javascript
-   import { sqliteTable, text, integer } from 'drizzle-orm/sqlite-core';
-
-   /**
-    * YourTable description
-    * @typedef {import('./types').YourTable} YourTable
-    */
-   export const yourTable = sqliteTable('your_table', {
-     id: integer('id').primaryKey({ autoIncrement: true }),
-     name: text('name').notNull(),
-     isActive: integer('is_active', { mode: 'boolean' }).notNull(),
-     createdAt: integer('created_at', { mode: 'timestamp' }).notNull(),
-   });
-   ```
-
-2. **Add TypeScript interface** (`src/lib/db/schema/types.d.ts`):
-
-   ```typescript
-   /**
-    * YourTable - Description
-    */
-   export interface YourTable {
-     id: number;
-     name: string;
-     isActive: boolean; // Note: Use boolean for { mode: 'boolean' }
-     createdAt: Date; // Note: Use Date for { mode: 'timestamp' }
-   }
-   ```
-
-3. **Export the type** (`src/lib/db/types.d.ts`):
-
-   ```typescript
-   export type { Category, PortfolioItem, YourTable } from './schema/types';
-   ```
-
-4. **Add to global scope** (`src/app.d.ts`):
-
-   ```typescript
-   type YourTable = import('$lib/db/types').YourTable;
-   ```
-
-5. **Create typed query functions** (`src/lib/db/queries/your-table.js`):
-
-   ```javascript
-   /**
-    * Get all items
-    * @returns {Promise<YourTable[]>}
-    */
-   export async function getAllItems() {
-     /** @type {YourTable[]} */
-     const items = /** @type {YourTable[]} */ (
-       await db.select().from(yourTable).all()
-     );
-     return items;
-   }
-   ```
-
-6. **Type server load functions** (`+page.server.js`):
-
-   ```javascript
-   /**
-    * @returns {Promise<{ items: YourTable[] }>}
-    */
-   export async function load() {
-     return {
-       items: await getAllItems(),
-     };
-   }
-   ```
-
-7. **Use types in components** (`+page.svelte`):
-
-   ```svelte
-   <script>
-     /** @type {import('./$types').PageData} */
-     export let data;
-
-     // Types flow through automatically!
-     // data.items is typed as YourTable[]
-   </script>
-   ```
-
-#### Drizzle ORM Type Quirks
-
-- **Boolean fields**: Defined with `integer('field', { mode: 'boolean' })`, Drizzle converts to `boolean` on read
-- **Timestamp fields**: Defined with `integer('field', { mode: 'timestamp' })`, Drizzle converts to `Date` on read
-- **Type assertions**: Always wrap Drizzle queries with type assertions due to generic return types
-- **Nullable fields**: Use `field | null` for optional database fields (e.g., `description: string | null`)
-
-### Important: Svelte 5 Compatibility
-
-This project now uses **Svelte 5.46.1**. Key things to know:
-
-- Code is written in **Svelte 4 syntax** (backward compatible)
-- Runes API is **NOT** used (can be adopted incrementally)
-- Svelte 5 is stricter about self-closing non-void tags
-- DOM element manipulation requires `/** @type {HTMLElement} */` type casting
-- Build and runtime work perfectly with existing code
-
-### JSDoc Type Annotations
-
-Uses JSDoc comments for TypeScript checking (not .ts files):
+**Type flow:** Define in `schema/types.d.ts` → Export via `types.d.ts` → Add to `app.d.ts` → Use globally
 
 ```javascript
-/**
- * @param {number} frequency
- * @param {number} duration
- */
-function playNote(frequency, duration) {}
+// Function typing
+/** @param {number} frequency */
+function playNote(frequency) {}
 
-// Type casting for DOM manipulation (required in Svelte 5)
-let element = /** @type {HTMLElement} */ (document.getElementById('foo'));
-element.style.color = 'red';
-
-// Svelte component with typed reactive variable
+// Query typing (always use type assertions with Drizzle)
 /** @type {Category[]} */
-$: categories = data.categories;
+const items = /** @type {Category[]} */ (await db.select().from(categories).all());
+
+// DOM manipulation (required in Svelte 5)
+let el = /** @type {HTMLElement} */ (document.getElementById('foo'));
 ```
 
-### Naming Conventions
+**Adding a new database table:**
+1. Create schema in `src/lib/db/schema/your-table.js` with `@typedef`
+2. Add interface to `src/lib/db/schema/types.d.ts`
+3. Export via `src/lib/db/types.d.ts`
+4. Add to global scope in `src/app.d.ts`
+5. Create query functions in `src/lib/db/queries/your-table.js`
+6. Run `npx drizzle-kit push`
 
-- Components: PascalCase (Bio.svelte, ThemeSwitch.svelte)
-- Files: kebab-case for routes (+page.svelte, +layout.svelte)
-- Functions: camelCase
-- Constants: UPPER_SNAKE_CASE (in FireSim)
+**Drizzle quirks:**
+- Booleans: `integer('field', { mode: 'boolean' })` → `boolean`
+- Timestamps: `integer('field', { mode: 'timestamp' })` → `Date`
+- Always use type assertions on queries
 
-### CSS Approach
+### Svelte 5
 
-- Scoped styles in .svelte components
-- CSS custom properties for theming (--neutral-dark-gray, --main-blue, etc.)
-- Heavy use of CSS animations and transitions
-- Responsive design with media queries
-- View-based animation timelines (animation-timeline: view())
+- Existing code uses **Svelte 4 syntax** (backward compatible)
+- **New code can use Svelte 5 features** (runes, snippets, etc.)
+- Stricter about self-closing non-void tags
+- DOM manipulation requires type casting
 
-### Svelte Patterns Used
+### Naming & Style
 
-- Reactive declarations: `$: updateBioHeight(bioHeight)`
-- Stores with `$` prefix: `$page.url.hash`, `$themeMode`
-- onMount lifecycle for browser-only code
-- Conditional rendering: `{#if condition}...{:else}...{/if}`
-- Component props with bind: `bind:height={bioHeight}`
-- Conditional classes: `class:animate={enableTabAnimation}`
+- **Components:** PascalCase (`Bio.svelte`)
+- **Routes:** kebab-case (`+page.svelte`)
+- **Functions:** camelCase
+- **CSS:** Scoped styles, custom properties (`var(--main-blue)`), heavy animations
+- **Responsive:** Mobile < 440px, Desktop ≥ 441px
 
-## Common Patterns
-
-### Browser Safety Check
+### Common Patterns
 
 ```javascript
+// SSR safety
 import { browser } from '$app/environment';
-if (!browser) return; // Prevent SSR errors
+if (!browser) return;
+
+// Svelte reactivity
+$: categories = data.categories;
+$store.themeMode;
+
+// Color usage
+var(--neutral-white), var(--neutral-black)
+var(--neutral-dark-gray), var(--main-blue)
 ```
-
-### Adding New Content
-
-1. **Portfolio items:** Use `/admin/portfolio` to create/edit items (login required)
-2. **Bio content:** Update directly in Turso database (admin UI coming soon)
-3. **Site metadata:** Update via `siteMetadata` table in database (admin UI coming soon)
-4. **Images:** Use `/admin/images` to upload to Vercel Blob (5MB max, login required)
-
-### Color Usage
-
-Use CSS custom properties from [global.css](src/global.css):
-
-- `var(--neutral-white)`, `var(--neutral-black)`
-- `var(--neutral-dark-gray)`, `var(--neutral-gray)`
-- `var(--main-blue)`, `var(--main-blue-light)`
-- Opacity variants: `var(--neutral-dark-gray-op-50)`
-
-## Recent Improvements
-
-### Turso Database Integration (2025-12-27)
-
-Migrated from static JSON files to Turso (LibSQL) cloud database:
-
-- **Database:** Turso with Drizzle ORM for type-safe queries
-- **Schema:** Categories, portfolio items, bios, and site metadata tables
-- **Migration:** Automated script migrated all JSON data to database
-- **Dual-mode imports:** Database client works in both SvelteKit (`$env/static/private`) and Node.js scripts (`process.env`)
-- **Server-side loading:** SvelteKit `+page.server.js` files fetch data asynchronously from database
-
-### Tab Navigation System (2025-12-27)
-
-The projects page now features a Chrome-style tab navigation with:
-
-- **Transparent cutout effect**: Active tab reveals the patterned background through a "hole" in the dark nav bar
-- **Smooth beveled corners**: 8px border-radius on both sides of the cutout for modern browser-tab aesthetics
-- **Conditional animations**: Tabs animate smoothly (500ms, elastic bezier) on click, but resize instantly with no animation lag
-- **Three-section background**: Dynamic width calculation using viewport-based positioning
-- **Implementation**: Uses reactive Svelte patterns with conditional CSS classes instead of imperative DOM manipulation
-
-### SEO & Metadata Integration (2025-12-28)
-
-Comprehensive SEO implementation using database-driven metadata:
-
-- **SEO Component**: [src/lib/components/SEO.svelte](src/lib/components/SEO.svelte) - Reusable component for all meta tags (title, description, Open Graph, Twitter Cards)
-- **Metadata Loading**: [src/routes/+layout.server.js](src/routes/+layout.server.js) loads site metadata from database on every page
-- **Dynamic Meta Tags**: Each page can override default SEO with page-specific titles, descriptions, and keywords
-- **Sitemap & Robots**: Auto-generated [/sitemap.xml](src/routes/sitemap.xml/+server.js) and [/robots.txt](src/routes/robots.txt/+server.js) endpoints
-- **Database Keys**: `site_title`, `site_description`, `owner_name`, `owner_email`, `site_url`, `social_preview_image`, `github_url`, `linkedin_url`
-- **Usage**: Import SEO component and pass page-specific props: `<SEO title="Page Title" description="..." keywords={[...]} />`
-
-## Known Technical Debt
-
-### High Priority
-
-1. **No Admin Interface:** Content updates require direct database access or running migration scripts.
-
-### Medium Priority
-
-2. **Magic Numbers:** Timeouts and dimensions hardcoded throughout (e.g., 800ms, 7.6s, 220vw).
-
-3. **Theme System:** Infrastructure exists but only dark mode implemented.
-
-### Low Priority
-
-4. **Accessibility:** No reduced-motion media queries despite heavy animations.
-
-5. **Musical Notes Data:** [notes.json](src/routes/home/notes.json) is the only remaining JSON file - could be migrated to database for consistency.
 
 ## Development Workflow
 
-### Local Development
+### Commands
 
 ```bash
-npm run dev          # Start dev server
+npm run dev          # Dev server
 npm run build        # Production build
-npm run preview      # Preview production build
 npm run check        # Type checking
-npm run lint         # Run ESLint
-npm run format       # Format with Prettier
+npm run lint         # ESLint
+npm run format       # Prettier
 ```
 
-### Database Management
+### Database
 
 ```bash
-# Setup (one-time)
-cp .env.example .env              # Copy environment template
-# Fill in TURSO_DATABASE_URL and TURSO_AUTH_TOKEN in .env
-npx drizzle-kit push              # Push schema to database
-node scripts/migrate-json-to-db.js # Migrate data (if needed)
+# One-time setup
+cp .env.example .env  # Add TURSO_DATABASE_URL and TURSO_AUTH_TOKEN
+npx drizzle-kit push
 
 # Schema changes
-npx drizzle-kit push              # Push schema changes to Turso
-npx drizzle-kit studio            # Open Drizzle Studio (GUI browser)
+npx drizzle-kit push      # Push changes to Turso
+npx drizzle-kit studio    # Open Drizzle Studio GUI
 ```
-
-### Code Quality Tools
-
-- **ESLint:** Configured with Svelte plugin
-- **Prettier:** 2-space indent, single quotes, trailing commas
-- **TypeScript:** JSDoc checking with checkJs enabled
 
 ### Deployment
 
-- Automatic deployment via Vercel
-- Uses @sveltejs/adapter-auto
-- Analytics via @vercel/analytics
-- **IMPORTANT:** Add `TURSO_DATABASE_URL` and `TURSO_AUTH_TOKEN` to Vercel environment variables for production
+- **Platform:** Vercel (automatic deployment)
+- **Required env vars:** `TURSO_DATABASE_URL`, `TURSO_AUTH_TOKEN`
+- **Analytics:** @vercel/analytics
+
+## Content Management
+
+- **Portfolio items:** `/admin/portfolio` (login required)
+- **Images:** `/admin/images` (Vercel Blob uploads, login required)
+- **Bios/metadata:** Direct database access (admin UI coming soon)
 
 ## Design Philosophy
 
-### Creative & Experimental
+- **Creative & experimental** - Visual interest, CSS 3D, playful interactions
+- **Learning-focused** - Code experimentation welcome, open source
+- **Performance-conscious** - Minimal JS, CSS animations, no heavy dependencies
 
-- Prioritize visual interest and interactivity
-- CSS animations and 3D transforms encouraged
-- Playful elements (musical notes, jiggling stickers, animated sphere)
+## Known Technical Debt
 
-### Learning-Focused
+**High Priority:**
+- Admin interface incomplete (bios/metadata need UI)
 
-- Code experimentation welcome
-- Comments explaining techniques (e.g., audio API source)
-- Open source for educational purposes
+**Medium Priority:**
+- Magic numbers hardcoded (timeouts, dimensions)
+- Theme system (only dark mode implemented)
 
-### Performance Considerations
+**Low Priority:**
+- No `prefers-reduced-motion` support
+- [notes.json](src/routes/home/notes.json) not migrated to database
 
-- No heavy frameworks or libraries
-- Static site generation where possible
-- Minimal JavaScript for core functionality
-- CSS-based animations for performance
+## Guidelines for AI Assistants
 
-## Next Steps & Future Features
+**Before editing:**
+- Read existing files to understand implementation
+- Check [global.css](src/global.css) for available CSS variables
+- Maintain JSDoc pattern (don't convert to `.ts` unless requested)
 
-### Immediate Priorities
-
-1. **Admin Interface:** Build a `/admin` route for managing content without database access
-   - CRUD operations for portfolio items, bios, and categories
-   - Authentication (consider SvelteKit's built-in auth or Lucia)
-   - Rich text editor for bio content
-   - Image upload integration
-
-2. **Site Metadata Integration:** Use the `siteMetadata` table site-wide
-   - Replace hardcoded site title, description, owner info
-   - Make it editable via admin interface
-   - Use in meta tags for SEO
-
-3. **Blog System:** Implement the planned blog feature
-   - Create `blogPosts` table (title, slug, content, publishedAt, tags)
-   - Markdown rendering with syntax highlighting
-   - Tag/category filtering
-   - RSS feed generation
-
-### Future Enhancements
-
-4. **Testing Suite:** Add Vitest + Testing Library for unit and integration tests
-
-5. **Analytics Dashboard:** Visualize visitor data from Vercel Analytics
-
-6. **Theme System Completion:** Implement light mode and additional color schemes
-
-7. **Accessibility Improvements:**
-   - Add `prefers-reduced-motion` media queries
-   - Keyboard navigation improvements
-   - Screen reader optimization
-
-8. **Performance Optimizations:**
-   - Image optimization (WebP, lazy loading)
-   - Consider migrating [notes.json](src/routes/home/notes.json) to database
-   - Database query caching for frequently accessed data
-
-## When Making Changes
-
-### Before Editing
-
-1. Read existing file to understand current implementation
-2. Check [global.css](src/global.css) for available CSS variables
-3. Review [project_status.md](project_status.md) for known issues
-4. Maintain existing code style (JSDoc, naming conventions)
-
-### After Editing
-
-1. Run `npm run check` for type errors
-2. Run `npm run lint` for linting issues
-3. Run `npm run format` to auto-format
-4. Test in browser (especially animations/interactions)
-5. Check responsive behavior (mobile/desktop)
-
-### Adding New Features
-
+**When adding features:**
 - Follow SvelteKit routing conventions
-- Use scoped CSS in .svelte files
+- Use scoped CSS in components
 - Add JSDoc type annotations
-- Consider SSR implications (use browser checks)
-- For portfolio-related features, update database schema and queries
-- Create `+page.server.js` files for database queries (SSR)
-- Keep database queries in `src/lib/db/queries/` for reusability
-
-### Refactoring Guidelines
-
+- Consider SSR (use `browser` checks)
+- Keep database queries in `src/lib/db/queries/`
 - Prefer Svelte's declarative approach over DOM manipulation
-- Extract reusable components when patterns repeat
-- Use Svelte transitions instead of manual CSS animation toggling
-- Keep components small and focused
 
-## Useful Context
-
-### Animation State Management
-
-Landing page sphere animation controlled via localStorage:
-
-```javascript
-export const animatePageLoadLocalStorageKey = 'animatePageLoad';
-```
-
-Set to prevent replay on page refresh.
-
-### Database Schema Overview
-
-**Categories** (slug, name, description, order, hasTab):
-
-- `experiences` - Professional experience and leadership roles
-- `projects` - Personal and academic projects
-- `other` - Experiments, CSS art, interactive demos
-
-**Portfolio Items** (categoryId, title, description, startDate, endDate, url, image, highlight, displayOrder):
-
-- Linked to categories via `categoryId`
-- Ordered by `displayOrder` within each category
-- `highlight` boolean for featured items
-
-**Bios** (type, content, updatedAt):
-
-- Three types: `short`, `mid`, `long`
-- Content stored as newline-separated paragraphs
-
-**Site Metadata** (key, value, description, updatedAt):
-
-- Key-value pairs for site-wide configuration
-- Examples: `site_title`, `site_description`, `owner_name`, `owner_email`
-
-### Responsive Breakpoints
-
-- Mobile: < 440px
-- Desktop: ≥ 441px
-
-Used in media queries and svelte-media-query package.
+**Code quality:**
+- Run `npm run check && npm run lint && npm run format`
+- Test animations in browser
+- Check responsive behavior (mobile/desktop)
+- Preserve creative/experimental style
+- Avoid over-engineering
+- Keep bundle size minimal
 
 ## Resources
 
 - **SvelteKit Docs:** https://kit.svelte.dev/docs
 - **Svelte Tutorial:** https://svelte.dev/tutorial
 - **Project Repo:** https://github.com/Centerville1/matt-jones-website
-- **Owner Contact:** matt.jones3054@gmail.com
-
-## Notes for AI Assistants
-
-- Preserve creative/experimental code style
-- Avoid over-engineering simple features
-- Keep bundle size minimal (no heavy dependencies)
-- Prioritize visual polish and interactivity
-- Respect existing JSDoc pattern (don't convert to .ts unless requested)
-- When in doubt about design choices, ask the user
-- Test animations in browser before completing work

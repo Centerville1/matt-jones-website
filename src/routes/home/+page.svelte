@@ -126,22 +126,29 @@
       <h3>Matt Jones</h3>
     </div>
     <div class="text-box">
-      <h1>So What's Here</h1>
-      <h3>
+      <h2>
         This site is my personal portfolio, blog, project showcase, and more:
-      </h3>
-      <h2>You can find:</h2>
+      </h2>
+      <h3>You can find:</h3>
       <ul>
         <li>
-          <a href="/home/projects">My portfolio, including:</a>
+          <p>My portfolio:</p>
           <ul>
-            <li>My Tech Experience</li>
-            <li>Personal Projects Showcase</li>
-            <li><a href="/home/projects#other">Fun Creations</a></li>
+            <li>
+              <a href="/home/projects#experiences">My Experience and Timeline</a
+              >
+            </li>
+            <br />
+            <li>
+              <a href="/home/projects#projects">Personal Projects Showcase</a>
+            </li>
+            <br />
+            <li><a href="/home/projects#other">Web Toys and Creations</a></li>
           </ul>
         </li>
+        <br />
+        <li><a href="/home/blog">My Blog</a></li>
       </ul>
-      <br />
     </div>
     <div class="text-box">
       <h1>Site Story</h1>
@@ -170,24 +177,9 @@
           </h4>
         </li>
       </ul>
-      <br />
-      <hr />
-      <br />
-      <h2>Inquiries? Feel free to reach out!</h2>
-      <h4>
-        Email: <a href="mailto:matt.jones3054@gmail.com" class="inline-link"
-          >matt.jones3054@gmail.com</a
-        >
-      </h4>
-      <h4>
-        LinkedIn:
-        <a href="https://www.linkedin.com/in/matt-jones-a7b389292/">
-          My Profile
-        </a>
-      </h4>
     </div>
     <div class="text-box">
-      <h1>My Links</h1>
+      <h1>Socials</h1>
       <a
         href="https://www.linkedin.com/in/matt-jones-a7b389292/"
         class="link"

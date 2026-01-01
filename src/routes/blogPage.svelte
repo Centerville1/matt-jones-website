@@ -2,7 +2,7 @@
   export let title = 'Default Title';
   export let subtitle = '';
   export let background = 'blocks';
-  export let signature = true;
+  export let signature = false;
 </script>
 
 <div class="page {background}">

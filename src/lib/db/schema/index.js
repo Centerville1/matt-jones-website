@@ -8,3 +8,5 @@ export { blogPosts } from './blog-posts.js';
 export { blogSeries } from './blog-series.js';
 export { blogTags } from './blog-tags.js';
 export { blogPostTags } from './blog-post-tags.js';
+export { contactSubmissions } from './contact-submissions.js';
+export { files } from './files.js';

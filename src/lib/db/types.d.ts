@@ -16,4 +16,6 @@ export type {
   BlogSeries,
   BlogTag,
   BlogPostTag,
+  ContactSubmission,
+  FileRecord,
 } from './schema/types';

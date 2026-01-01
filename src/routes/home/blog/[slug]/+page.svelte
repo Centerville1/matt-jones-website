@@ -169,12 +169,6 @@
 
 	<article class="blog-post">
 		<header class="post-header">
-			{#if data.post.headerImagePath}
-				<div class="header-image">
-					<img src={data.post.headerImagePath} alt={data.post.title} />
-				</div>
-			{/if}
-
 			<div class="post-meta">
 				<div class="meta-row">
 					{#if data.post.authorName}
@@ -249,23 +243,6 @@
 
 	.post-header {
 		margin-bottom: 2rem;
-	}
-
-	.header-image {
-		width: 100%;
-		max-height: 400px;
-		overflow: hidden;
-		border-radius: 12px;
-		margin-bottom: 1.5rem;
-		display: flex;
-		align-items: center;
-		justify-content: center;
-	}
-
-	.header-image img {
-		width: 100%;
-		max-height: 400px;
-		object-fit: contain;
 	}
 
 	.post-meta {
@@ -554,10 +531,6 @@
 		.meta-row {
 			flex-direction: column;
 			gap: 0.5rem;
-		}
-
-		.header-image {
-			max-height: 250px;
 		}
 
 		.excerpt {

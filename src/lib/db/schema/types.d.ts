@@ -134,3 +134,34 @@ export interface BlogPostTag {
   postId: number;
   tagId: number;
 }
+
+/**
+ * ContactSubmission - Contact form submissions from the footer
+ */
+export interface ContactSubmission {
+  id: number;
+  name: string;
+  email: string;
+  subject: string | null;
+  message: string;
+  status: string; // unread, read, archived
+  notes: string | null;
+  submittedAt: Date;
+  readAt: Date | null;
+}
+
+/**
+ * FileRecord - Uploaded files (PDFs, documents, etc.)
+ */
+export interface FileRecord {
+  id: number;
+  filename: string;
+  originalName: string;
+  path: string;
+  mimeType: string;
+  size: number;
+  category: string | null; // resume, cv, document, or null
+  description: string | null;
+  displayName: string | null;
+  uploadedAt: Date;
+}

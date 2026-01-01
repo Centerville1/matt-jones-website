@@ -11,6 +11,8 @@ import type {
   BlogSeries,
   BlogTag,
   BlogPostTag,
+  ContactSubmission,
+  FileRecord,
 } from '$lib/db/types';
 
 declare global {
@@ -35,6 +37,8 @@ declare global {
   type BlogSeries = import('$lib/db/types').BlogSeries;
   type BlogTag = import('$lib/db/types').BlogTag;
   type BlogPostTag = import('$lib/db/types').BlogPostTag;
+  type ContactSubmission = import('$lib/db/types').ContactSubmission;
+  type FileRecord = import('$lib/db/types').FileRecord;
 }
 
 export {};

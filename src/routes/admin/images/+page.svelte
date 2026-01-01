@@ -189,7 +189,7 @@
 
   .help-text {
     font-size: 13px;
-    color: var(--neutral-gray);
+    color: var(--neutral-black);
     margin: 10px 0 0 0;
   }
 
@@ -258,7 +258,8 @@
   .details {
     margin: 0 0 12px 0;
     font-size: 12px;
-    color: var(--neutral-gray);
+    color: var(--neutral-black);
+    opacity: 0.7;
   }
 
   .image-actions {
@@ -294,7 +295,8 @@
   .empty-state {
     text-align: center;
     padding: 40px;
-    color: var(--neutral-gray);
+    color: var(--neutral-black);
+    opacity: 0.6;
   }
 
   @media (max-width: 600px) {

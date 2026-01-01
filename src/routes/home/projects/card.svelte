@@ -190,9 +190,9 @@
     flex-direction: column;
     overflow: hidden;
     transition:
-      transform 0.2s ease-out,
+      transform 0.5s ease-out,
       box-shadow 0.2s ease-out,
-      max-height 0.3s ease-out;
+      max-height 0.5s ease-out;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
     position: relative;
     z-index: 1;
@@ -302,7 +302,7 @@
     line-height: 1.6;
     overflow: hidden;
     max-height: 180px; /* Approximate height for 6 lines */
-    transition: max-height 0.4s ease-out;
+    transition: max-height 1s ease-out;
     position: relative;
     white-space: pre-line; /* Preserve newlines from database */
     /* Gradient fade-out at bottom to indicate more text */
@@ -316,5 +316,6 @@
     /* Remove gradient on hover */
     mask-image: none;
     -webkit-mask-image: none;
+    transition: max-height 1.5s ease-out;
   }
 </style>

@@ -9,34 +9,10 @@
   import { afterNavigate } from '$app/navigation';
   import { page } from '$app/stores';
 
+  /** @type {import('./$types').LayoutData} */
+  export let data;
+
   const isDesktop = useMediaQuery('(min-width: 440px)');
-
-  let headerVisible = true;
-  /** @type {ReturnType<typeof setTimeout>} */
-  let hideTimeout;
-
-  /**
-   * Hide the header after 5 seconds
-   */
-  function scheduleHeaderHide() {
-    clearTimeout(hideTimeout);
-    hideTimeout = setTimeout(() => {
-      headerVisible = false;
-    }, 5000);
-  }
-
-  /**
-   * Show the header when mouse near top
-   * @param {MouseEvent} e
-   */
-  function handleMouseMove(e) {
-    if (e.clientY < 100) {
-      headerVisible = true;
-      clearTimeout(hideTimeout);
-    } else {
-      headerVisible = false;
-    }
-  }
 
   // Toggle visibility of the mobile nav dropdown menu
   function toggleNav() {
@@ -82,17 +58,6 @@
         }
       }
     };
-
-    // Start the auto-hide timer
-    scheduleHeaderHide();
-
-    // Add mousemove listener for showing header
-    document.addEventListener('mousemove', handleMouseMove);
-
-    return () => {
-      clearTimeout(hideTimeout);
-      document.removeEventListener('mousemove', handleMouseMove);
-    };
   });
 
   // Ensure that the main element's scroll position is reset on navigation
@@ -112,7 +77,7 @@
 
 <div id="outer-container"></div>
 <div id="page">
-  <header class:hidden={!headerVisible && isDesktop.matches}>
+  <header>
     {#if isDesktop.matches}
       {#if mode === 'dark'}
         <img
@@ -203,7 +168,8 @@
     <div id="page-content">
       <slot />
     </div>
-    <Footer />
+    <div class="footer-gradient"></div>
+    <Footer resume={data.resume} />
   </main>
 </div>
 
@@ -243,14 +209,7 @@
     justify-content: center;
     z-index: 1000;
     position: relative;
-    transform: translateY(0);
-    transition: transform 0.2s ease-out;
     pointer-events: none;
-  }
-
-  header.hidden {
-    transform: translateY(-100%);
-    transition: transform 0.5s ease-in-out;
   }
 
   #logo {
@@ -303,11 +262,12 @@
       margin-left: 10px;
       position: relative;
       padding-bottom: 5px;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
     }
 
-    #links a.active {
+    #links a.plain.active {
       text-decoration: underline;
-      color: var(--main-blue);
+      color: var(--main-blue-light);
     }
 
     .emphasis {
@@ -316,6 +276,12 @@
       color: var(--contrast-text-light);
       border-radius: 10px;
       transition: background 0.5s;
+    }
+
+    #links a.emphasis.active {
+      background-color: var(--main-blue);
+      color: var(--contrast-text-light);
+      text-decoration: underline !important;
     }
 
     .emphasis:hover {
@@ -394,5 +360,17 @@
   #page-content {
     min-height: 80vh;
     width: 100vw;
+  }
+
+  .footer-gradient {
+    height: 300px;
+    width: 100vw;
+    background: linear-gradient(
+      to bottom,
+      transparent 0%,
+      var(--neutral-white) 100%
+    );
+    margin-top: -300px;
+    pointer-events: none;
   }
 </style>

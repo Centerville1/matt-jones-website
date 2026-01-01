@@ -250,7 +250,8 @@
     overflow: clip;
     margin-left: auto;
     margin-right: auto;
-    /* Background pattern originally generated from 
+    padding-bottom: 50px;
+    /* Background pattern originally generated from
   https://www.magicpattern.design/tools/css-backgrounds */
     background: repeating-linear-gradient(
       45deg,

@@ -13,7 +13,11 @@ export async function GET({ url }) {
 User-agent: *
 Allow: /
 
-# Sitemap
+# Disallow admin pages from indexing
+User-agent: *
+Disallow: /admin/
+
+# Sitemaps
 Sitemap: ${baseUrl}/sitemap.xml
 `;
 

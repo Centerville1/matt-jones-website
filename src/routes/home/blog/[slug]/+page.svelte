@@ -1,10 +1,55 @@
 <script>
 	import BlogPage from '../../../blogPage.svelte';
 	import TagPill from '$lib/components/TagPill.svelte';
+	import SEO from '$lib/components/SEO.svelte';
 	import { browser } from '$app/environment';
+	import { page } from '$app/stores';
 
 	/** @type {{ data: { post: BlogPost, tags: BlogTag[], series: BlogSeries | null, seriesPosts: BlogPost[], renderedContent: string } }} */
 	let { data } = $props();
+
+	// SEO metadata
+	let baseUrl = $derived($page.url.origin);
+	let currentUrl = $derived(`${baseUrl}${$page.url.pathname}`);
+	let keywords = $derived(data.tags.map((tag) => tag.name));
+	let socialImage = $derived(
+		data.post.headerImagePath || `${baseUrl}/logo.png`
+	);
+
+	// Structured data for Google rich results
+	let structuredData = $derived({
+		'@context': 'https://schema.org',
+		'@type': 'BlogPosting',
+		headline: data.post.title,
+		description: data.post.excerpt,
+		image: data.post.headerImagePath ? [data.post.headerImagePath] : [],
+		datePublished: data.post.publishedAt ? new Date(data.post.publishedAt).toISOString() : new Date(data.post.createdAt).toISOString(),
+		dateModified: new Date(data.post.updatedAt).toISOString(),
+		author: {
+			'@type': 'Person',
+			name: data.post.authorName || 'Matt Jones',
+			url: baseUrl
+		},
+		publisher: {
+			'@type': 'Person',
+			name: 'Matt Jones',
+			url: baseUrl
+		},
+		mainEntityOfPage: {
+			'@type': 'WebPage',
+			'@id': currentUrl
+		},
+		keywords: keywords.join(', '),
+		wordCount: data.renderedContent.split(/\s+/).length,
+		...(data.post.readTimeMinutes && { timeRequired: `PT${data.post.readTimeMinutes}M` }),
+		...(data.series && {
+			isPartOf: {
+				'@type': 'Series',
+				name: data.series.title,
+				position: data.post.seriesOrder || 1
+			}
+		})
+	});
 
 	/** @type {HTMLElement | undefined} */
 	let contentContainer;
@@ -85,12 +130,32 @@
 </script>
 
 <svelte:head>
-	<title>{data.post.title} - Matt Jones</title>
-	<meta name="description" content={data.post.excerpt} />
 	{#if data.post.canonicalUrl}
 		<link rel="canonical" href={data.post.canonicalUrl} />
 	{/if}
+
+	<!-- Article-specific meta tags -->
+	<meta property="article:published_time" content={data.post.publishedAt ? new Date(data.post.publishedAt).toISOString() : new Date(data.post.createdAt).toISOString()} />
+	<meta property="article:modified_time" content={new Date(data.post.updatedAt).toISOString()} />
+	<meta property="article:author" content={data.post.authorName || 'Matt Jones'} />
+	{#each data.tags as tag}
+		<meta property="article:tag" content={tag.name} />
+	{/each}
+
+	<!-- Structured data for rich results -->
+	{@html `<script type="application/ld+json">${JSON.stringify(structuredData)}</scr${'ipt'}>`}
 </svelte:head>
+
+<SEO
+	title={data.post.title}
+	description={data.post.excerpt}
+	url={currentUrl}
+	type="article"
+	image={socialImage}
+	{keywords}
+	siteName="Matt Jones"
+	author={data.post.authorName || 'Matt Jones'}
+/>
 
 <BlogPage
 	title={data.post.title}
@@ -98,11 +163,15 @@
 	background={data.post.background || 'blocks'}
 	signature={false}
 >
+	<div class="back-link top">
+		<a href="/home/blog">← All posts</a>
+	</div>
+
 	<article class="blog-post">
 		<header class="post-header">
-			{#if data.post.headerImageId}
+			{#if data.post.headerImagePath}
 				<div class="header-image">
-					<img src="/api/images/{data.post.headerImageId}" alt={data.post.title} />
+					<img src={data.post.headerImagePath} alt={data.post.title} />
 				</div>
 			{/if}
 
@@ -160,13 +229,16 @@
 						</li>
 					{/each}
 				</ol>
+				<div class="back-link bottom">
+					<a href="/home/blog">← All posts</a>
+				</div>
 			</aside>
+		{:else}
+			<div class="back-link bottom">
+				<a href="/home/blog">← All posts</a>
+			</div>
 		{/if}
 	</article>
-
-	<div class="back-link">
-		<a href="/home/blog">← Back to all posts</a>
-	</div>
 </BlogPage>
 
 <style>
@@ -185,12 +257,15 @@
 		overflow: hidden;
 		border-radius: 12px;
 		margin-bottom: 1.5rem;
+		display: flex;
+		align-items: center;
+		justify-content: center;
 	}
 
 	.header-image img {
 		width: 100%;
-		height: 100%;
-		object-fit: cover;
+		max-height: 400px;
+		object-fit: contain;
 	}
 
 	.post-meta {
@@ -306,10 +381,18 @@
 		color: var(--neutral-black);
 	}
 
-	.back-link {
-		margin-top: 3rem;
-		padding-top: 2rem;
-		border-top: 2px solid var(--neutral-dark-gray-op-50);
+	.back-link.top {
+		margin-bottom: 2rem;
+	}
+
+	.back-link.bottom {
+		margin-top: 2rem;
+	}
+
+	.series-navigation .back-link.bottom {
+		margin-top: 1rem;
+		padding-top: 0;
+		border-top: none;
 	}
 
 	.back-link a {

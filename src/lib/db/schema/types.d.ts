@@ -90,6 +90,7 @@ export interface BlogPost {
   content: any; // TipTap JSON format
   background: string; // blocks, zigzag, checker, crosses
   headerImageId: number | null;
+  headerImagePath?: string | null; // Joined from images table
   status: string; // draft or published
   publishedAt: Date | null;
   readTimeMinutes: number;

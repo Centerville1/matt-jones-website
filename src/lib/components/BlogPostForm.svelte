@@ -27,17 +27,26 @@
   let backgroundPattern = form?.data?.background || post?.background || 'blocks';
 
   // Track selected tags - use existing tags or form data
-  let selectedTagIds = form?.data?.tagIds
-    ? form.data.tagIds.split(',').map((/** @type {string} */ id) => parseInt(id.trim(), 10))
-    : postTags.map((/** @type {any} */ tag) => tag.id);
+  let selectedTagIds =
+    form?.data?.tagIds && form.data.tagIds.trim() !== ''
+      ? form.data.tagIds
+          .split(',')
+          .map((/** @type {string} */ id) => parseInt(id.trim(), 10))
+          .filter((id) => !isNaN(id))
+      : postTags.map((/** @type {any} */ tag) => tag.id);
 
-  // Track selected header image
-  let selectedHeaderImage =
-    form?.data?.headerImageId !== undefined
-      ? String(form.data.headerImageId)
-      : post?.headerImageId
-        ? String(post.headerImageId)
-        : '';
+  // Track selected header image - store the path for ImagePicker
+  let selectedHeaderImagePath = '';
+
+  // Initialize from form data or post data
+  if (form?.data?.headerImageId !== undefined && form.data.headerImageId !== '') {
+    const imageId = parseInt(String(form.data.headerImageId), 10);
+    const image = data.images.find((/** @type {any} */ img) => img.id === imageId);
+    selectedHeaderImagePath = image ? image.path : '';
+  } else if (post?.headerImageId) {
+    const image = data.images.find((/** @type {any} */ img) => img.id === post.headerImageId);
+    selectedHeaderImagePath = image ? image.path : '';
+  }
 
   /**
    * Handle editor content changes
@@ -78,12 +87,17 @@
   $: availableTags = data.tags.filter((/** @type {any} */ tag) => !selectedTagIds.includes(tag.id));
 
   /**
-   * Handle header image selection
-   * @param {string} imageId
+   * Handle header image selection - receives path from ImagePicker
+   * @param {string} imagePath
    */
-  function handleHeaderImageSelect(imageId) {
-    selectedHeaderImage = imageId;
+  function handleHeaderImageSelect(imagePath) {
+    selectedHeaderImagePath = imagePath;
   }
+
+  // Reactive: Convert path back to ID for form submission
+  $: selectedHeaderImageId = selectedHeaderImagePath
+    ? String(data.images.find((/** @type {any} */ img) => img.path === selectedHeaderImagePath)?.id || '')
+    : '';
 
   // Helper to get field value (form data, post data, or default)
   /**
@@ -177,10 +191,10 @@
     <!-- TODO: Add filterCategory="blog" once ImagePicker supports it -->
     <ImagePicker
       images={data.images}
-      selectedImage={selectedHeaderImage}
+      selectedImage={selectedHeaderImagePath}
       onSelect={handleHeaderImageSelect}
     />
-    <input type="hidden" name="headerImageId" value={selectedHeaderImage || ''} />
+    <input type="hidden" name="headerImageId" value={selectedHeaderImageId} />
   </div>
 
   <!-- Tags -->
@@ -207,7 +221,7 @@
             <button
               type="button"
               class="tag-add-button"
-              on:click={() => addTag(tag.id)}
+              onclick={() => addTag(tag.id)}
             >
               <TagPill {tag} />
             </button>

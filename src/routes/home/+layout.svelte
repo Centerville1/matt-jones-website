@@ -139,6 +139,14 @@
           Home
         </a>
         <a
+          class="plain"
+          class:active={$page.url.pathname.startsWith('/home/blog')}
+          href="/home/blog"
+          on:click={scrollTop}
+        >
+          Blog
+        </a>
+        <a
           class="emphasis"
           class:active={$page.url.pathname === '/home/projects'}
           href="/home/projects"
@@ -181,6 +189,9 @@
       <nav id="links">
         <div>
           <a on:click={toggleNav} href="/home">Home</a>
+        </div>
+        <div>
+          <a on:click={toggleNav} href="/home/blog">Blog</a>
         </div>
         <div>
           <a on:click={toggleNav} href="/home/projects">My Portfolio</a>

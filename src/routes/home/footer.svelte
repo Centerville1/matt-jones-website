@@ -73,13 +73,17 @@
         <div class="links">
           <h2>About</h2>
           <h3>
-            <a href="/home/about" class="inline-link" on:click={scroll_top}>
+            <a
+              href="/home/blog/about-site"
+              class="inline-link"
+              on:click={scroll_top}
+            >
               About Site
             </a>
           </h3>
           <h3>
             <a
-              href="/home/architecture"
+              href="/home/blog/site-implementation"
               class="inline-link"
               on:click={scroll_top}
             >

@@ -152,12 +152,12 @@
       <ul>
         <li>
           <h4>
-            <a href="/home/about" class="inline-link"> About Site </a>
+            <a href="/home/blog/about-site" class="inline-link"> About Site </a>
           </h4>
         </li>
         <li>
           <h4>
-            <a href="/home/architecture" class="inline-link">
+            <a href="/home/blog/site-implementation" class="inline-link">
               Tech Stack/Development Story
             </a>
           </h4>

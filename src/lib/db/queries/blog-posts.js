@@ -3,7 +3,7 @@
  */
 
 import { db } from '../index.js';
-import { blogPosts } from '../schema/index.js';
+import { blogPosts, images } from '../schema/index.js';
 import { eq, desc, and, isNotNull, sql } from 'drizzle-orm';
 
 /**
@@ -14,8 +14,29 @@ import { eq, desc, and, isNotNull, sql } from 'drizzle-orm';
 export async function getPublishedPosts() {
   /** @type {BlogPost[]} */
   const posts = await db
-    .select()
+    .select({
+      id: blogPosts.id,
+      title: blogPosts.title,
+      slug: blogPosts.slug,
+      excerpt: blogPosts.excerpt,
+      content: blogPosts.content,
+      background: blogPosts.background,
+      headerImageId: blogPosts.headerImageId,
+      headerImagePath: images.path,
+      status: blogPosts.status,
+      publishedAt: blogPosts.publishedAt,
+      readTimeMinutes: blogPosts.readTimeMinutes,
+      authorName: blogPosts.authorName,
+      canonicalUrl: blogPosts.canonicalUrl,
+      seriesId: blogPosts.seriesId,
+      seriesOrder: blogPosts.seriesOrder,
+      featuredOrder: blogPosts.featuredOrder,
+      viewCount: blogPosts.viewCount,
+      createdAt: blogPosts.createdAt,
+      updatedAt: blogPosts.updatedAt,
+    })
     .from(blogPosts)
+    .leftJoin(images, eq(blogPosts.headerImageId, images.id))
     .where(eq(blogPosts.status, 'published'))
     .orderBy(desc(blogPosts.publishedAt))
     .all();
@@ -31,8 +52,29 @@ export async function getPublishedPosts() {
 export async function getFeaturedPosts() {
   /** @type {BlogPost[]} */
   const posts = await db
-    .select()
+    .select({
+      id: blogPosts.id,
+      title: blogPosts.title,
+      slug: blogPosts.slug,
+      excerpt: blogPosts.excerpt,
+      content: blogPosts.content,
+      background: blogPosts.background,
+      headerImageId: blogPosts.headerImageId,
+      headerImagePath: images.path,
+      status: blogPosts.status,
+      publishedAt: blogPosts.publishedAt,
+      readTimeMinutes: blogPosts.readTimeMinutes,
+      authorName: blogPosts.authorName,
+      canonicalUrl: blogPosts.canonicalUrl,
+      seriesId: blogPosts.seriesId,
+      seriesOrder: blogPosts.seriesOrder,
+      featuredOrder: blogPosts.featuredOrder,
+      viewCount: blogPosts.viewCount,
+      createdAt: blogPosts.createdAt,
+      updatedAt: blogPosts.updatedAt,
+    })
     .from(blogPosts)
+    .leftJoin(images, eq(blogPosts.headerImageId, images.id))
     .where(
       and(eq(blogPosts.status, 'published'), isNotNull(blogPosts.featuredOrder))
     )
@@ -50,8 +92,29 @@ export async function getFeaturedPosts() {
 export async function getPostBySlug(slug) {
   /** @type {BlogPost | undefined} */
   const post = await db
-    .select()
+    .select({
+      id: blogPosts.id,
+      title: blogPosts.title,
+      slug: blogPosts.slug,
+      excerpt: blogPosts.excerpt,
+      content: blogPosts.content,
+      background: blogPosts.background,
+      headerImageId: blogPosts.headerImageId,
+      headerImagePath: images.path,
+      status: blogPosts.status,
+      publishedAt: blogPosts.publishedAt,
+      readTimeMinutes: blogPosts.readTimeMinutes,
+      authorName: blogPosts.authorName,
+      canonicalUrl: blogPosts.canonicalUrl,
+      seriesId: blogPosts.seriesId,
+      seriesOrder: blogPosts.seriesOrder,
+      featuredOrder: blogPosts.featuredOrder,
+      viewCount: blogPosts.viewCount,
+      createdAt: blogPosts.createdAt,
+      updatedAt: blogPosts.updatedAt,
+    })
     .from(blogPosts)
+    .leftJoin(images, eq(blogPosts.headerImageId, images.id))
     .where(eq(blogPosts.slug, slug))
     .get();
 
@@ -98,8 +161,29 @@ export async function getAllPosts() {
 export async function getPostsBySeries(seriesId) {
   /** @type {BlogPost[]} */
   const posts = await db
-    .select()
+    .select({
+      id: blogPosts.id,
+      title: blogPosts.title,
+      slug: blogPosts.slug,
+      excerpt: blogPosts.excerpt,
+      content: blogPosts.content,
+      background: blogPosts.background,
+      headerImageId: blogPosts.headerImageId,
+      headerImagePath: images.path,
+      status: blogPosts.status,
+      publishedAt: blogPosts.publishedAt,
+      readTimeMinutes: blogPosts.readTimeMinutes,
+      authorName: blogPosts.authorName,
+      canonicalUrl: blogPosts.canonicalUrl,
+      seriesId: blogPosts.seriesId,
+      seriesOrder: blogPosts.seriesOrder,
+      featuredOrder: blogPosts.featuredOrder,
+      viewCount: blogPosts.viewCount,
+      createdAt: blogPosts.createdAt,
+      updatedAt: blogPosts.updatedAt,
+    })
     .from(blogPosts)
+    .leftJoin(images, eq(blogPosts.headerImageId, images.id))
     .where(
       and(eq(blogPosts.status, 'published'), eq(blogPosts.seriesId, seriesId))
     )

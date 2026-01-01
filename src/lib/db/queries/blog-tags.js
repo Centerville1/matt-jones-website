@@ -3,8 +3,8 @@
  */
 
 import { db } from '../index.js';
-import { blogTags, blogPostTags, blogPosts } from '../schema/index.js';
-import { eq, desc, and, sql } from 'drizzle-orm';
+import { blogTags, blogPostTags, blogPosts, images } from '../schema/index.js';
+import { eq, desc, and, inArray } from 'drizzle-orm';
 
 /**
  * Get all tags
@@ -59,11 +59,13 @@ export async function getTagsForPost(postId) {
 
   if (tagIds.length === 0) return [];
 
+  const tagIdValues = tagIds.map((t) => t.tagId);
+
   /** @type {BlogTag[]} */
   const tags = await db
     .select()
     .from(blogTags)
-    .where(sql`${blogTags.id} IN (${tagIds.map((t) => t.tagId).join(',')})`)
+    .where(inArray(blogTags.id, tagIdValues))
     .all();
 
   return tags;
@@ -86,14 +88,37 @@ export async function getPostsByTag(tagSlug) {
 
   if (postIds.length === 0) return [];
 
+  const postIdValues = postIds.map((p) => p.postId);
+
   /** @type {BlogPost[]} */
   const posts = await db
-    .select()
+    .select({
+      id: blogPosts.id,
+      title: blogPosts.title,
+      slug: blogPosts.slug,
+      excerpt: blogPosts.excerpt,
+      content: blogPosts.content,
+      background: blogPosts.background,
+      headerImageId: blogPosts.headerImageId,
+      headerImagePath: images.path,
+      status: blogPosts.status,
+      publishedAt: blogPosts.publishedAt,
+      readTimeMinutes: blogPosts.readTimeMinutes,
+      authorName: blogPosts.authorName,
+      canonicalUrl: blogPosts.canonicalUrl,
+      seriesId: blogPosts.seriesId,
+      seriesOrder: blogPosts.seriesOrder,
+      featuredOrder: blogPosts.featuredOrder,
+      viewCount: blogPosts.viewCount,
+      createdAt: blogPosts.createdAt,
+      updatedAt: blogPosts.updatedAt,
+    })
     .from(blogPosts)
+    .leftJoin(images, eq(blogPosts.headerImageId, images.id))
     .where(
       and(
         eq(blogPosts.status, 'published'),
-        sql`${blogPosts.id} IN (${postIds.map((p) => p.postId).join(',')})`
+        inArray(blogPosts.id, postIdValues)
       )
     )
     .orderBy(desc(blogPosts.publishedAt))

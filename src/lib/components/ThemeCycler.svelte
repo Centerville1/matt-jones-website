@@ -110,12 +110,10 @@
           palette[/** @type {keyof typeof palette} */ (item.themeName)]
         )}
         {@const isCenter = item.position === 0}
-        {@const isHidden = Math.abs(item.position) === 2}
 
         <button
           class="carousel-item"
           class:carousel-item-center={isCenter}
-          class:carousel-item-hidden={isHidden}
           on:click={() => {
             if (item.position === -1) cyclePrevious();
             if (item.position === 1) cycleNext();
@@ -188,11 +186,6 @@
     z-index: 1;
   }
 
-  .carousel-item-hidden {
-    opacity: 0;
-    pointer-events: none;
-  }
-
   .gradient-overlay {
     position: absolute;
     top: 0;
@@ -208,7 +201,7 @@
       to right,
       var(--neutral-white) 0%,
       var(--neutral-white) 40%,
-      transparent 90%
+      transparent 80%
     );
   }
 
@@ -217,7 +210,7 @@
     background: linear-gradient(
       to left,
       var(--neutral-white) 0%,
-      var(--neutral-white) 20%,
+      var(--neutral-white) 40%,
       transparent 80%
     );
   }

@@ -6,7 +6,6 @@ import { error } from '@sveltejs/kit';
 import { getPostBySlug, incrementViewCount, getPostsBySeries } from '$lib/db/queries/blog-posts.js';
 import { getTagsForPost } from '$lib/db/queries/blog-tags.js';
 import { getSeriesById } from '$lib/db/queries/blog-series.js';
-import { renderTiptapJSON } from '$lib/utils/tiptap-renderer.js';
 
 /** @type {import('./$types').PageServerLoad} */
 export async function load({ params, cookies }) {
@@ -41,19 +40,17 @@ export async function load({ params, cookies }) {
 		});
 	}
 
-	// Load related data and render content with syntax highlighting
-	const [tags, series, seriesPosts, renderedContent] = await Promise.all([
+	// Load related data
+	const [tags, series, seriesPosts] = await Promise.all([
 		getTagsForPost(post.id),
 		post.seriesId ? getSeriesById(post.seriesId) : Promise.resolve(null),
-		post.seriesId ? getPostsBySeries(post.seriesId) : Promise.resolve([]),
-		renderTiptapJSON(post.content, true) // Enable syntax highlighting
+		post.seriesId ? getPostsBySeries(post.seriesId) : Promise.resolve([])
 	]);
 
 	return {
 		post,
 		tags,
 		series,
-		seriesPosts,
-		renderedContent
+		seriesPosts
 	};
 }

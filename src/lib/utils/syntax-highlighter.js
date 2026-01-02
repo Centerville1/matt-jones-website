@@ -36,6 +36,7 @@ export async function highlightCode(code, language) {
 function escapeHtml(text) {
 	if (!text) return '';
 
+	/** @type {Record<string, string>} */
 	const map = {
 		'&': '&amp;',
 		'<': '&lt;',

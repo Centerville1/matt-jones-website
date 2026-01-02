@@ -1,11 +1,12 @@
 <script>
 	import BlogPage from '$lib/components/BlogPage.svelte';
+	import BlogPostContent from '$lib/components/BlogPostContent.svelte';
 	import TagPill from '$lib/components/TagPill.svelte';
 	import SEO from '$lib/components/SEO.svelte';
 	import { browser } from '$app/environment';
 	import { page } from '$app/stores';
 
-	/** @type {{ data: { post: BlogPost, tags: BlogTag[], series: BlogSeries | null, seriesPosts: BlogPost[], renderedContent: string } }} */
+	/** @type {{ data: { post: BlogPost, tags: BlogTag[], series: BlogSeries | null, seriesPosts: BlogPost[] } }} */
 	let { data } = $props();
 
 	// SEO metadata
@@ -40,7 +41,6 @@
 			'@id': currentUrl
 		},
 		keywords: keywords.join(', '),
-		wordCount: data.renderedContent.split(/\s+/).length,
 		...(data.post.readTimeMinutes && { timeRequired: `PT${data.post.readTimeMinutes}M` }),
 		...(data.series && {
 			isPartOf: {
@@ -50,9 +50,6 @@
 			}
 		})
 	});
-
-	/** @type {HTMLElement | undefined} */
-	let contentContainer;
 
 	/**
 	 * Format a date for display
@@ -64,69 +61,6 @@
 		const d = new Date(date);
 		return d.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
 	}
-
-	/**
-	 * Copy code to clipboard
-	 * @param {string} code
-	 */
-	async function copyCode(code) {
-		if (!browser) return;
-
-		try {
-			await navigator.clipboard.writeText(code);
-			return true;
-		} catch (err) {
-			console.error('Failed to copy code:', err);
-			return false;
-		}
-	}
-
-	/**
-	 * Add copy buttons to code blocks after rendering
-	 */
-	function addCopyButtons() {
-		if (!browser || !contentContainer) return;
-
-		const codeBlocks = contentContainer.querySelectorAll('pre');
-
-		codeBlocks.forEach((pre) => {
-			// Skip if copy button already exists
-			if (pre.querySelector('.copy-button')) return;
-
-			const codeElement = pre.querySelector('code');
-			if (!codeElement) return;
-
-			const code = codeElement.textContent || '';
-
-			// Create copy button
-			const button = document.createElement('button');
-			button.className = 'copy-button';
-			button.innerHTML = '📋';
-			button.title = 'Copy code';
-			button.type = 'button';
-
-			button.addEventListener('click', async () => {
-				const success = await copyCode(code);
-				if (success) {
-					button.innerHTML = '✓';
-					button.classList.add('copied');
-					setTimeout(() => {
-						button.innerHTML = '📋';
-						button.classList.remove('copied');
-					}, 2000);
-				}
-			});
-
-			pre.style.position = 'relative';
-			pre.appendChild(button);
-		});
-	}
-
-	$effect(() => {
-		if (browser && data.renderedContent && contentContainer) {
-			setTimeout(addCopyButtons, 0);
-		}
-	});
 </script>
 
 <svelte:head>
@@ -204,9 +138,7 @@
 		</header>
 
 		<div class="post-body">
-			<div class="blog-post-content {data.post.background || ''}" bind:this={contentContainer}>
-				{@html data.renderedContent}
-			</div>
+			<BlogPostContent content={data.post.content} backgroundPattern={data.post.background || ''} />
 		</div>
 
 		{#if data.seriesPosts.length > 1}

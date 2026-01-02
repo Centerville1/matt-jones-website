@@ -149,6 +149,20 @@ async function renderNode(node, enableSyntaxHighlighting = true) {
 			html = '<br>';
 			break;
 
+		case 'svelteComponent':
+			// Render a placeholder for Svelte components
+			// The actual component will be rendered by BlogPostContent.svelte
+			const componentName = node.attrs?.name || 'Unknown';
+			const componentProps = node.attrs?.props || {};
+			const contextId = node.attrs?.contextId || null;
+
+			// Create a data marker that BlogPostContent can parse
+			// Using a custom HTML element that won't be rendered by browsers
+			const propsJson = escapeHtml(JSON.stringify(componentProps));
+			const contextAttr = contextId ? ` data-context-id="${escapeHtml(contextId)}"` : '';
+			html = `<svelte-component-placeholder data-component="${escapeHtml(componentName)}" data-props="${propsJson}"${contextAttr}></svelte-component-placeholder>`;
+			break;
+
 		default:
 			// Unknown node type, just render children
 			html = childrenHtml;

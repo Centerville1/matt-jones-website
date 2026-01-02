@@ -8,6 +8,13 @@
   import CodeBlockLowlight from '@tiptap/extension-code-block-lowlight';
   import { createLowlight, all } from 'lowlight';
   import ImagePicker from './ImagePicker.svelte';
+  import ComponentPropsEditor from './ComponentPropsEditor.svelte';
+  import { ComponentNode } from '$lib/tiptap-extensions/ComponentNode.js';
+  import {
+    componentRegistry,
+    getComponent,
+    getDefaultProps,
+  } from '$lib/components/embeddable/registry.js';
 
   /** @type {any} */
   export let content = null;
@@ -37,6 +44,18 @@
   let showCodeBlockLangSelector = false;
   let codeBlockLanguage = '';
   let showBackgroundSelector = false;
+  let showComponentPicker = false;
+  /** @type {string | null} */
+  let selectedComponentName = null;
+  let showPropsEditor = false;
+  /** @type {string | null} */
+  let editingComponentName = null;
+  /** @type {Record<string, any>} */
+  let editingComponentProps = {};
+  /** @type {string | null} */
+  let editingContextId = null;
+  /** @type {number | null} */
+  let editingComponentPos = null;
 
   // Initialize currentBackgroundPattern from prop
   let currentBackgroundPattern = backgroundPattern;
@@ -48,6 +67,9 @@
   const lowlight = createLowlight(all);
 
   onMount(() => {
+    // Set up click handler for edit props buttons
+    editorElement.addEventListener('click', handleEditorClick);
+
     editor = new Editor({
       element: editorElement,
       extensions: [
@@ -71,6 +93,7 @@
             class: 'editor-code-block',
           },
         }),
+        ComponentNode,
       ],
       content: content,
       onUpdate: ({ editor: updatedEditor }) => {
@@ -92,6 +115,7 @@
   });
 
   onDestroy(() => {
+    editorElement?.removeEventListener('click', handleEditorClick);
     if (editor) {
       editor.destroy();
     }
@@ -239,6 +263,146 @@
     currentBackgroundPattern = pattern;
     onBackgroundChange(pattern);
     showBackgroundSelector = false;
+  }
+
+  /**
+   * Handle clicks in the editor
+   * @param {MouseEvent} event
+   */
+  function handleEditorClick(event) {
+    const target = /** @type {HTMLElement} */ (event.target);
+    if (target.classList.contains('edit-props-btn') || target.closest('.edit-props-btn')) {
+      event.preventDefault();
+      event.stopPropagation();
+
+      const btn = target.closest('.edit-props-btn');
+      const componentEl = btn?.closest('.svelte-component');
+      if (componentEl && editor) {
+        const componentName = componentEl.getAttribute('data-component-name');
+        const propsJson = componentEl.getAttribute('data-component-props');
+        const contextIdAttr = componentEl.getAttribute('data-context-id');
+
+        if (componentName) {
+          editingComponentName = componentName;
+          editingComponentProps = propsJson ? JSON.parse(propsJson) : {};
+          editingContextId = contextIdAttr || null;
+
+          // Find the position of this specific component in the document
+          // by using the DOM position to find the correct TipTap node
+          let foundPos = null;
+          const view = editor.view;
+
+          try {
+            // Get the position from the DOM node
+            const domPos = view.posAtDOM(componentEl, 0);
+            const $pos = view.state.doc.resolve(domPos);
+
+            // Find the component node at or before this position
+            for (let depth = $pos.depth; depth >= 0; depth--) {
+              const node = $pos.node(depth);
+              if (node.type.name === 'svelteComponent') {
+                // Use the position at the start of the node
+                foundPos = $pos.start(depth) - 1;
+                break;
+              }
+            }
+
+            // If not found in parent chain, check the node at this exact position
+            if (foundPos === null) {
+              const nodeAtPos = view.state.doc.nodeAt(domPos);
+              if (nodeAtPos && nodeAtPos.type.name === 'svelteComponent') {
+                foundPos = domPos;
+              }
+            }
+          } catch (e) {
+            // Fallback: find by matching props and context to identify the specific instance
+            let matchCount = 0;
+            const targetProps = editingComponentProps;
+            const targetContext = editingContextId;
+
+            editor.state.doc.descendants((node, pos) => {
+              if (node.type.name === 'svelteComponent' &&
+                  node.attrs.name === componentName &&
+                  JSON.stringify(node.attrs.props) === JSON.stringify(targetProps) &&
+                  node.attrs.contextId === targetContext) {
+                if (matchCount === 0) {
+                  foundPos = pos;
+                }
+                matchCount++;
+                return false;
+              }
+            });
+          }
+
+          editingComponentPos = foundPos;
+          showPropsEditor = true;
+        }
+      }
+    }
+  }
+
+  function openComponentPicker() {
+    showComponentPicker = true;
+  }
+
+  /**
+   * Insert a component with default props
+   * @param {string} componentName
+   */
+  function insertComponent(componentName) {
+    const defaultProps = getDefaultProps(componentName);
+    editor
+      ?.chain()
+      .focus()
+      .insertComponent({
+        name: componentName,
+        props: defaultProps,
+        contextId: null,
+      })
+      .run();
+    showComponentPicker = false;
+    selectedComponentName = null;
+  }
+
+  function cancelComponentPicker() {
+    showComponentPicker = false;
+    selectedComponentName = null;
+  }
+
+  /**
+   * Save edited props and contextId
+   * @param {Record<string, any>} newProps
+   * @param {string | null} newContextId
+   */
+  function saveComponentPropsWithContext(newProps, newContextId) {
+    if (editingComponentPos !== null && editor) {
+      // Update the component props and contextId in the document
+      const tr = editor.state.tr;
+      const node = editor.state.doc.nodeAt(editingComponentPos);
+
+      if (node && node.type.name === 'svelteComponent') {
+        tr.setNodeMarkup(editingComponentPos, undefined, {
+          ...node.attrs,
+          props: newProps,
+          contextId: newContextId
+        });
+        editor.view.dispatch(tr);
+      }
+    }
+
+    showPropsEditor = false;
+    editingComponentName = null;
+    editingComponentProps = {};
+    editingContextId = null;
+    editingComponentPos = null;
+  }
+
+  function cancelPropsEditor() {
+    showPropsEditor = false;
+    editingComponentName = null;
+    editingComponentProps = {};
+    editingContextId = null;
+    editingComponentPos = null;
   }
 
   // Check active states for toolbar buttons
@@ -424,6 +588,9 @@
       </button>
       <button on:click={openImageDialog} type="button" title="Image">
         🖼️
+      </button>
+      <button on:click={openComponentPicker} type="button" title="Insert Component">
+        📦
       </button>
       <button
         on:click={toggleCodeBlock}
@@ -673,6 +840,83 @@
             Cancel
           </button>
         </div>
+      </div>
+    </div>
+  {/if}
+
+  <!-- Component Picker Dialog -->
+  {#if showComponentPicker}
+    <div
+      class="dialog-overlay"
+      role="button"
+      tabindex="0"
+      on:click={cancelComponentPicker}
+      on:keydown={(e) => e.key === 'Escape' && cancelComponentPicker()}
+    >
+      <div
+        class="dialog component-picker-dialog"
+        role="dialog"
+        aria-labelledby="component-picker-title"
+        tabindex="-1"
+        on:click|stopPropagation
+        on:keydown|stopPropagation
+      >
+        <h4 id="component-picker-title">Insert Interactive Component</h4>
+        <p class="help-text">
+          Select a component to insert into your blog post. Components are
+          interactive elements that readers can play with.
+        </p>
+        <div class="component-grid">
+          {#each Object.values(componentRegistry) as component}
+            <button
+              type="button"
+              class="component-option"
+              class:selected={selectedComponentName === component.name}
+              on:click={() => insertComponent(component.name)}
+            >
+              <div class="component-label">{component.label}</div>
+              <div class="component-description">{component.description}</div>
+              <div class="component-category">{component.category}</div>
+            </button>
+          {/each}
+        </div>
+        <div class="dialog-actions">
+          <button
+            on:click={cancelComponentPicker}
+            type="button"
+            class="button-secondary"
+          >
+            Cancel
+          </button>
+        </div>
+      </div>
+    </div>
+  {/if}
+
+  <!-- Component Props Editor Dialog -->
+  {#if showPropsEditor && editingComponentName}
+    <div
+      class="dialog-overlay"
+      role="button"
+      tabindex="0"
+      on:click={cancelPropsEditor}
+      on:keydown={(e) => e.key === 'Escape' && cancelPropsEditor()}
+    >
+      <div
+        class="dialog props-editor-dialog"
+        role="dialog"
+        aria-labelledby="props-editor-title"
+        tabindex="-1"
+        on:click|stopPropagation
+        on:keydown|stopPropagation
+      >
+        <ComponentPropsEditor
+          componentName={editingComponentName}
+          props={editingComponentProps}
+          contextId={editingContextId}
+          onSaveWithContext={saveComponentPropsWithContext}
+          onCancel={cancelPropsEditor}
+        />
       </div>
     </div>
   {/if}
@@ -931,8 +1175,8 @@
 
   .help-text {
     font-size: 0.85rem;
-    color: var(--neutral-black);
-    opacity: 0.7;
+    color: var(--contrast-text-light);
+    opacity: 0.9;
     margin: 0 0 16px 0;
   }
 
@@ -1276,5 +1520,141 @@
       60px 60px,
       30px 30px,
       30px 30px;
+  }
+
+  /* Component Picker Styles */
+  .component-picker-dialog {
+    max-width: 600px;
+    width: 90%;
+  }
+
+  .component-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 1.5rem;
+    margin: 1.5rem 0;
+    max-height: 400px;
+    overflow-y: auto;
+    padding: 0.5rem;
+  }
+
+  .component-option {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 1.25rem;
+    border: 2px solid var(--neutral-dark-gray-op-50);
+    border-radius: 8px;
+    background-color: var(--neutral-white);
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    text-align: left;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  }
+
+  .component-option:hover {
+    border-color: var(--main-blue);
+    background-color: var(--neutral-white);
+    transform: scale(1.05);
+    box-shadow: 0 8px 16px rgba(0, 168, 255, 0.2);
+    z-index: 1;
+  }
+
+  .component-option.selected {
+    border-color: var(--main-blue);
+    background-color: var(--main-blue-light-op-10);
+  }
+
+  .component-label {
+    font-weight: bold;
+    font-size: 1.1em;
+    color: var(--neutral-black);
+    margin-bottom: 0.5rem;
+  }
+
+  .component-description {
+    font-size: 0.9em;
+    color: var(--contrast-text-light);
+    margin-bottom: 0.5rem;
+    line-height: 1.4;
+    flex-grow: 1;
+  }
+
+  .component-category {
+    font-size: 0.75em;
+    text-transform: uppercase;
+    color: var(--main-blue);
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    margin-top: auto;
+  }
+
+  /* Component Picker Dialog */
+  .props-editor-dialog {
+    max-width: 600px;
+    width: 90%;
+    max-height: 80vh;
+    overflow-y: auto;
+  }
+
+  /* Component preview in editor */
+  :global(.svelte-component) {
+    background-color: var(--neutral-gray);
+    border: 2px dashed var(--main-blue);
+    border-radius: 8px;
+    padding: 1rem;
+    margin: 1rem 0;
+  }
+
+  :global(.component-preview) {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  :global(.component-header) {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.5rem;
+  }
+
+  :global(.component-title) {
+    font-weight: bold;
+    color: var(--neutral-black);
+  }
+
+  :global(.edit-props-btn) {
+    padding: 0.25rem 0.5rem;
+    background-color: var(--main-blue);
+    color: var(--neutral-white);
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.8rem;
+    transition: background-color 0.2s;
+  }
+
+  :global(.edit-props-btn:hover) {
+    background-color: var(--main-blue-light);
+  }
+
+  :global(.component-props) {
+    font-size: 0.85em;
+  }
+
+  :global(.component-props summary) {
+    cursor: pointer;
+    color: var(--main-blue);
+    user-select: none;
+  }
+
+  :global(.component-props pre) {
+    background-color: var(--neutral-dark-gray);
+    padding: 0.5rem;
+    border-radius: 4px;
+    overflow-x: auto;
+    font-size: 0.8em;
+    margin-top: 0.5rem;
   }
 </style>

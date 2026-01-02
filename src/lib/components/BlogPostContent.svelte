@@ -1,7 +1,10 @@
 <script>
   import { renderTiptapJSON } from '$lib/utils/tiptap-renderer.js';
-  import { onMount } from 'svelte';
+  import { onMount, onDestroy, tick } from 'svelte';
   import { browser } from '$app/environment';
+  import { getComponent } from '$lib/components/embeddable/registry.js';
+  import { mount, unmount } from 'svelte';
+  import { writable } from 'svelte/store';
 
   /** @type {any} */
   export let content;
@@ -12,7 +15,114 @@
   /** @type {HTMLElement | undefined} */
   let contentContainer;
 
-  $: htmlContent = renderTiptapJSON(content);
+  /** @type {string} */
+  let htmlContent = '';
+
+  /** @type {Array<{id: string, component: any, props: any, contextId: string | null, target: HTMLElement, instance?: any, contextStore?: any}>} */
+  let embeddedComponents = [];
+
+  /** @type {Record<string, any>} Stores for shared context */
+  let contextStores = {};
+
+  // Render HTML when content changes (client-side only)
+  $: if (browser && content) {
+    renderTiptapJSON(content).then(async (html) => {
+      htmlContent = html;
+      if (contentContainer) {
+        // Wait for DOM to update after htmlContent changes
+        await tick();
+        await parseAndRenderComponents();
+        setTimeout(addCopyButtons, 0);
+      }
+    });
+  }
+
+  /**
+   * Parse HTML content and extract component placeholders
+   */
+  async function parseAndRenderComponents() {
+    if (!browser || !contentContainer) return;
+
+    // Find all component placeholders
+    const placeholders = contentContainer.querySelectorAll(
+      'svelte-component-placeholder',
+    );
+
+    // Build new components array
+    const newComponents = [];
+
+    // Load and prepare each component
+    for (let i = 0; i < placeholders.length; i++) {
+      const placeholder = placeholders[i];
+      const componentName = placeholder.getAttribute('data-component');
+      const propsJson = placeholder.getAttribute('data-props');
+      const contextId = placeholder.getAttribute('data-context-id');
+
+      if (!componentName) continue;
+
+      try {
+        const props = propsJson ? JSON.parse(propsJson) : {};
+        const componentEntry = getComponent(componentName);
+
+        if (componentEntry) {
+          // Create a unique ID for this component instance
+          const id = `component-${i}-${componentName}`;
+
+          // Load the component module
+          const componentModule = await componentEntry.component();
+
+          // Create a container div for the Svelte component
+          const container = document.createElement('div');
+          container.id = id;
+          container.className = 'embedded-component-container';
+
+          // Replace placeholder with container
+          placeholder.replaceWith(container);
+
+          // Add to components array
+          newComponents.push({
+            id,
+            component: componentModule.default,
+            props,
+            contextId,
+            target: container,
+          });
+        } else {
+          console.error(
+            '[BlogPostContent] Component not found in registry:',
+            componentName,
+          );
+        }
+      } catch (error) {
+        console.error(`Failed to load component ${componentName}:`, error);
+        placeholder.innerHTML = `<div class="component-error">Failed to load component: ${componentName}</div>`;
+      }
+    }
+
+    // Update the components array to trigger reactive rendering
+    embeddedComponents = newComponents;
+  }
+
+  /**
+   * Get or create a context store for a given contextId
+   * @param {string} contextId
+   */
+  function getContextStore(contextId) {
+    if (!contextStores[contextId]) {
+      contextStores[contextId] = writable({});
+    }
+    return contextStores[contextId];
+  }
+
+  /**
+   * Update shared context from a component
+   * @param {string} contextId
+   * @param {any} data
+   */
+  function updateContext(contextId, data) {
+    const store = getContextStore(contextId);
+    store.set(data);
+  }
 
   /**
    * Copy code to clipboard
@@ -71,14 +181,54 @@
     });
   }
 
-  onMount(() => {
+  // Mount components when the array changes
+  $: if (browser && embeddedComponents.length > 0) {
+    embeddedComponents.forEach((comp) => {
+      if (!comp.instance && comp.target) {
+        try {
+          // Get or create context store for this component
+          const contextStore = comp.contextId ? getContextStore(comp.contextId) : null;
+
+          // Mount the Svelte component into its target container
+          comp.instance = mount(comp.component, {
+            target: comp.target,
+            props: {
+              ...comp.props,
+              contextStore: contextStore,
+              updateContext: comp.contextId
+                ? (/** @type {any} */ data) => {
+                    if (comp.contextId) {
+                      updateContext(comp.contextId, data);
+                    }
+                  }
+                : undefined,
+            },
+          });
+          comp.contextStore = contextStore;
+        } catch (error) {
+          console.error(`Failed to mount component ${comp.id}:`, error);
+        }
+      }
+    });
+  }
+
+  onMount(async () => {
+    await parseAndRenderComponents();
     addCopyButtons();
   });
 
-  // Re-add copy buttons when content changes
-  $: if (browser && htmlContent && contentContainer) {
-    setTimeout(addCopyButtons, 0);
-  }
+  onDestroy(() => {
+    // Cleanup mounted components
+    embeddedComponents.forEach((comp) => {
+      if (comp.instance) {
+        try {
+          unmount(comp.instance);
+        } catch (error) {
+          console.error(`Failed to unmount component:`, error);
+        }
+      }
+    });
+  });
 </script>
 
 <div class="blog-post-content {backgroundPattern}" bind:this={contentContainer}>
@@ -87,9 +237,7 @@
 
 <style>
   .blog-post-content {
-    padding: 20px;
-    min-height: 200px;
-    background-color: var(--neutral-gray);
+    /* No padding/background - parent page handles this */
   }
 
   /* Typography */
@@ -227,156 +375,48 @@
   }
 
   .blog-post-content :global(hr) {
+    height: 2px;
     border: none;
-    border-top: 2px solid var(--neutral-dark-gray-op-50);
+    background: linear-gradient(
+      to right,
+      transparent,
+      var(--main-blue),
+      transparent
+    );
+    margin: 2em auto;
+    width: 100%;
+    transform: scaleX(0);
+    opacity: 0;
+    animation: expand-horizontal cubic-bezier(0.58, 0, 0.48, 0.9) forwards;
+    animation-timeline: view();
+    animation-range-start: 0vh;
+    animation-range-end: 20vh;
+  }
+
+  @keyframes expand-horizontal {
+    to {
+      transform: scaleX(1);
+      opacity: 1;
+    }
+  }
+
+  /* Embedded component styles */
+  .blog-post-content :global(.embedded-component-container) {
     margin: 2em 0;
+    width: 100%;
   }
 
-  /* Background patterns for the whole content area */
-  .blog-post-content.zigzag {
-    background:
-      linear-gradient(
-          135deg,
-          var(--neutral-dark-gray-op-10) 25%,
-          transparent 25%
-        ) -45px
-        0/ 90px 90px,
-      linear-gradient(
-          225deg,
-          var(--neutral-dark-gray-op-50) 25%,
-          transparent 25%
-        ) -45px
-        0/ 90px 90px,
-      linear-gradient(
-          315deg,
-          var(--neutral-dark-gray-op-10) 25%,
-          transparent 25%
-        )
-        0px 0/ 90px 90px,
-      linear-gradient(
-          45deg,
-          var(--neutral-dark-gray-op-50) 25%,
-          var(--no-background) 25%
-        )
-        0px 0/ 90px 90px;
+  .blog-post-content :global(.component-error) {
+    padding: 1em;
+    background-color: var(--red);
+    color: var(--neutral-white);
+    border-radius: 8px;
+    margin: 1em 0;
   }
 
-  .blog-post-content.blocks {
-    background-image:
-      linear-gradient(
-        30deg,
-        var(--neutral-dark-gray-op-50) 12%,
-        transparent 12.5%,
-        transparent 87%,
-        var(--neutral-dark-gray-op-50) 87.5%,
-        var(--neutral-dark-gray-op-50)
-      ),
-      linear-gradient(
-        150deg,
-        var(--neutral-dark-gray-op-50) 12%,
-        transparent 12.5%,
-        transparent 87%,
-        var(--neutral-dark-gray-op-50) 87.5%,
-        var(--neutral-dark-gray-op-50)
-      ),
-      linear-gradient(
-        30deg,
-        var(--neutral-dark-gray-op-50) 12%,
-        transparent 12.5%,
-        transparent 87%,
-        var(--neutral-dark-gray-op-50) 87.5%,
-        var(--neutral-dark-gray-op-50)
-      ),
-      linear-gradient(
-        150deg,
-        var(--neutral-dark-gray-op-50) 12%,
-        transparent 12.5%,
-        transparent 87%,
-        var(--neutral-dark-gray-op-50) 87.5%,
-        var(--neutral-dark-gray-op-50)
-      ),
-      linear-gradient(
-        60deg,
-        var(--neutral-dark-gray-op-10) 25%,
-        transparent 25.5%,
-        transparent 75%,
-        var(--neutral-dark-gray-op-10) 75%,
-        var(--neutral-dark-gray-op-10)
-      ),
-      linear-gradient(
-        60deg,
-        var(--neutral-dark-gray-op-10) 25%,
-        transparent 25.5%,
-        transparent 75%,
-        var(--neutral-dark-gray-op-10) 75%,
-        var(--neutral-dark-gray-op-10)
-      );
-    background-size: 80px 140px;
-    background-position:
-      0 0,
-      0 0,
-      40px 70px,
-      40px 70px,
-      0 0,
-      40px 70px;
-  }
-
-  .blog-post-content.checker {
-    background-image:
-      repeating-linear-gradient(
-        45deg,
-        var(--neutral-dark-gray-op-50) 25%,
-        transparent 25%,
-        transparent 75%,
-        var(--neutral-dark-gray-op-50) 75%,
-        var(--neutral-dark-gray-op-50)
-      ),
-      repeating-linear-gradient(
-        45deg,
-        var(--neutral-dark-gray-op-50) 25%,
-        var(--neutral-dark-gray-op-10) 25%,
-        var(--neutral-dark-gray-op-10) 75%,
-        var(--neutral-dark-gray-op-50) 75%,
-        var(--neutral-dark-gray-op-50)
-      );
-    background-position:
-      0 0,
-      15px 15px;
-    background-size: 30px 30px;
-  }
-
-  .blog-post-content.crosses {
-    background:
-      radial-gradient(
-        circle,
-        transparent 20%,
-        var(--neutral-gray) 20%,
-        var(--neutral-gray) 80%,
-        transparent 80%,
-        transparent
-      ),
-      radial-gradient(
-          circle,
-          transparent 20%,
-          var(--neutral-gray) 20%,
-          var(--neutral-gray) 80%,
-          transparent 80%,
-          transparent
-        )
-        30px 30px,
-      linear-gradient(var(--neutral-dark-gray) 2.6px, transparent 2.6px)
-        0 -1.3px,
-      linear-gradient(
-          90deg,
-          var(--neutral-dark-gray) 2.6px,
-          var(--neutral-gray) 2.6px
-        ) -1.3px
-        0;
-    background-size:
-      60px 60px,
-      60px 60px,
-      30px 30px,
-      30px 30px;
+  .component-mount-point {
+    /* Hidden by default - components render into the embedded-component-container divs */
+    display: none;
   }
 
   /* Responsive */

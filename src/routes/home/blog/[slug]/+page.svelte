@@ -1,5 +1,5 @@
 <script>
-	import BlogPage from '../../../blogPage.svelte';
+	import BlogPage from '$lib/components/BlogPage.svelte';
 	import TagPill from '$lib/components/TagPill.svelte';
 	import SEO from '$lib/components/SEO.svelte';
 	import { browser } from '$app/environment';

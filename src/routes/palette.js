@@ -26,6 +26,37 @@ const EerieBlack = '#1F1F1F';
 const Onyx = '#2D2F34';
 const Charcoal = '#394356';
 
+// Gray Colors
+/* Gray Palette - neutral gray tones */
+const LightGray = '#E0E0E0';
+const BackgroundGray = '#3D3D3D'; // Lightened from #2A2A2A (about 1/3 toward white)
+const MediumGray = '#999999';
+const DarkGray = '#333333';
+const SlateBlueGray = '#8BA5C8'; // Light blue-gray (brighter)
+const SteelBlueGray = '#6B86AB'; // Medium blue-gray (brighter)
+const GraphiteBlueGray = '#4F6482'; // Dark blue-gray (brighter)
+
+// Sepia Colors
+/* Sepia Palette - warm vintage tones https://coolors.co/f4e8d8-d4a574-8b6914-704214-3d2817 */
+const Parchment = '#F4E8D8';
+const BurlyWood = '#D4A574';
+const DarkGoldenrod = '#8B6914';
+const SaddleBrown = '#704214';
+const DarkBrown = '#3D2817';
+const WarmCream = '#FBF5ED';
+const RustyBrown = '#A0522D';
+const VintageGold = '#B8860B';
+
+// Ocean Colors
+/* Ocean Palette - deep sea blues and aqua tones https://coolors.co/003d5b-30bced-7fb285-e8f1f5-00171f */
+const DeepBlue = '#003D5B';
+const AquaMarine = '#30BCED';
+const SeafoamGreen = '#7FB285';
+const FoamWhite = '#E8F1F5';
+const AbyssBlack = '#00171F';
+const TealBlue = '#006D77';
+const LightCyan = '#83C5BE';
+
 const Clear = '#00000000';
 
 /**
@@ -86,10 +117,87 @@ const darkScheme = [
   { varName: '--contrast-text-dark', color: Black },
 ];
 
-// Return the full theme JSON, with light and dark palettes included
+// Colors specific to sepia mode
+const sepiaScheme = [
+  { varName: '--main-blue', color: RustyBrown },
+  { varName: '--main-blue-light', color: VintageGold },
+  { varName: '--main-blue-alt', color: BurlyWood },
+  { varName: '--contrast-purple', color: DarkGoldenrod },
+  { varName: '--neutral-white', color: WarmCream },
+  { varName: '--neutral-black', color: DarkBrown },
+  { varName: '--neutral-gray', color: Parchment },
+  { varName: '--neutral-gray-op-50', color: opacity(Parchment, 50) },
+  { varName: '--neutral-gray-op-10', color: opacity(Parchment, 10) },
+  { varName: '--neutral-dark-gray', color: BurlyWood },
+  { varName: '--neutral-dark-gray-op-50', color: opacity(BurlyWood, 50) },
+  { varName: '--neutral-dark-gray-op-10', color: opacity(BurlyWood, 10) },
+  { varName: '--contrast-text-light', color: SaddleBrown },
+  { varName: '--contrast-text-dark', color: WarmCream },
+];
+
+// Colors specific to ocean mode
+const oceanScheme = [
+  { varName: '--main-blue', color: TealBlue },
+  { varName: '--main-blue-light', color: AquaMarine },
+  { varName: '--main-blue-alt', color: LightCyan },
+  { varName: '--contrast-purple', color: SeafoamGreen },
+  { varName: '--neutral-white', color: FoamWhite },
+  { varName: '--neutral-black', color: AbyssBlack },
+  { varName: '--neutral-gray', color: LightCyan },
+  { varName: '--neutral-gray-op-50', color: opacity(LightCyan, 50) },
+  { varName: '--neutral-gray-op-10', color: opacity(LightCyan, 10) },
+  { varName: '--neutral-dark-gray', color: TealBlue },
+  { varName: '--neutral-dark-gray-op-50', color: opacity(TealBlue, 50) },
+  { varName: '--neutral-dark-gray-op-10', color: opacity(TealBlue, 10) },
+  { varName: '--contrast-text-light', color: DeepBlue },
+  { varName: '--contrast-text-dark', color: FoamWhite },
+];
+
+// Colors specific to gray mode
+const grayScheme = [
+  { varName: '--main-blue', color: SlateBlueGray },
+  { varName: '--main-blue-light', color: SteelBlueGray },
+  { varName: '--main-blue-alt', color: GraphiteBlueGray },
+  { varName: '--contrast-purple', color: GraphiteBlueGray },
+  { varName: '--neutral-white', color: BackgroundGray },
+  { varName: '--neutral-black', color: LightGray },
+  { varName: '--neutral-gray', color: DarkGray },
+  { varName: '--neutral-gray-op-50', color: opacity(DarkGray, 50) },
+  { varName: '--neutral-gray-op-10', color: opacity(DarkGray, 10) },
+  { varName: '--neutral-dark-gray', color: GraphiteBlueGray },
+  { varName: '--neutral-dark-gray-op-50', color: opacity(GraphiteBlueGray, 50) },
+  { varName: '--neutral-dark-gray-op-10', color: opacity(GraphiteBlueGray, 10) },
+  { varName: '--contrast-text-light', color: LightGray },
+  { varName: '--contrast-text-dark', color: DarkGray },
+];
+
+// Return the full theme JSON with all palettes (dark first as default, then gray, light, sepia, and ocean)
 export const createPalette = () => {
   return {
-    light: lightScheme.concat(constantColors),
-    dark: darkScheme.concat(constantColors),
+    dark: {
+      colors: darkScheme.concat(constantColors),
+      icon: '🌙',
+      name: 'Dark',
+    },
+    gray: {
+      colors: grayScheme.concat(constantColors),
+      icon: '⚪',
+      name: 'Gray',
+    },
+    light: {
+      colors: lightScheme.concat(constantColors),
+      icon: '☀️',
+      name: 'Light',
+    },
+    sepia: {
+      colors: sepiaScheme.concat(constantColors),
+      icon: '📜',
+      name: 'Sepia',
+    },
+    ocean: {
+      colors: oceanScheme.concat(constantColors),
+      icon: '🌊',
+      name: 'Ocean',
+    },
   };
 };

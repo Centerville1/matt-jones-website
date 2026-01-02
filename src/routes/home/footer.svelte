@@ -1,5 +1,6 @@
 <script>
   import { themeMode } from '../../store';
+  import ThemeCycler from '$lib/components/ThemeCycler.svelte';
 
   /** @type {FileRecord | null} */
   export let resume = null;
@@ -158,6 +159,10 @@
             </a>
           </div>
         </nav>
+      </div>
+
+      <div class="theme-section">
+        <ThemeCycler />
       </div>
 
       <div class="github-section">
@@ -420,6 +425,11 @@
   .branding {
     font-size: 0.875rem;
     font-weight: 400;
+  }
+
+  .theme-section {
+    display: flex;
+    justify-content: center;
   }
 
   .github-section {

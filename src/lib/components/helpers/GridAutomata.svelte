@@ -41,6 +41,10 @@
   let currentGrid = new Uint8Array(gridWidth * gridHeight);
   let nextGrid = new Uint8Array(gridWidth * gridHeight);
 
+  // Track counts for each state (indexed by state ID)
+  /** @type {number[]} */
+  let stateCounts = new Array(config.states.length).fill(0);
+
   /** @type {HTMLCanvasElement} */
   let canvas;
 
@@ -355,6 +359,16 @@
   }
 
   /**
+   * Compute state counts from current grid
+   */
+  function computeStateCounts() {
+    stateCounts = new Array(config.states.length).fill(0);
+    for (let i = 0; i < currentGrid.length; i++) {
+      stateCounts[currentGrid[i]]++;
+    }
+  }
+
+  /**
    * Initialize the simulation
    */
   function initializeSimulation() {
@@ -385,6 +399,9 @@
       });
     }
 
+    // Compute initial state counts
+    computeStateCounts();
+
     render();
   }
 
@@ -408,6 +425,12 @@
           stateById
         );
         setCell(nextGrid, x, y, newState);
+
+        // Update state counts if state changed
+        if (newState !== currentState) {
+          stateCounts[currentState]--;
+          stateCounts[newState]++;
+        }
       }
     }
 
@@ -527,6 +550,35 @@
   }
 
   /**
+   * Format a count with padding after closing parenthesis
+   * @param {number} count
+   * @returns {string}
+   */
+  function formatCount(count) {
+    const str = count.toString();
+
+    // Format with thousand separators if needed
+    let formatted;
+    if (count < 1000) {
+      formatted = str;
+    } else {
+      const parts = [];
+      for (let i = str.length; i > 0; i -= 3) {
+        parts.unshift(str.substring(Math.max(0, i - 3), i));
+      }
+      formatted = parts.join(',');
+    }
+
+    // Calculate spaces needed: 5 - digit count - commas added
+    const digitCount = str.length;
+    const commaCount = Math.floor((str.length - 1) / 3);
+    const spacesNeeded = 5 - digitCount - commaCount;
+    const spaces = ' '.repeat(Math.max(0, spacesNeeded));
+
+    return formatted + ')' + spaces;
+  }
+
+  /**
    * Format a parameter value for display
    * @param {number | boolean | string} value
    * @returns {string}
@@ -588,13 +640,13 @@
   <canvas bind:this={canvas} width={canvasWidth} height={canvasHeight}></canvas>
 
   <div class="legend">
-    {#each config.states as state}
+    {#each config.states as state, index}
       <div class="legend-item">
         <span
           class="legend-box"
           style="background-color: rgb({state.color[0]}, {state.color[1]}, {state.color[2]});"
         ></span>
-        <span class="legend-label">{state.name}</span>
+        <span class="legend-label">{state.name} ({formatCount(stateCounts[index])}</span>
       </div>
     {/each}
   </div>
@@ -996,7 +1048,9 @@
   .legend-label {
     font-size: 0.875rem;
     color: var(--contrast-text-light);
-    white-space: nowrap;
+    white-space: pre;
+    font-family: monospace;
+    min-width: fit-content;
   }
 
   @media (max-width: 640px) {

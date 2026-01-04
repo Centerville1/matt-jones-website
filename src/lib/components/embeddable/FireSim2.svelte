@@ -188,15 +188,15 @@
 
         // Fire spreads from neighbors
         if (burningNeighbors > 0) {
-          if (Math.random() < burningNeighbors * getNum(params, 'fireSpread')) {
-            // Young trees catch fire easier
-            if (cellState === states.YOUNG_TREE) {
+          if (cellState === states.YOUNG_TREE) {
+            if (Math.random() < burningNeighbors * getNum(params, 'fireSpread')) {
+              // Young trees catch fire easier
               return states.FIRE_COOL;
             }
-            // Old trees are more resistant
-            else if (Math.random() < burningNeighbors * (getNum(params, 'fireSpread') / 2)) {
-              return states.FIRE_COOL;
-            }
+          }
+          // Old trees are more resistant
+          else if (Math.random() < burningNeighbors * (getNum(params, 'fireSpread') / 2)) {
+            return states.FIRE_COOL;
           }
         }
         // Spontaneous combustion

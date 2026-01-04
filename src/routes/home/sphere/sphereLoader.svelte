@@ -95,6 +95,24 @@
 
   onMount(() => {
     buildSphere(numLongLines, numLatLines);
+
+    // Preload home page images during the animation
+    const banner = new Image();
+    banner.src = '/pictures/banner.png';
+
+    // Preload other assets that might be needed
+    const logoLight = new Image();
+    logoLight.src = '/logo-light.png';
+    const logoLightNbg = new Image();
+    logoLightNbg.src = '/logo-light-nbg.png';
+
+    // Hide the loader just before navigation to prevent flash
+    setTimeout(() => {
+      const outerContainer = document.getElementById('outer-container');
+      if (outerContainer) {
+        outerContainer.style.opacity = '0';
+      }
+    }, 7500);
     setTimeout(goHome, 7600);
   });
 </script>

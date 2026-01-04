@@ -1,4 +1,5 @@
-import { timingSafeEqual } from 'crypto';
+import { timingSafeEqual, createHmac } from 'crypto';
+import { env } from '$env/dynamic/private';
 
 /**
  * In-memory storage for login attempts rate limiting
@@ -8,10 +9,70 @@ import { timingSafeEqual } from 'crypto';
 const loginAttempts = new Map();
 
 /**
- * In-memory storage for active sessions
- * @type {Set<string>}
+ * Get or generate a secret key for signing sessions
+ * @returns {string} Secret key
  */
-const activeSessions = new Set();
+function getSecretKey() {
+  const secret = env.SESSION_SECRET || env.ADMIN_PASSWORD;
+  if (!secret) {
+    throw new Error('SESSION_SECRET or ADMIN_PASSWORD must be set in environment variables');
+  }
+  return secret;
+}
+
+/**
+ * Create a signed session token with timestamp
+ * @returns {string} Signed session token
+ */
+export function createSession() {
+  const timestamp = Date.now();
+  const sessionData = JSON.stringify({ timestamp, authenticated: true });
+  const signature = createHmac('sha256', getSecretKey())
+    .update(sessionData)
+    .digest('hex');
+
+  return `${Buffer.from(sessionData).toString('base64')}.${signature}`;
+}
+
+/**
+ * Verify if a session token is valid and not expired
+ * @param {string} sessionToken - Session token to verify
+ * @returns {boolean} Whether session is valid
+ */
+export function verifySession(sessionToken) {
+  if (!sessionToken || typeof sessionToken !== 'string') {
+    return false;
+  }
+
+  try {
+    const [dataB64, signature] = sessionToken.split('.');
+    if (!dataB64 || !signature) {
+      return false;
+    }
+
+    // Verify signature
+    const expectedSignature = createHmac('sha256', getSecretKey())
+      .update(Buffer.from(dataB64, 'base64').toString())
+      .digest('hex');
+
+    if (!timingSafeEqual(Buffer.from(signature), Buffer.from(expectedSignature))) {
+      return false;
+    }
+
+    // Verify timestamp (7 days max)
+    const sessionData = JSON.parse(Buffer.from(dataB64, 'base64').toString());
+    const age = Date.now() - sessionData.timestamp;
+    const maxAge = 7 * 24 * 60 * 60 * 1000; // 7 days in milliseconds
+
+    if (age > maxAge) {
+      return false;
+    }
+
+    return sessionData.authenticated === true;
+  } catch {
+    return false;
+  }
+}
 
 /**
  * Constant-time password comparison to prevent timing attacks
@@ -64,35 +125,6 @@ export function checkRateLimit(ip) {
   attempt.count++;
   attempt.lastAttempt = now;
   return true;
-}
-
-/**
- * Create a new session token
- * @returns {string} Session token (UUID)
- */
-export function createSession() {
-  const sessionId = crypto.randomUUID();
-  activeSessions.add(sessionId);
-  return sessionId;
-}
-
-/**
- * Verify if a session token is valid
- * @param {string} sessionId - Session token to verify
- * @returns {boolean} Whether session is valid
- */
-export function verifySession(sessionId) {
-  return Boolean(sessionId && activeSessions.has(sessionId));
-}
-
-/**
- * Destroy a session
- * @param {string} sessionId - Session token to destroy
- */
-export function destroySession(sessionId) {
-  if (sessionId) {
-    activeSessions.delete(sessionId);
-  }
 }
 
 /**

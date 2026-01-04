@@ -163,6 +163,18 @@ export const componentRegistry = {
     props: {},
   },
 
+  Orbits: {
+    name: 'Orbits',
+    label: 'N-Body Orbital Mechanics',
+    description:
+      'Interactive gravitational physics simulation - fire bodies, watch orbits emerge, explore presets',
+    category: 'simulation',
+    component: () => import('./Orbits.svelte'),
+    consumesContext: false,
+    providesContext: [],
+    props: {},
+  },
+
   SphereControl: {
     name: 'SphereControl',
     label: '3D Sphere with Controls',

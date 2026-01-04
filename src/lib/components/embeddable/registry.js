@@ -394,6 +394,18 @@ export const componentRegistry = {
     },
   },
 
+  FireSim2: {
+    name: 'FireSim2',
+    label: 'Forest Fire Simulation v2 (Optimized)',
+    description:
+      'Optimized forest fire simulation using new grid automata engine - built-in controls',
+    category: 'simulation',
+    component: () => import('./FireSim2.svelte'),
+    consumesContext: false,
+    providesContext: [],
+    props: {},
+  },
+
   SphereControl: {
     name: 'SphereControl',
     label: '3D Sphere with Controls',

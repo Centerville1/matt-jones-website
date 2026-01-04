@@ -24,7 +24,7 @@
   });
 
   // Initialize parameters with defaults
-  /** @type {Record<string, number>} */
+  /** @type {Record<string, number | boolean | string>} */
   const paramValues = {};
   Object.keys(config.params).forEach(key => {
     paramValues[key] = config.params[key].default;
@@ -44,11 +44,11 @@
   /** @type {HTMLCanvasElement} */
   let canvas;
 
-  /** @type {CanvasRenderingContext2D} */
-  let ctx;
+  /** @type {CanvasRenderingContext2D | null} */
+  let ctx = null;
 
-  /** @type {ImageData} */
-  let imageData;
+  /** @type {ImageData | null} */
+  let imageData = null;
 
   let isPlaying = false;
   /** @type {number | null} */
@@ -64,6 +64,7 @@
   let actualFPS = 0;
   let frameCount = 0;
   let fpsLastTime = 0;
+  let isDestroyed = false;
 
   // Update minFrameTime when targetFPS changes
   $: minFrameTime = 1000 / targetFPS;
@@ -178,6 +179,68 @@
   }
 
   /**
+   * Simple 2D noise function for blob generation
+   * @param {number} x
+   * @param {number} y
+   * @param {number} seed
+   */
+  function noise2D(x, y, seed) {
+    const n = Math.sin(x * 12.9898 + y * 78.233 + seed) * 43758.5453;
+    return n - Math.floor(n);
+  }
+
+  /**
+   * Smooth interpolated noise
+   * @param {number} x
+   * @param {number} y
+   * @param {number} seed
+   */
+  function smoothNoise(x, y, seed) {
+    const intX = Math.floor(x);
+    const intY = Math.floor(y);
+    const fracX = x - intX;
+    const fracY = y - intY;
+
+    // Smooth interpolation
+    const u = fracX * fracX * (3 - 2 * fracX);
+    const v = fracY * fracY * (3 - 2 * fracY);
+
+    // Get corner values
+    const n00 = noise2D(intX, intY, seed);
+    const n10 = noise2D(intX + 1, intY, seed);
+    const n01 = noise2D(intX, intY + 1, seed);
+    const n11 = noise2D(intX + 1, intY + 1, seed);
+
+    // Bilinear interpolation
+    const nx0 = n00 * (1 - u) + n10 * u;
+    const nx1 = n01 * (1 - u) + n11 * u;
+    return nx0 * (1 - v) + nx1 * v;
+  }
+
+  /**
+   * Multi-octave noise for natural variation
+   * @param {number} x
+   * @param {number} y
+   * @param {number} seed
+   */
+  function multiOctaveNoise(x, y, seed) {
+    let value = 0;
+    let amplitude = 1;
+    let frequency = 1;
+    let maxValue = 0;
+
+    // 3 octaves for smooth, organic variation
+    for (let i = 0; i < 3; i++) {
+      value += smoothNoise(x * frequency, y * frequency, seed + i * 100) * amplitude;
+      maxValue += amplitude;
+      amplitude *= 0.5;
+      frequency *= 2;
+    }
+
+    return value / maxValue;
+  }
+
+  /**
    * Blob generation helper
    * @param {Uint8Array} grid
    * @param {number} stateId
@@ -187,16 +250,30 @@
     const centerX = Math.floor(Math.random() * gridWidth);
     const centerY = Math.floor(Math.random() * gridHeight);
 
-    const stretchX = 0.7 + Math.random() * 0.6;
-    const stretchY = 0.7 + Math.random() * 0.6;
+    // More extreme stretching for elongation
+    const stretchX = 0.4 + Math.random() * 1.2;
+    const stretchY = 0.4 + Math.random() * 1.2;
     const rotation = Math.random() * Math.PI * 2;
-    const irregularity = 0.3 + Math.random() * 0.4;
+    const irregularity = 0.3 + Math.random() * 0.5;
+    const noiseSeed = Math.random() * 1000;
 
     const baseRadius = maxSize / 2;
     const actualSize = baseRadius * (0.6 + Math.random() * 0.8);
 
     const cos = Math.cos(rotation);
     const sin = Math.sin(rotation);
+
+    // Generate 2-5 random "offshoot" directions for interesting protrusions
+    const numOffshoots = 2 + Math.floor(Math.random() * 4);
+    /** @type {Array<{angle: number, strength: number, width: number}>} */
+    const offshoots = [];
+    for (let i = 0; i < numOffshoots; i++) {
+      offshoots.push({
+        angle: Math.random() * Math.PI * 2,
+        strength: 0.3 + Math.random() * 0.7,
+        width: 0.3 + Math.random() * 0.5
+      });
+    }
 
     /**
      * @param {number} dx
@@ -210,11 +287,28 @@
       const distY = rotY / stretchY;
       const distance = Math.sqrt(distX * distX + distY * distY);
 
+      // Use multi-octave noise for smooth, organic edge variation
       const angle = Math.atan2(dy, dx);
-      const waviness = Math.sin(angle * 3 + centerX * 0.1) * irregularity +
-                      Math.cos(angle * 5 + centerY * 0.1) * irregularity * 0.5;
+      const noiseScale = 0.3;
+      const noise = multiOctaveNoise(
+        Math.cos(angle) * 3 + centerX * noiseScale,
+        Math.sin(angle) * 3 + centerY * noiseScale,
+        noiseSeed
+      );
 
-      const effectiveRadius = actualSize + waviness * actualSize;
+      // Add offshoot influence - creates protrusions in random directions
+      let offshootBonus = 0;
+      for (const offshoot of offshoots) {
+        const angleDiff = Math.abs(((angle - offshoot.angle + Math.PI) % (Math.PI * 2)) - Math.PI);
+        const directionality = Math.max(0, 1 - angleDiff / offshoot.width);
+        offshootBonus += directionality * offshoot.strength;
+      }
+
+      // Map noise from [0,1] to [-irregularity, +irregularity]
+      const waviness = (noise - 0.5) * 2 * irregularity;
+
+      // Combine base radius with waviness and offshoot bonus
+      const effectiveRadius = actualSize * (1 + waviness + offshootBonus);
       const distRatio = distance / effectiveRadius;
 
       if (distRatio < 0.7) return 0.95;
@@ -266,7 +360,8 @@
   function initializeSimulation() {
     if (!canvas) return;
 
-    ctx = /** @type {CanvasRenderingContext2D} */ (canvas.getContext('2d'));
+    ctx = canvas.getContext('2d');
+    if (!ctx) return;
     imageData = ctx.createImageData(canvasWidth, canvasHeight);
 
     // Initialize grid
@@ -361,7 +456,7 @@
    * @param {number} timestamp
    */
   function animate(timestamp) {
-    if (!isPlaying) return;
+    if (!isPlaying || isDestroyed) return;
 
     // Initialize timing on first frame
     if (lastUpdateTime === 0) {
@@ -433,10 +528,12 @@
 
   /**
    * Format a parameter value for display
-   * @param {number} value
+   * @param {number | boolean | string} value
    * @returns {string}
    */
   function formatParamValue(value) {
+    if (typeof value === 'boolean') return value ? 'true' : 'false';
+    if (typeof value === 'string') return value;
     if (value === 0) return '0';
 
     const absValue = Math.abs(value);
@@ -459,7 +556,7 @@
   $: {
     canvasWidth = gridWidth * scale;
     canvasHeight = gridHeight * scale;
-    if (canvas) {
+    if (canvas && !isDestroyed) {
       initializeSimulation();
     }
   }
@@ -475,7 +572,15 @@
   });
 
   onDestroy(() => {
+    isDestroyed = true;
     pause();
+    // Clean up references to help garbage collection
+    if (ctx) {
+      ctx = null;
+    }
+    imageData = null;
+    currentGrid = new Uint8Array(0);
+    nextGrid = new Uint8Array(0);
   });
 </script>
 
@@ -555,18 +660,42 @@
               </button>
             </div>
             {#each Object.entries(config.params) as [key, param]}
-              <div class="slider-group">
-                <label for={key}>
-                  {param.label}: {formatParamValue(paramValues[key])}
-                  <span class="default-value">Default: {formatParamValue(param.default)}</span>
-                  <input
-                    type="range"
-                    id={key}
-                    bind:value={paramValues[key]}
-                    min={param.min}
-                    max={param.max}
-                    step={param.step}
-                  />
+              <div class="slider-group" class:checkbox-group={param.type === 'boolean'}>
+                <label for={key} title={param.description || ''}>
+                  {#if param.type === 'boolean'}
+                    <input
+                      type="checkbox"
+                      id={key}
+                      checked={!!paramValues[key]}
+                      on:change={(e) => { paramValues[key] = e.currentTarget.checked; }}
+                    />
+                    {param.label}
+                  {:else if param.type === 'select'}
+                    {param.label}
+                    <select id={key} bind:value={paramValues[key]}>
+                      {#each param.options || [] as option}
+                        <option value={option.value}>{option.label}</option>
+                      {/each}
+                    </select>
+                  {:else if param.type === 'color'}
+                    {param.label}
+                    <input
+                      type="color"
+                      id={key}
+                      bind:value={paramValues[key]}
+                    />
+                  {:else}
+                    {param.label}: {formatParamValue(paramValues[key])}
+                    <span class="default-value">Default: {formatParamValue(param.default)}</span>
+                    <input
+                      type="range"
+                      id={key}
+                      bind:value={paramValues[key]}
+                      min={param.min}
+                      max={param.max}
+                      step={param.step}
+                    />
+                  {/if}
                 </label>
               </div>
             {/each}
@@ -711,6 +840,56 @@
 
   input[type="range"] {
     width: 100%;
+    cursor: pointer;
+    accent-color: var(--main-blue);
+  }
+
+  select {
+    width: 100%;
+    padding: 0.5rem;
+    font-size: 0.875rem;
+    background-color: var(--neutral-gray);
+    color: var(--contrast-text-light);
+    border: 1px solid var(--neutral-dark-gray-op-50);
+    border-radius: 6px;
+    cursor: pointer;
+  }
+
+  select:focus {
+    outline: none;
+    border-color: var(--main-blue);
+  }
+
+  input[type="color"] {
+    width: 100%;
+    height: 40px;
+    padding: 0.25rem;
+    background-color: var(--neutral-gray);
+    border: 1px solid var(--neutral-dark-gray-op-50);
+    border-radius: 6px;
+    cursor: pointer;
+  }
+
+  input[type="color"]:focus {
+    outline: none;
+    border-color: var(--main-blue);
+  }
+
+  .checkbox-group {
+    width: auto;
+    flex-direction: row;
+    align-items: center;
+  }
+
+  .checkbox-group label {
+    flex-direction: row;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  input[type="checkbox"] {
+    width: 20px;
+    height: 20px;
     cursor: pointer;
     accent-color: var(--main-blue);
   }

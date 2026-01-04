@@ -9,11 +9,14 @@
 /**
  * Defines a parameter that can be configured in the automata.
  * @typedef {Object} ParamDefinition
- * @property {number} default - Default value
- * @property {number} min - Minimum value
- * @property {number} max - Maximum value
- * @property {number} step - Step size for slider
+ * @property {('number'|'boolean'|'select'|'color')} type - Type of parameter control
+ * @property {number|boolean|string} default - Default value
+ * @property {number} [min] - Minimum value (number type only)
+ * @property {number} [max] - Maximum value (number type only)
+ * @property {number} [step] - Step size for slider (number type only)
+ * @property {Array<{value: number|string, label: string}>} [options] - Options for select type
  * @property {string} label - Display label
+ * @property {string} [description] - Optional tooltip description
  */
 
 /**
@@ -32,7 +35,7 @@
  * @param {number} y - Y coordinate
  * @param {number} width - Grid width
  * @param {number} height - Grid height
- * @param {Record<string, number>} params - Parameter values
+ * @param {Record<string, number | boolean | string>} params - Parameter values
  * @param {Record<string, number>} states - State ID lookup
  * @returns {number} Initial state ID
  */
@@ -43,7 +46,7 @@
  * @param {Uint8Array} grid - The grid array
  * @param {number} width - Grid width
  * @param {number} height - Grid height
- * @param {Record<string, number>} params - Parameter values
+ * @param {Record<string, number | boolean | string>} params - Parameter values
  * @param {Record<string, number>} states - State ID lookup
  * @param {Object} helpers - Helper functions
  * @param {function(Uint8Array, number, number): void} helpers.generateBlob - Generate a blob on the grid
@@ -61,7 +64,7 @@
  * @param {number} y - Y coordinate
  * @param {number} width - Grid width
  * @param {number} height - Grid height
- * @param {Record<string, number>} params - Parameter values
+ * @param {Record<string, number | boolean | string>} params - Parameter values
  * @param {Record<string, number>} states - State ID lookup
  * @returns {number} New state ID
  */

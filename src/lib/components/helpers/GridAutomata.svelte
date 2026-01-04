@@ -719,9 +719,7 @@
   canvas {
     display: block;
     max-width: 100%;
-    padding: 10px;
-    border: solid 1px var(--contrast-text-light);
-    border-radius: 20px;
+    border-radius: 8px;
     background-color: var(--neutral-black);
   }
 

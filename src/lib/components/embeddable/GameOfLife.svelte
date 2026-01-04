@@ -112,10 +112,13 @@
         pasteTemplate(17, 16, blinker);
       } else if (pattern === 2) {
         // Glider Gun (centered)
-        const gunWidth = gun[0].length;
-        const gunHeight = gun.length;
-        const startX = Math.floor((width - gunWidth) / 2) - 10;
-        const startY = Math.floor((height - gunHeight) / 2 - 10);
+        // const gunWidth = gun[0].length;
+        // const gunHeight = gun.length;
+        // const startX = Math.floor((width - gunWidth) / 2);
+        // const startY = Math.floor((height - gunHeight) / 2);
+        // Glider Gun (top left)
+        const startX = 10;
+        const startY = 10
         pasteTemplate(startX, startY, gun);
       }
       // Pattern 3 (Empty) and 0 (Random) are already handled by initializeCell

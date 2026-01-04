@@ -45,7 +45,7 @@
       },
       nearNeighborSprout: {
         type: 'number',
-        default: 0.001,
+        default: 0.0005,
         min: 0,
         max: 0.01,
         step: 0.0001,
@@ -54,7 +54,7 @@
       },
       treeGrow: {
         type: 'number',
-        default: 0.01,
+        default: 0.003,
         min: 0,
         max: 0.1,
         step: 0.001,
@@ -63,7 +63,7 @@
       },
       burnRepair: {
         type: 'number',
-        default: 0.1,
+        default: 0.04,
         min: 0,
         max: 1,
         step: 0.01,
@@ -81,7 +81,7 @@
       },
       spontaneousCombustion: {
         type: 'number',
-        default: 0.000004,
+        default: 0.000009,
         min: 0,
         max: 0.0001,
         step: 0.000001,
@@ -90,7 +90,7 @@
       },
       fireSpread: {
         type: 'number',
-        default: 0.33,
+        default: 0.3,
         min: 0,
         max: 1,
         step: 0.01,
@@ -108,7 +108,7 @@
       },
       lakeCount: {
         type: 'number',
-        default: 2,
+        default: 3,
         min: 0,
         max: 10,
         step: 1,
@@ -117,7 +117,7 @@
       },
       stoneSize: {
         type: 'number',
-        default: 6,
+        default: 10,
         min: 1,
         max: 50,
         step: 1,
@@ -126,7 +126,7 @@
       },
       lakeSize: {
         type: 'number',
-        default: 10,
+        default: 20,
         min: 1,
         max: 50,
         step: 1,
@@ -137,7 +137,7 @@
 
     defaultGridSize: { width: 100, height: 50 },
     defaultScale: 10,
-    targetFPS: 5,
+    targetFPS: 25,
     autoPlay: true,
     neighborhoodType: 'moore',
     neighborhoodRadius: 2,
@@ -146,7 +146,7 @@
       if (Math.random() < getNum(params, 'houseChance')) {
         return states.HOUSE;
       } else if (Math.random() < getNum(params, 'treeChance')) {
-        return states.OLD_TREE;
+        return states.YOUNG_TREE;
       }
       return states.BACKGROUND;
     },

@@ -9,6 +9,9 @@
    */
   const getNum = (params, key) => /** @type {number} */ (params[key]);
 
+  // Paint mode for mouse interaction
+  let paintMode = 'FIRE_COOL';
+
   /** @type {import('../helpers/GridAutomata.types.js').AutomataConfig} */
   const fireSimConfig = {
     states: [
@@ -23,6 +26,11 @@
       { id: 'FIRE_MED', color: [220, 50, 0, 255], name: 'Fire (Medium)' },
       { id: 'FIRE_HOT', color: [200, 0, 0, 255], name: 'Fire (Hot)' }
     ],
+
+    onMouseInteraction: (_x, _y, _currentState, states, _isInitialClick) => {
+      // Paint the selected state on click/drag
+      return states[paintMode];
+    },
 
     params: {
       treeChance: {
@@ -232,4 +240,82 @@
   };
 </script>
 
-<GridAutomata config={fireSimConfig} />
+<GridAutomata config={fireSimConfig}>
+  <div slot="toolbar" class="paint-toolbar">
+    <label for="paint-mode">
+      <span class="toolbar-label">Paint Mode:</span>
+      <select id="paint-mode" bind:value={paintMode}>
+        <option value="BACKGROUND">Empty Ground</option>
+        <option value="YOUNG_TREE">Young Tree</option>
+        <option value="OLD_TREE">Old Tree</option>
+        <option value="HOUSE">House</option>
+        <option value="STONE">Stone</option>
+        <option value="WATER">Water</option>
+        <option value="BURNT">Burnt Ground</option>
+        <option value="FIRE_COOL">Fire (Cool)</option>
+        <option value="FIRE_MED">Fire (Medium)</option>
+        <option value="FIRE_HOT">Fire (Hot)</option>
+      </select>
+    </label>
+    <p class="toolbar-hint">Click and drag on the canvas to paint cells</p>
+  </div>
+</GridAutomata>
+
+<style>
+  .paint-toolbar {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .paint-toolbar label {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-size: 0.95rem;
+    color: var(--neutral-black);
+  }
+
+  .toolbar-label {
+    font-weight: 600;
+    min-width: 100px;
+  }
+
+  .paint-toolbar select {
+    flex: 1;
+    padding: 0.5rem;
+    font-size: 0.9rem;
+    background-color: var(--neutral-gray);
+    color: var(--contrast-text-light);
+    border: 1px solid var(--neutral-dark-gray-op-50);
+    border-radius: 6px;
+    cursor: pointer;
+  }
+
+  .paint-toolbar select:focus {
+    outline: none;
+    border-color: var(--main-blue);
+  }
+
+  .toolbar-hint {
+    margin: 0;
+    font-size: 0.8rem;
+    color: var(--neutral-dark-gray);
+    font-style: italic;
+  }
+
+  @media (max-width: 640px) {
+    .paint-toolbar label {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+
+    .toolbar-label {
+      min-width: auto;
+    }
+
+    .paint-toolbar select {
+      width: 100%;
+    }
+  }
+</style>

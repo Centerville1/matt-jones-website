@@ -16,6 +16,11 @@
       { id: 'ALIVE', color: [0, 150, 255, 255], name: 'Alive' }
     ],
 
+    onMouseInteraction: (_x, _y, currentState, states, _isInitialClick) => {
+      // Toggle between ALIVE and DEAD on click/drag
+      return currentState === states.ALIVE ? states.DEAD : states.ALIVE;
+    },
+
     params: {
       initialPattern: {
         type: 'select',
@@ -147,4 +152,23 @@
   };
 </script>
 
-<GridAutomata config={gameOfLifeConfig} />
+<GridAutomata config={gameOfLifeConfig}>
+  <div slot="toolbar" class="game-toolbar">
+    <p class="toolbar-hint">Click and drag to toggle cells</p>
+  </div>
+</GridAutomata>
+
+<style>
+  .game-toolbar {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .toolbar-hint {
+    margin: 0;
+    font-size: 0.9rem;
+    color: var(--neutral-dark-gray);
+    font-style: italic;
+  }
+</style>

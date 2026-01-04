@@ -60,6 +60,13 @@
   let lastUpdateTime = 0;
   let showAdvancedParams = false;
 
+  // Mouse interaction state
+  let isMouseDown = false;
+  let isInitialClick = true;
+  let lastPaintedX = -1;
+  let lastPaintedY = -1;
+  let wasPlayingBeforeDrag = false;
+
   // Frame rate control
   let targetFPS = config.targetFPS || 20;
   let minFrameTime = 1000 / targetFPS; // Minimum time between frames in ms
@@ -550,6 +557,123 @@
   }
 
   /**
+   * Convert mouse event to grid coordinates
+   * @param {MouseEvent} event
+   * @returns {{x: number, y: number} | null}
+   */
+  function getGridCoordinates(event) {
+    if (!canvas) return null;
+
+    const rect = canvas.getBoundingClientRect();
+    const canvasX = event.clientX - rect.left;
+    const canvasY = event.clientY - rect.top;
+
+    // Convert canvas pixel to grid coordinates
+    const gridX = Math.floor((canvasX / rect.width) * gridWidth);
+    const gridY = Math.floor((canvasY / rect.height) * gridHeight);
+
+    // Bounds check
+    if (gridX < 0 || gridX >= gridWidth || gridY < 0 || gridY >= gridHeight) {
+      return null;
+    }
+
+    return { x: gridX, y: gridY };
+  }
+
+  /**
+   * Handle mouse down on canvas
+   * @param {MouseEvent} event
+   */
+  function handleMouseDown(event) {
+    if (!config.onMouseInteraction) return;
+
+    const coords = getGridCoordinates(event);
+    if (!coords) return;
+
+    // Pause simulation during drag
+    wasPlayingBeforeDrag = isPlaying;
+    if (isPlaying) {
+      pause();
+    }
+
+    isMouseDown = true;
+    isInitialClick = true;
+    lastPaintedX = coords.x;
+    lastPaintedY = coords.y;
+
+    const currentState = getCell(currentGrid, coords.x, coords.y);
+    const newState = config.onMouseInteraction(
+      coords.x,
+      coords.y,
+      currentState,
+      stateById,
+      isInitialClick
+    );
+
+    if (newState !== null && newState !== undefined) {
+      setCell(currentGrid, coords.x, coords.y, newState);
+      // Update state counts
+      stateCounts[currentState]--;
+      stateCounts[newState]++;
+      render();
+    }
+  }
+
+  /**
+   * Handle mouse move on canvas (for dragging)
+   * @param {MouseEvent} event
+   */
+  function handleMouseMove(event) {
+    if (!isMouseDown || !config.onMouseInteraction) return;
+
+    const coords = getGridCoordinates(event);
+    if (!coords) return;
+
+    // Skip if we're still on the same cell
+    if (coords.x === lastPaintedX && coords.y === lastPaintedY) {
+      return;
+    }
+
+    lastPaintedX = coords.x;
+    lastPaintedY = coords.y;
+
+    const currentState = getCell(currentGrid, coords.x, coords.y);
+    const newState = config.onMouseInteraction(
+      coords.x,
+      coords.y,
+      currentState,
+      stateById,
+      isInitialClick
+    );
+
+    isInitialClick = false;
+
+    if (newState !== null && newState !== undefined && newState !== currentState) {
+      setCell(currentGrid, coords.x, coords.y, newState);
+      // Update state counts
+      stateCounts[currentState]--;
+      stateCounts[newState]++;
+      render();
+    }
+  }
+
+  /**
+   * Handle mouse up (end dragging)
+   */
+  function handleMouseUp() {
+    isMouseDown = false;
+    isInitialClick = true;
+    lastPaintedX = -1;
+    lastPaintedY = -1;
+
+    // Resume simulation if it was playing before drag
+    if (wasPlayingBeforeDrag) {
+      play();
+      wasPlayingBeforeDrag = false;
+    }
+  }
+
+  /**
    * Format a count with padding after closing parenthesis
    * @param {number} count
    * @returns {string}
@@ -637,7 +761,16 @@
 </script>
 
 <div class="automata-container">
-  <canvas bind:this={canvas} width={canvasWidth} height={canvasHeight}></canvas>
+  <canvas
+    bind:this={canvas}
+    width={canvasWidth}
+    height={canvasHeight}
+    on:mousedown={handleMouseDown}
+    on:mousemove={handleMouseMove}
+    on:mouseup={handleMouseUp}
+    on:mouseleave={handleMouseUp}
+    style:cursor={config.onMouseInteraction ? 'crosshair' : 'default'}
+  ></canvas>
 
   <div class="legend">
     {#each config.states as state, index}
@@ -653,6 +786,12 @@
 
   <div class="controls">
     <h3 class="controls-title">Automata Controls</h3>
+
+    {#if $$slots.toolbar}
+      <div class="custom-toolbar">
+        <slot name="toolbar"></slot>
+      </div>
+    {/if}
 
     <div class="fps-display">
       {#if isPlaying}
@@ -791,6 +930,17 @@
     font-weight: 600;
     color: var(--contrast-text-light);
     text-align: center;
+  }
+
+  .custom-toolbar {
+    margin-bottom: 1rem;
+    padding: 1rem;
+    background-color: var(--neutral-white);
+    border-radius: 6px;
+    border: 1px solid var(--neutral-dark-gray-op-50);
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
   }
 
   .control-row {

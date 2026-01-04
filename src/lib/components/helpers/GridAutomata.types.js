@@ -70,6 +70,17 @@
  */
 
 /**
+ * Mouse interaction handler for grid cells.
+ * @callback MouseInteractionFn
+ * @param {number} x - Grid X coordinate
+ * @param {number} y - Grid Y coordinate
+ * @param {number} currentState - Current cell state
+ * @param {Record<string, number>} states - State ID lookup
+ * @param {boolean} isInitialClick - True on first click, false during drag
+ * @returns {number | null} New state ID, or null to leave unchanged
+ */
+
+/**
  * Configuration for a grid automata simulation.
  * @typedef {Object} AutomataConfig
  * @property {StateDefinition[]} states - Array of state definitions
@@ -83,6 +94,7 @@
  * @property {InitializeCellFn} initializeCell - Initialize a cell
  * @property {PostInitializeFn} [postInitialize] - Post-process grid
  * @property {UpdateCellFn} updateCell - Update rule
+ * @property {MouseInteractionFn} [onMouseInteraction] - Optional mouse click/drag handler
  */
 
 export {};

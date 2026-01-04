@@ -41,6 +41,10 @@
   let showTrails = true;
   let isPaused = false;
 
+  // Merge mode settings
+  let mergeMode = false;
+  let mergeDistance = 5;
+
   // Animation control
   /** @type {number | null} */
   let animationFrameId = null;
@@ -369,6 +373,40 @@
   }
 
   /**
+   * Merge two bodies using conservation of momentum
+   * @param {Body} body1
+   * @param {Body} body2
+   * @returns {Body} The merged body
+   */
+  function mergeBodies(body1, body2) {
+    // Determine which body is larger (keeps its name and color)
+    const larger = body1.mass >= body2.mass ? body1 : body2;
+    const smaller = body1.mass >= body2.mass ? body2 : body1;
+
+    // Conservation of momentum: p_total = m1*v1 + m2*v2
+    const totalMass = body1.mass + body2.mass;
+    const newDx = (body1.mass * body1.dx + body2.mass * body2.dx) / totalMass;
+    const newDy = (body1.mass * body1.dy + body2.mass * body2.dy) / totalMass;
+
+    // Center of mass position
+    const newX = (body1.mass * body1.x + body2.mass * body2.x) / totalMass;
+    const newY = (body1.mass * body1.y + body2.mass * body2.y) / totalMass;
+
+    // Create merged body
+    return {
+      x: newX,
+      y: newY,
+      dx: newDx,
+      dy: newDy,
+      mass: totalMass,
+      color: larger.color,
+      radius: Math.max(4, Math.min(25, totalMass * 0.5)),
+      name: larger.name,
+      fixed: body1.fixed || body2.fixed, // Fixed if either was fixed
+    };
+  }
+
+  /**
    * Update velocity for a body based on gravitational forces
    * @param {Body} currentBody
    */
@@ -450,9 +488,54 @@
    * Update simulation by one step
    */
   function updateSimulation() {
-    // Update velocities for all bodies
-    for (const body of bodies) {
-      updateVelocity(body);
+    // Track bodies to merge during velocity updates
+    const mergedIndices = new Set();
+    const newMergedBodies = [];
+
+    // Update velocities for all bodies and check for merges
+    for (let i = 0; i < bodies.length; i++) {
+      if (mergedIndices.has(i)) continue; // Skip already merged bodies
+
+      const body = bodies[i];
+
+      if (!body.fixed && mergeMode) {
+        // Check for merges while updating velocity
+        let currentBody = body;
+
+        for (let j = i + 1; j < bodies.length; j++) {
+          if (mergedIndices.has(j)) continue;
+
+          const otherBody = bodies[j];
+          const distance = getDistance(currentBody, otherBody);
+
+          if (distance <= mergeDistance) {
+            // Merge the bodies
+            currentBody = mergeBodies(currentBody, otherBody);
+            mergedIndices.add(j);
+          }
+        }
+
+        // If we merged, store the new merged body
+        if (mergedIndices.size > 0 && currentBody !== body) {
+          newMergedBodies.push({ index: i, body: currentBody });
+        }
+      }
+
+      // Calculate gravitational forces for non-merged bodies
+      if (!mergedIndices.has(i)) {
+        updateVelocity(bodies[i]);
+      }
+    }
+
+    // Replace merged bodies
+    for (const { index, body } of newMergedBodies) {
+      bodies[index] = body;
+    }
+
+    // Remove merged bodies (from highest index to lowest to preserve indices)
+    const indicesToRemove = Array.from(mergedIndices).sort((a, b) => b - a);
+    for (const index of indicesToRemove) {
+      bodies.splice(index, 1);
     }
 
     // Update positions and draw trails
@@ -1121,6 +1204,28 @@ Mass: ${cannonMass.toFixed(1)}`;
       </div>
     </div>
 
+    <div class="control-row">
+      <label class="checkbox-label">
+        <input type="checkbox" bind:checked={mergeMode} />
+        Merge Mode
+      </label>
+      {#if mergeMode}
+        <div class="slider-group inline-slider">
+          <label for="merge-distance">
+            Merge Distance: {mergeDistance}
+            <input
+              type="range"
+              id="merge-distance"
+              bind:value={mergeDistance}
+              min="3"
+              max="100"
+              step="1"
+            />
+          </label>
+        </div>
+      {/if}
+    </div>
+
     <div class="keyboard-hints">
       <p><strong>Keyboard Shortcuts:</strong></p>
       <p>
@@ -1354,6 +1459,12 @@ Mass: ${cannonMass.toFixed(1)}`;
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
+  }
+
+  .slider-group.inline-slider {
+    width: auto;
+    flex: 1;
+    min-width: 200px;
   }
 
   input[type='range'] {

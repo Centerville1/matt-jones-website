@@ -24,7 +24,8 @@
     : post?.content || null;
 
   // Track background pattern
-  let backgroundPattern = form?.data?.background || post?.background || 'blocks';
+  let backgroundPattern =
+    form?.data?.background || post?.background || 'blocks';
 
   // Track selected tags - use existing tags or form data
   let selectedTagIds =
@@ -39,12 +40,19 @@
   let selectedHeaderImagePath = '';
 
   // Initialize from form data or post data
-  if (form?.data?.headerImageId !== undefined && form.data.headerImageId !== '') {
+  if (
+    form?.data?.headerImageId !== undefined &&
+    form.data.headerImageId !== ''
+  ) {
     const imageId = parseInt(String(form.data.headerImageId), 10);
-    const image = data.images.find((/** @type {any} */ img) => img.id === imageId);
+    const image = data.images.find(
+      (/** @type {any} */ img) => img.id === imageId,
+    );
     selectedHeaderImagePath = image ? image.path : '';
   } else if (post?.headerImageId) {
-    const image = data.images.find((/** @type {any} */ img) => img.id === post.headerImageId);
+    const image = data.images.find(
+      (/** @type {any} */ img) => img.id === post.headerImageId,
+    );
     selectedHeaderImagePath = image ? image.path : '';
   }
 
@@ -79,12 +87,18 @@
    * @param {any} tag
    */
   function removeTag(tag) {
-    selectedTagIds = selectedTagIds.filter((/** @type {number} */ id) => id !== tag.id);
+    selectedTagIds = selectedTagIds.filter(
+      (/** @type {number} */ id) => id !== tag.id,
+    );
   }
 
   // Reactive declarations for selected and available tags
-  $: selectedTags = data.tags.filter((/** @type {any} */ tag) => selectedTagIds.includes(tag.id));
-  $: availableTags = data.tags.filter((/** @type {any} */ tag) => !selectedTagIds.includes(tag.id));
+  $: selectedTags = data.tags.filter((/** @type {any} */ tag) =>
+    selectedTagIds.includes(tag.id),
+  );
+  $: availableTags = data.tags.filter(
+    (/** @type {any} */ tag) => !selectedTagIds.includes(tag.id),
+  );
 
   /**
    * Handle header image selection - receives path from ImagePicker
@@ -96,7 +110,11 @@
 
   // Reactive: Convert path back to ID for form submission
   $: selectedHeaderImageId = selectedHeaderImagePath
-    ? String(data.images.find((/** @type {any} */ img) => img.path === selectedHeaderImagePath)?.id || '')
+    ? String(
+        data.images.find(
+          (/** @type {any} */ img) => img.path === selectedHeaderImagePath,
+        )?.id || '',
+      )
     : '';
 
   // Helper to get field value (form data, post data, or default)
@@ -182,7 +200,9 @@
     {#if form?.errors?.content}
       <p class="error">{form.errors.content}</p>
     {/if}
-    <small>Use the 🎨 button in the editor toolbar to change the background pattern</small>
+    <small
+      >Use the 🎨 button in the editor toolbar to change the background pattern</small
+    >
   </div>
 
   <!-- Header Image -->
@@ -209,7 +229,9 @@
         {/each}
       </div>
     {:else}
-      <p class="no-tags-message">No tags selected. Choose from available tags below.</p>
+      <p class="no-tags-message">
+        No tags selected. Choose from available tags below.
+      </p>
     {/if}
 
     <!-- Available tags to add -->
@@ -233,7 +255,9 @@
     <input type="hidden" name="tagIds" value={selectedTagIds.join(',')} />
 
     {#if data.tags.length === 0}
-      <small>No tags available. <a href="/admin/blog/tags">Create tags</a></small>
+      <small
+        >No tags available. <a href="/admin/blog/tags">Create tags</a></small
+      >
     {/if}
   </div>
 

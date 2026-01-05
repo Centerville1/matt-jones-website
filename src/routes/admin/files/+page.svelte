@@ -82,7 +82,13 @@
     >
       <div class="form-group">
         <label for="file">File (PDF, DOC, DOCX, TXT - Max 5MB)</label>
-        <input type="file" id="file" name="file" accept=".pdf,.doc,.docx,.txt" required />
+        <input
+          type="file"
+          id="file"
+          name="file"
+          accept=".pdf,.doc,.docx,.txt"
+          required
+        />
       </div>
 
       <div class="form-group">

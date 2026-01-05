@@ -78,11 +78,16 @@
   {:else}
     <div class="submissions-list">
       {#each data.submissions as submission (submission.id)}
-        <div class="submission-card" class:unread={submission.status === 'unread'}>
+        <div
+          class="submission-card"
+          class:unread={submission.status === 'unread'}
+        >
           <div class="submission-header">
             <div class="submission-meta">
               <h3>{submission.name}</h3>
-              <a href="mailto:{submission.email}" class="email-link">{submission.email}</a>
+              <a href="mailto:{submission.email}" class="email-link"
+                >{submission.email}</a
+              >
               <p class="date">{formatDate(submission.submittedAt)}</p>
             </div>
 
@@ -186,7 +191,9 @@
               method="POST"
               action="?/delete"
               use:enhance={() => {
-                if (!confirm('Are you sure you want to delete this submission?')) {
+                if (
+                  !confirm('Are you sure you want to delete this submission?')
+                ) {
                   return async ({ update }) => {
                     await update({ reset: false });
                   };

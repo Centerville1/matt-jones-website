@@ -32,13 +32,19 @@
           <li class:active={$page.url.pathname.startsWith('/admin/portfolio')}>
             <a href="/admin/portfolio">Portfolio Items</a>
           </li>
-          <li class:active={$page.url.pathname === '/admin/blog' && !$page.url.pathname.includes('/tags') && !$page.url.pathname.includes('/series')}>
+          <li
+            class:active={$page.url.pathname === '/admin/blog' &&
+              !$page.url.pathname.includes('/tags') &&
+              !$page.url.pathname.includes('/series')}
+          >
             <a href="/admin/blog">Blog Posts</a>
           </li>
           <li class:active={$page.url.pathname.startsWith('/admin/blog/tags')}>
             <a href="/admin/blog/tags" class="sub-nav">Tags</a>
           </li>
-          <li class:active={$page.url.pathname.startsWith('/admin/blog/series')}>
+          <li
+            class:active={$page.url.pathname.startsWith('/admin/blog/series')}
+          >
             <a href="/admin/blog/series" class="sub-nav">Series</a>
           </li>
           <li class:active={$page.url.pathname.startsWith('/admin/bios')}>
@@ -52,6 +58,11 @@
           </li>
           <li class:active={$page.url.pathname.startsWith('/admin/contact')}>
             <a href="/admin/contact">Contact Submissions</a>
+          </li>
+
+          <li class="section-header">Game Tools</li>
+          <li class:active={$page.url.pathname.startsWith('/admin/sprites')}>
+            <a href="/admin/sprites">Sprite Editor</a>
           </li>
         </ul>
       </nav>
@@ -147,6 +158,18 @@
 
   nav li {
     margin: 0;
+  }
+
+  nav li.section-header {
+    padding: 20px 20px 8px 20px;
+    margin-top: 12px;
+    font-size: 0.75em;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--neutral-black);
+    opacity: 0.6;
+    border-top: 1px solid var(--neutral-dark-gray-op-50);
   }
 
   nav a {

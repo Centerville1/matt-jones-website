@@ -147,21 +147,22 @@ export const actions = {
         excerpt: /** @type {string} */ (excerpt).trim(),
         content: contentJson,
         background:
-          background && typeof background === 'string'
-            ? background
-            : 'blocks',
+          background && typeof background === 'string' ? background : 'blocks',
         headerImageId:
           headerImageId && typeof headerImageId === 'string'
             ? parseInt(headerImageId, 10)
             : undefined,
-        status:
-          status && typeof status === 'string' ? status : 'draft',
+        status: status && typeof status === 'string' ? status : 'draft',
         authorName:
-          authorName && typeof authorName === 'string' && authorName.trim() !== ''
+          authorName &&
+          typeof authorName === 'string' &&
+          authorName.trim() !== ''
             ? authorName.trim()
             : 'Matt Jones',
         canonicalUrl:
-          canonicalUrl && typeof canonicalUrl === 'string' && canonicalUrl.trim() !== ''
+          canonicalUrl &&
+          typeof canonicalUrl === 'string' &&
+          canonicalUrl.trim() !== ''
             ? canonicalUrl.trim()
             : undefined,
         seriesId:

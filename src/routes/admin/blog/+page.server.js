@@ -18,7 +18,7 @@ export async function load({ locals }) {
     posts.map(async (post) => {
       const postTags = await getTagsForPost(post.id);
       return { ...post, tags: postTags };
-    })
+    }),
   );
 
   return {

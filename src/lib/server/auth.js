@@ -15,7 +15,9 @@ const loginAttempts = new Map();
 function getSecretKey() {
   const secret = env.SESSION_SECRET || env.ADMIN_PASSWORD;
   if (!secret) {
-    throw new Error('SESSION_SECRET or ADMIN_PASSWORD must be set in environment variables');
+    throw new Error(
+      'SESSION_SECRET or ADMIN_PASSWORD must be set in environment variables',
+    );
   }
   return secret;
 }
@@ -55,7 +57,9 @@ export function verifySession(sessionToken) {
       .update(Buffer.from(dataB64, 'base64').toString())
       .digest('hex');
 
-    if (!timingSafeEqual(Buffer.from(signature), Buffer.from(expectedSignature))) {
+    if (
+      !timingSafeEqual(Buffer.from(signature), Buffer.from(expectedSignature))
+    ) {
       return false;
     }
 

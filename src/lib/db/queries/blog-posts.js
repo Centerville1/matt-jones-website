@@ -76,7 +76,10 @@ export async function getFeaturedPosts() {
     .from(blogPosts)
     .leftJoin(images, eq(blogPosts.headerImageId, images.id))
     .where(
-      and(eq(blogPosts.status, 'published'), isNotNull(blogPosts.featuredOrder))
+      and(
+        eq(blogPosts.status, 'published'),
+        isNotNull(blogPosts.featuredOrder),
+      ),
     )
     .orderBy(blogPosts.featuredOrder)
     .all();
@@ -185,7 +188,7 @@ export async function getPostsBySeries(seriesId) {
     .from(blogPosts)
     .leftJoin(images, eq(blogPosts.headerImageId, images.id))
     .where(
-      and(eq(blogPosts.status, 'published'), eq(blogPosts.seriesId, seriesId))
+      and(eq(blogPosts.status, 'published'), eq(blogPosts.seriesId, seriesId)),
     )
     .orderBy(blogPosts.seriesOrder)
     .all();

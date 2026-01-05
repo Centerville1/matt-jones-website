@@ -187,7 +187,9 @@
       if (!comp.instance && comp.target) {
         try {
           // Get or create context store for this component
-          const contextStore = comp.contextId ? getContextStore(comp.contextId) : null;
+          const contextStore = comp.contextId
+            ? getContextStore(comp.contextId)
+            : null;
 
           // Mount the Svelte component into its target container
           comp.instance = mount(comp.component, {

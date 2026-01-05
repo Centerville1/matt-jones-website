@@ -24,7 +24,7 @@
       { id: 'BURNT', color: [80, 130, 130, 255], name: 'Burnt Ground' },
       { id: 'FIRE_COOL', color: [255, 126, 42, 255], name: 'Fire (Cool)' },
       { id: 'FIRE_MED', color: [220, 50, 0, 255], name: 'Fire (Medium)' },
-      { id: 'FIRE_HOT', color: [200, 0, 0, 255], name: 'Fire (Hot)' }
+      { id: 'FIRE_HOT', color: [200, 0, 0, 255], name: 'Fire (Hot)' },
     ],
 
     onMouseInteraction: (_x, _y, _currentState, states, _isInitialClick) => {
@@ -40,7 +40,8 @@
         max: 0.2,
         step: 0.01,
         label: 'Initial Tree Density',
-        description: 'Probability that each cell starts as a tree when the simulation is initialized'
+        description:
+          'Probability that each cell starts as a tree when the simulation is initialized',
       },
       treeSprout: {
         type: 'number',
@@ -49,7 +50,8 @@
         max: 0.0001,
         step: 0.000000001,
         label: 'Tree Sprout Base Rate',
-        description: 'Base probability per frame that a tree will sprout on empty ground (multiplied by neighbor count)'
+        description:
+          'Base probability per frame that a tree will sprout on empty ground (multiplied by neighbor count)',
       },
       nearNeighborSprout: {
         type: 'number',
@@ -58,7 +60,8 @@
         max: 0.01,
         step: 0.0001,
         label: 'Neighbor Sprout Multiplier',
-        description: 'Multiplier applied to sprout rate for each neighboring tree (encourages forest clustering)'
+        description:
+          'Multiplier applied to sprout rate for each neighboring tree (encourages forest clustering)',
       },
       treeGrow: {
         type: 'number',
@@ -67,7 +70,8 @@
         max: 0.1,
         step: 0.001,
         label: 'Tree Growth Rate',
-        description: 'Probability per frame that a young tree matures into an old tree'
+        description:
+          'Probability per frame that a young tree matures into an old tree',
       },
       burnRepair: {
         type: 'number',
@@ -76,7 +80,8 @@
         max: 1,
         step: 0.01,
         label: 'Burn Repair Rate',
-        description: 'Probability per frame that burnt ground recovers back to empty ground'
+        description:
+          'Probability per frame that burnt ground recovers back to empty ground',
       },
       houseChance: {
         type: 'number',
@@ -85,7 +90,8 @@
         max: 0.1,
         step: 0.001,
         label: 'Initial House Density',
-        description: 'Probability that each cell starts as a house when the simulation is initialized'
+        description:
+          'Probability that each cell starts as a house when the simulation is initialized',
       },
       spontaneousCombustion: {
         type: 'number',
@@ -94,7 +100,8 @@
         max: 0.0001,
         step: 0.000001,
         label: 'Spontaneous Combustion',
-        description: 'Probability per frame that a tree spontaneously catches fire (like lightning strikes)'
+        description:
+          'Probability per frame that a tree spontaneously catches fire (like lightning strikes)',
       },
       fireSpread: {
         type: 'number',
@@ -103,7 +110,8 @@
         max: 1,
         step: 0.01,
         label: 'Fire Spread Chance',
-        description: 'Probability that fire spreads from a burning cell to an adjacent tree'
+        description:
+          'Probability that fire spreads from a burning cell to an adjacent tree',
       },
       stoneCount: {
         type: 'number',
@@ -112,7 +120,8 @@
         max: 50,
         step: 1,
         label: 'Initial Stone Blob Multiplier',
-        description: 'Multiplier for stone formations (base: 0-10 random blobs per reset) [reset required]'
+        description:
+          'Multiplier for stone formations (base: 0-10 random blobs per reset) [reset required]',
       },
       lakeCount: {
         type: 'number',
@@ -121,7 +130,8 @@
         max: 10,
         step: 1,
         label: 'Initial Lake Count Multiplier',
-        description: 'Multiplier for water lakes (base: 0-2 random lakes per reset) [reset required]'
+        description:
+          'Multiplier for water lakes (base: 0-2 random lakes per reset) [reset required]',
       },
       stoneSize: {
         type: 'number',
@@ -130,7 +140,8 @@
         max: 50,
         step: 1,
         label: 'Stone Blob Max Size',
-        description: 'Maximum size for each stone formation (affects blob generation radius) [reset required]'
+        description:
+          'Maximum size for each stone formation (affects blob generation radius) [reset required]',
       },
       lakeSize: {
         type: 'number',
@@ -139,8 +150,9 @@
         max: 50,
         step: 1,
         label: 'Lake Max Size',
-        description: 'Maximum size for each water lake (affects blob generation radius) [reset required]'
-      }
+        description:
+          'Maximum size for each water lake (affects blob generation radius) [reset required]',
+      },
     },
 
     defaultGridSize: { width: 100, height: 50 },
@@ -161,7 +173,9 @@
 
     postInitialize: (grid, _width, _height, params, states, helpers) => {
       // Add stone blobs
-      const numStones = Math.floor(Math.random() * getNum(params, 'stoneCount'));
+      const numStones = Math.floor(
+        Math.random() * getNum(params, 'stoneCount'),
+      );
       for (let i = 0; i < numStones; i++) {
         helpers.generateBlob(grid, states.STONE, getNum(params, 'stoneSize'));
       }
@@ -176,34 +190,51 @@
     updateCell: (cellState, neighbors, x, y, width, height, params, states) => {
       // Background: trees can sprout (uses full radius 2 neighborhood)
       if (cellState === states.BACKGROUND) {
-        const treeNeighbors = neighbors.count([states.YOUNG_TREE, states.OLD_TREE]);
-        if (Math.random() < getNum(params, 'treeSprout') + treeNeighbors * getNum(params, 'nearNeighborSprout')) {
+        const treeNeighbors = neighbors.count([
+          states.YOUNG_TREE,
+          states.OLD_TREE,
+        ]);
+        if (
+          Math.random() <
+          getNum(params, 'treeSprout') +
+            treeNeighbors * getNum(params, 'nearNeighborSprout')
+        ) {
           return states.YOUNG_TREE;
         }
       }
 
       // Trees: can catch fire or grow
-      else if (cellState === states.YOUNG_TREE || cellState === states.OLD_TREE) {
+      else if (
+        cellState === states.YOUNG_TREE ||
+        cellState === states.OLD_TREE
+      ) {
         // Count burning neighbors (only radius 1 for fire spread)
         // Filter to neighbors within Chebyshev distance 1 (3x3 grid)
         const burningNeighbors = neighbors.grid
           .filter(([dx, dy]) => Math.max(Math.abs(dx), Math.abs(dy)) <= 1)
-          .filter(([, , state]) =>
-            state === states.FIRE_COOL ||
-            state === states.FIRE_MED ||
-            state === states.FIRE_HOT
+          .filter(
+            ([, , state]) =>
+              state === states.FIRE_COOL ||
+              state === states.FIRE_MED ||
+              state === states.FIRE_HOT,
           ).length;
 
         // Fire spreads from neighbors
         if (burningNeighbors > 0) {
           if (cellState === states.YOUNG_TREE) {
-            if (Math.random() < burningNeighbors * getNum(params, 'fireSpread')) {
+            if (
+              Math.random() <
+              burningNeighbors * getNum(params, 'fireSpread')
+            ) {
               // Young trees catch fire easier
               return states.FIRE_COOL;
             }
           }
           // Old trees are more resistant
-          else if (Math.random() < burningNeighbors * (getNum(params, 'fireSpread') / 2)) {
+          else if (
+            Math.random() <
+            burningNeighbors * (getNum(params, 'fireSpread') / 2)
+          ) {
             return states.FIRE_COOL;
           }
         }
@@ -213,7 +244,10 @@
         }
 
         // Young trees grow into old trees
-        if (cellState === states.YOUNG_TREE && Math.random() < getNum(params, 'treeGrow')) {
+        if (
+          cellState === states.YOUNG_TREE &&
+          Math.random() < getNum(params, 'treeGrow')
+        ) {
           return states.OLD_TREE;
         }
       }
@@ -236,7 +270,7 @@
 
       // No change
       return cellState;
-    }
+    },
   };
 </script>
 

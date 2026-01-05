@@ -118,8 +118,8 @@ export async function getPostsByTag(tagSlug) {
     .where(
       and(
         eq(blogPosts.status, 'published'),
-        inArray(blogPosts.id, postIdValues)
-      )
+        inArray(blogPosts.id, postIdValues),
+      ),
     )
     .orderBy(desc(blogPosts.publishedAt))
     .all();
@@ -192,7 +192,7 @@ export async function setTagsForPost(postId, tagIds) {
       tagIds.map((tagId) => ({
         postId,
         tagId,
-      }))
+      })),
     );
   }
 }

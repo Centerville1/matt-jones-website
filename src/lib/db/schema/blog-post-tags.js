@@ -19,5 +19,5 @@ export const blogPostTags = sqliteTable(
   },
   (table) => ({
     pk: primaryKey({ columns: [table.postId, table.tagId] }),
-  })
+  }),
 );

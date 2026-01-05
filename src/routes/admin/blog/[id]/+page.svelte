@@ -10,7 +10,13 @@
 
 <div class="page-container">
   <h2>Edit Blog Post</h2>
-  <BlogPostForm {data} {form} post={data.post} postTags={data.postTags} isEdit={true} />
+  <BlogPostForm
+    {data}
+    {form}
+    post={data.post}
+    postTags={data.postTags}
+    isEdit={true}
+  />
 </div>
 
 <style>

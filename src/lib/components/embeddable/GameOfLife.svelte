@@ -13,7 +13,7 @@
   const gameOfLifeConfig = {
     states: [
       { id: 'DEAD', color: [20, 20, 20, 255], name: 'Dead' },
-      { id: 'ALIVE', color: [0, 150, 255, 255], name: 'Alive' }
+      { id: 'ALIVE', color: [0, 150, 255, 255], name: 'Alive' },
     ],
 
     onMouseInteraction: (_x, _y, currentState, states, _isInitialClick) => {
@@ -29,10 +29,10 @@
           { value: 0, label: 'Random' },
           { value: 1, label: 'Glider' },
           { value: 2, label: 'Glider Gun' },
-          { value: 3, label: 'Empty' }
+          { value: 3, label: 'Empty' },
         ],
         label: 'Initial Pattern',
-        description: 'Pattern to start with [reset required]'
+        description: 'Pattern to start with [reset required]',
       },
       randomDensity: {
         type: 'number',
@@ -41,8 +41,9 @@
         max: 1,
         step: 0.05,
         label: 'Random Density',
-        description: 'Probability of cell being alive when Random pattern is selected [reset required]'
-      }
+        description:
+          'Probability of cell being alive when Random pattern is selected [reset required]',
+      },
     },
 
     defaultGridSize: { width: 80, height: 50 },
@@ -56,7 +57,9 @@
       // Will be overridden by postInitialize for patterns
       if (getNum(params, 'initialPattern') === 0) {
         // Random pattern
-        return Math.random() < getNum(params, 'randomDensity') ? states.ALIVE : states.DEAD;
+        return Math.random() < getNum(params, 'randomDensity')
+          ? states.ALIVE
+          : states.DEAD;
       }
       return states.DEAD;
     },
@@ -66,27 +69,54 @@
       const glider = [
         [0, 0, 1],
         [1, 0, 1],
-        [0, 1, 1]
+        [0, 1, 1],
       ];
 
       // Blinker pattern
       const blinker = [
         [0, 1, 0],
         [0, 1, 0],
-        [0, 1, 0]
+        [0, 1, 0],
       ];
 
       // Glider Gun (Gosper's Glider Gun)
       const gun = [
-        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1],
-        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1],
-        [1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        [1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+        [
+          0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+          0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        ],
+        [
+          0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
+          0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        ],
+        [
+          0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 0,
+          0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1,
+        ],
+        [
+          0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 1, 1, 0,
+          0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1,
+        ],
+        [
+          1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0,
+          0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        ],
+        [
+          1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 1, 0, 0, 0, 0, 1,
+          0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        ],
+        [
+          0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0,
+          0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        ],
+        [
+          0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0,
+          0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        ],
+        [
+          0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+          0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        ],
       ];
 
       /**
@@ -123,13 +153,22 @@
         // const startY = Math.floor((height - gunHeight) / 2);
         // Glider Gun (top left)
         const startX = 10;
-        const startY = 10
+        const startY = 10;
         pasteTemplate(startX, startY, gun);
       }
       // Pattern 3 (Empty) and 0 (Random) are already handled by initializeCell
     },
 
-    updateCell: (cellState, neighbors, _x, _y, _width, _height, _params, states) => {
+    updateCell: (
+      cellState,
+      neighbors,
+      _x,
+      _y,
+      _width,
+      _height,
+      _params,
+      states,
+    ) => {
       // Count living neighbors
       const aliveNeighbors = neighbors.count([states.ALIVE]);
 
@@ -148,7 +187,7 @@
       }
 
       return cellState;
-    }
+    },
   };
 </script>
 

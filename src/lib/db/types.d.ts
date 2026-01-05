@@ -18,4 +18,9 @@ export type {
   BlogPostTag,
   ContactSubmission,
   FileRecord,
+  SpriteLayer,
+  ColliderShape,
+  AnimationFrame,
+  AnimationState,
+  SpriteDefinition,
 } from './schema/types';

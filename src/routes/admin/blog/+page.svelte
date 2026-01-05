@@ -144,7 +144,10 @@
                   <span class="badge badge-featured">Featured</span>
                 {/if}
                 {#if post.seriesId && seriesMap.get(post.seriesId)}
-                  <span class="badge badge-series">{/** @type {any} */ (seriesMap.get(post.seriesId)).title}</span>
+                  <span class="badge badge-series"
+                    >{/** @type {any} */ (seriesMap.get(post.seriesId))
+                      .title}</span
+                  >
                 {/if}
               </div>
               <div class="excerpt">{post.excerpt}</div>

@@ -153,7 +153,7 @@ export const componentRegistry = {
 
   GameOfLife: {
     name: 'GameOfLife',
-    label: 'Conway\'s Game of Life',
+    label: "Conway's Game of Life",
     description:
       'Classic cellular automaton - watch patterns evolve following simple rules of life and death',
     category: 'simulation',

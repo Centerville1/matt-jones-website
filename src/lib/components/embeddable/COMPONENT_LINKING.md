@@ -44,6 +44,7 @@ Insert another component and give it the **same Link ID**. Now they're connected
 ### 3. Components Must Support Linking
 
 Check the component registry to see if a component supports linking:
+
 - **`consumesContext: true`** - Component can read shared data
 - **`providesContext: ['key']`** - Component provides data with the given key
 
@@ -67,6 +68,7 @@ Check the component registry to see if a component supports linking:
 ### Consuming Context
 
 Your component receives two special props:
+
 - `context` - The shared context object
 - `updateContext` - Function to update the shared context
 
@@ -138,6 +140,7 @@ Mark your component's capabilities:
 Currently, the embeddable components (FireSim, Sphere, CSSArtwork) don't consume or provide context. They work great standalone!
 
 To create your first linked demo:
+
 1. Create a control component (sliders, buttons, etc.)
 2. Update an existing component to consume context
 3. Update the registry with `consumesContext` / `providesContext`

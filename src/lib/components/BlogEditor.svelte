@@ -271,7 +271,10 @@
    */
   function handleEditorClick(event) {
     const target = /** @type {HTMLElement} */ (event.target);
-    if (target.classList.contains('edit-props-btn') || target.closest('.edit-props-btn')) {
+    if (
+      target.classList.contains('edit-props-btn') ||
+      target.closest('.edit-props-btn')
+    ) {
       event.preventDefault();
       event.stopPropagation();
 
@@ -321,10 +324,13 @@
             const targetContext = editingContextId;
 
             editor.state.doc.descendants((node, pos) => {
-              if (node.type.name === 'svelteComponent' &&
-                  node.attrs.name === componentName &&
-                  JSON.stringify(node.attrs.props) === JSON.stringify(targetProps) &&
-                  node.attrs.contextId === targetContext) {
+              if (
+                node.type.name === 'svelteComponent' &&
+                node.attrs.name === componentName &&
+                JSON.stringify(node.attrs.props) ===
+                  JSON.stringify(targetProps) &&
+                node.attrs.contextId === targetContext
+              ) {
                 if (matchCount === 0) {
                   foundPos = pos;
                 }
@@ -384,7 +390,7 @@
         tr.setNodeMarkup(editingComponentPos, undefined, {
           ...node.attrs,
           props: newProps,
-          contextId: newContextId
+          contextId: newContextId,
         });
         editor.view.dispatch(tr);
       }
@@ -589,7 +595,11 @@
       <button on:click={openImageDialog} type="button" title="Image">
         🖼️
       </button>
-      <button on:click={openComponentPicker} type="button" title="Insert Component">
+      <button
+        on:click={openComponentPicker}
+        type="button"
+        title="Insert Component"
+      >
         📦
       </button>
       <button

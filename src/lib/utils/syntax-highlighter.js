@@ -11,21 +11,21 @@ import { codeToHtml } from 'shiki';
  * @returns {Promise<string>} HTML with syntax highlighting
  */
 export async function highlightCode(code, language) {
-	try {
-		const normalizedLang = language.toLowerCase();
+  try {
+    const normalizedLang = language.toLowerCase();
 
-		// Use the newer Shiki API
-		const html = await codeToHtml(code, {
-			lang: normalizedLang,
-			theme: 'github-dark'
-		});
+    // Use the newer Shiki API
+    const html = await codeToHtml(code, {
+      lang: normalizedLang,
+      theme: 'github-dark',
+    });
 
-		return html;
-	} catch (error) {
-		console.error('Error highlighting code:', error);
-		// Fallback to plain code block
-		return `<pre><code class="language-${language}">${escapeHtml(code)}</code></pre>`;
-	}
+    return html;
+  } catch (error) {
+    console.error('Error highlighting code:', error);
+    // Fallback to plain code block
+    return `<pre><code class="language-${language}">${escapeHtml(code)}</code></pre>`;
+  }
 }
 
 /**
@@ -34,16 +34,16 @@ export async function highlightCode(code, language) {
  * @returns {string}
  */
 function escapeHtml(text) {
-	if (!text) return '';
+  if (!text) return '';
 
-	/** @type {Record<string, string>} */
-	const map = {
-		'&': '&amp;',
-		'<': '&lt;',
-		'>': '&gt;',
-		'"': '&quot;',
-		"'": '&#039;'
-	};
+  /** @type {Record<string, string>} */
+  const map = {
+    '&': '&amp;',
+    '<': '&lt;',
+    '>': '&gt;',
+    '"': '&quot;',
+    "'": '&#039;',
+  };
 
-	return text.replace(/[&<>"']/g, (char) => map[char]);
+  return text.replace(/[&<>"']/g, (char) => map[char]);
 }

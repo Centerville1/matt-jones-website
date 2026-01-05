@@ -165,3 +165,81 @@ export interface FileRecord {
   displayName: string | null;
   uploadedAt: Date;
 }
+
+/**
+ * SpriteLayer - A single layer in a sprite composition
+ */
+export interface SpriteLayer {
+  imageId: number; // Reference to images table
+  offset: { x: number; y: number }; // Offset from sprite center in METERS
+  width: number; // Render width in pixels
+  height: number; // Render height in pixels
+  rotation: number; // Rotation in radians (default: 0)
+  zIndex: number; // Layer order (higher = on top)
+}
+
+/**
+ * ColliderShape - A single collision shape (circle or rect)
+ */
+export interface ColliderShape {
+  id: string; // Unique ID for this shape (for selection/editing)
+  type: 'circle' | 'rect';
+  // Circle properties
+  radius?: number; // In meters
+  // Rectangle properties
+  width?: number; // In meters
+  height?: number; // In meters
+  localRotation?: number; // In radians, relative to object rotation
+  // Shared properties
+  offset: { x: number; y: number }; // Offset from sprite center in meters
+}
+
+/**
+ * AnimationFrame - A single frame in an animation sequence
+ */
+export interface AnimationFrame {
+  duration: number; // Frame duration in milliseconds
+  layerOverrides: {
+    [layerIndex: number]: {
+      visible?: boolean;
+      offset?: { x: number; y: number };
+      rotation?: number;
+    };
+  };
+}
+
+/**
+ * AnimationState - A named animation state (e.g., "idle", "warp", "damaged")
+ */
+export interface AnimationState {
+  layerOverrides: {
+    [layerIndex: number]: {
+      visible?: boolean;
+      offset?: { x: number; y: number };
+      rotation?: number;
+    };
+  };
+  frames?: AnimationFrame[]; // Optional frame sequence for animated states
+}
+
+/**
+ * SpriteDefinition - Complete sprite definition with layers, collision, and animations
+ */
+export interface SpriteDefinition {
+  id: string;
+  name: string;
+  objectType:
+    | 'ship'
+    | 'asteroid'
+    | 'planet'
+    | 'blackHole'
+    | 'station'
+    | 'waypoint'
+    | 'debris'
+    | 'projectile';
+  layers: SpriteLayer[];
+  collider: ColliderShape | ColliderShape[]; // Single shape or array (auto-composite if array)
+  animationStates: { [stateName: string]: AnimationState } | null;
+  createdAt: Date;
+  updatedAt: Date;
+}

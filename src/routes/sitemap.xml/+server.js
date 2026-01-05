@@ -45,7 +45,9 @@ ${pages
   .join('\n')}
 ${posts
   .map((post) => {
-    const postLastmod = post.updatedAt ? new Date(post.updatedAt).toISOString().split('T')[0] : lastmod;
+    const postLastmod = post.updatedAt
+      ? new Date(post.updatedAt).toISOString().split('T')[0]
+      : lastmod;
     return `  <url>
     <loc>${baseUrl}/home/blog/${post.slug}</loc>
     <lastmod>${postLastmod}</lastmod>

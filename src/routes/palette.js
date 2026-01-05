@@ -165,8 +165,14 @@ const grayScheme = [
   { varName: '--neutral-gray-op-50', color: opacity(DarkGray, 50) },
   { varName: '--neutral-gray-op-10', color: opacity(DarkGray, 10) },
   { varName: '--neutral-dark-gray', color: GraphiteBlueGray },
-  { varName: '--neutral-dark-gray-op-50', color: opacity(GraphiteBlueGray, 50) },
-  { varName: '--neutral-dark-gray-op-10', color: opacity(GraphiteBlueGray, 10) },
+  {
+    varName: '--neutral-dark-gray-op-50',
+    color: opacity(GraphiteBlueGray, 50),
+  },
+  {
+    varName: '--neutral-dark-gray-op-10',
+    color: opacity(GraphiteBlueGray, 10),
+  },
   { varName: '--contrast-text-light', color: LightGray },
   { varName: '--contrast-text-dark', color: DarkGray },
 ];

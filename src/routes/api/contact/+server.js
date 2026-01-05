@@ -10,11 +10,19 @@ export async function POST({ request }) {
     const data = await request.json();
 
     // Validate required fields
-    if (!data.name || typeof data.name !== 'string' || data.name.trim() === '') {
+    if (
+      !data.name ||
+      typeof data.name !== 'string' ||
+      data.name.trim() === ''
+    ) {
       throw error(400, 'Name is required');
     }
 
-    if (!data.email || typeof data.email !== 'string' || data.email.trim() === '') {
+    if (
+      !data.email ||
+      typeof data.email !== 'string' ||
+      data.email.trim() === ''
+    ) {
       throw error(400, 'Email is required');
     }
 
@@ -24,7 +32,11 @@ export async function POST({ request }) {
       throw error(400, 'Invalid email format');
     }
 
-    if (!data.message || typeof data.message !== 'string' || data.message.trim() === '') {
+    if (
+      !data.message ||
+      typeof data.message !== 'string' ||
+      data.message.trim() === ''
+    ) {
       throw error(400, 'Message is required');
     }
 
@@ -53,12 +65,14 @@ export async function POST({ request }) {
       message: data.message.trim(),
     });
 
-    return json({
-      success: true,
-      message: 'Thank you for your message! I will get back to you soon.',
-      id: submission.id,
-    }, { status: 201 });
-
+    return json(
+      {
+        success: true,
+        message: 'Thank you for your message! I will get back to you soon.',
+        id: submission.id,
+      },
+      { status: 201 },
+    );
   } catch (err) {
     console.error('Contact form submission error:', err);
 

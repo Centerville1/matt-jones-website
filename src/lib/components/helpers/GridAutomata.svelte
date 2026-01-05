@@ -26,7 +26,7 @@
   // Initialize parameters with defaults
   /** @type {Record<string, number | boolean | string>} */
   const paramValues = {};
-  Object.keys(config.params).forEach(key => {
+  Object.keys(config.params).forEach((key) => {
     paramValues[key] = config.params[key].default;
   });
 
@@ -185,7 +185,7 @@
           grid.push([dx, dy, getCell(currentGrid, x + dx, y + dy)]);
         }
         return grid;
-      }
+      },
     };
   }
 
@@ -242,7 +242,8 @@
 
     // 3 octaves for smooth, organic variation
     for (let i = 0; i < 3; i++) {
-      value += smoothNoise(x * frequency, y * frequency, seed + i * 100) * amplitude;
+      value +=
+        smoothNoise(x * frequency, y * frequency, seed + i * 100) * amplitude;
       maxValue += amplitude;
       amplitude *= 0.5;
       frequency *= 2;
@@ -282,7 +283,7 @@
       offshoots.push({
         angle: Math.random() * Math.PI * 2,
         strength: 0.3 + Math.random() * 0.7,
-        width: 0.3 + Math.random() * 0.5
+        width: 0.3 + Math.random() * 0.5,
       });
     }
 
@@ -304,13 +305,15 @@
       const noise = multiOctaveNoise(
         Math.cos(angle) * 3 + centerX * noiseScale,
         Math.sin(angle) * 3 + centerY * noiseScale,
-        noiseSeed
+        noiseSeed,
       );
 
       // Add offshoot influence - creates protrusions in random directions
       let offshootBonus = 0;
       for (const offshoot of offshoots) {
-        const angleDiff = Math.abs(((angle - offshoot.angle + Math.PI) % (Math.PI * 2)) - Math.PI);
+        const angleDiff = Math.abs(
+          ((angle - offshoot.angle + Math.PI) % (Math.PI * 2)) - Math.PI,
+        );
         const directionality = Math.max(0, 1 - angleDiff / offshoot.width);
         offshootBonus += directionality * offshoot.strength;
       }
@@ -343,7 +346,7 @@
         [dx + 1, dy],
         [dx - 1, dy],
         [dx, dy + 1],
-        [dx, dy - 1]
+        [dx, dy - 1],
       ];
 
       for (const [ndx, ndy] of neighbors) {
@@ -392,18 +395,38 @@
     // Call initialization function for each cell
     for (let y = 0; y < gridHeight; y++) {
       for (let x = 0; x < gridWidth; x++) {
-        const state = config.initializeCell(x, y, gridWidth, gridHeight, paramValues, stateById);
+        const state = config.initializeCell(
+          x,
+          y,
+          gridWidth,
+          gridHeight,
+          paramValues,
+          stateById,
+        );
         setCell(currentGrid, x, y, state);
       }
     }
 
     // Post-initialization (for blobs, etc.)
     if (config.postInitialize) {
-      config.postInitialize(currentGrid, gridWidth, gridHeight, paramValues, stateById, {
-        generateBlob,
-        getCell: /** @param {number} x @param {number} y */ (x, y) => getCell(currentGrid, x, y),
-        setCell: /** @param {number} x @param {number} y @param {number} state */ (x, y, state) => setCell(currentGrid, x, y, state)
-      });
+      config.postInitialize(
+        currentGrid,
+        gridWidth,
+        gridHeight,
+        paramValues,
+        stateById,
+        {
+          generateBlob,
+          getCell: /** @param {number} x @param {number} y */ (x, y) =>
+            getCell(currentGrid, x, y),
+          setCell:
+            /** @param {number} x @param {number} y @param {number} state */ (
+              x,
+              y,
+              state,
+            ) => setCell(currentGrid, x, y, state),
+        },
+      );
     }
 
     // Compute initial state counts
@@ -429,7 +452,7 @@
           gridWidth,
           gridHeight,
           paramValues,
-          stateById
+          stateById,
         );
         setCell(nextGrid, x, y, newState);
 
@@ -607,7 +630,7 @@
       coords.y,
       currentState,
       stateById,
-      isInitialClick
+      isInitialClick,
     );
 
     if (newState !== null && newState !== undefined) {
@@ -643,12 +666,16 @@
       coords.y,
       currentState,
       stateById,
-      isInitialClick
+      isInitialClick,
     );
 
     isInitialClick = false;
 
-    if (newState !== null && newState !== undefined && newState !== currentState) {
+    if (
+      newState !== null &&
+      newState !== undefined &&
+      newState !== currentState
+    ) {
       setCell(currentGrid, coords.x, coords.y, newState);
       // Update state counts
       stateCounts[currentState]--;
@@ -777,9 +804,12 @@
       <div class="legend-item">
         <span
           class="legend-box"
-          style="background-color: rgb({state.color[0]}, {state.color[1]}, {state.color[2]});"
+          style="background-color: rgb({state.color[0]}, {state
+            .color[1]}, {state.color[2]});"
         ></span>
-        <span class="legend-label">{state.name} ({formatCount(stateCounts[index])}</span>
+        <span class="legend-label"
+          >{state.name} ({formatCount(stateCounts[index])}</span
+        >
       </div>
     {/each}
   </div>
@@ -819,26 +849,51 @@
       <div class="slider-group">
         <label for="grid-width">
           Grid Width: {gridWidth}
-          <input type="range" id="grid-width" bind:value={gridWidth} min="10" max="500" step="10" />
+          <input
+            type="range"
+            id="grid-width"
+            bind:value={gridWidth}
+            min="10"
+            max="500"
+            step="10"
+          />
         </label>
       </div>
       <div class="slider-group">
         <label for="grid-height">
           Grid Height: {gridHeight}
-          <input type="range" id="grid-height" bind:value={gridHeight} min="10" max="500" step="10" />
+          <input
+            type="range"
+            id="grid-height"
+            bind:value={gridHeight}
+            min="10"
+            max="500"
+            step="10"
+          />
         </label>
       </div>
       <div class="slider-group">
         <label for="scale">
           Scale: {scale}
-          <input type="range" id="scale" bind:value={scale} min="1" max="20" step="1" />
+          <input
+            type="range"
+            id="scale"
+            bind:value={scale}
+            min="1"
+            max="20"
+            step="1"
+          />
         </label>
       </div>
     </div>
 
     {#if Object.keys(config.params).length > 0}
       <div class="advanced-section">
-        <button class="expand-button" on:click={toggleAdvancedParams} type="button">
+        <button
+          class="expand-button"
+          on:click={toggleAdvancedParams}
+          type="button"
+        >
           <span class="arrow" class:expanded={showAdvancedParams}>▶</span>
           Advanced Parameters
         </button>
@@ -846,19 +901,28 @@
         {#if showAdvancedParams}
           <div class="advanced-controls">
             <div class="advanced-header">
-              <button class="reset-defaults-button" on:click={resetToDefaults} type="button">
+              <button
+                class="reset-defaults-button"
+                on:click={resetToDefaults}
+                type="button"
+              >
                 Reset to Defaults
               </button>
             </div>
             {#each Object.entries(config.params) as [key, param]}
-              <div class="slider-group" class:checkbox-group={param.type === 'boolean'}>
+              <div
+                class="slider-group"
+                class:checkbox-group={param.type === 'boolean'}
+              >
                 <label for={key} title={param.description || ''}>
                   {#if param.type === 'boolean'}
                     <input
                       type="checkbox"
                       id={key}
                       checked={!!paramValues[key]}
-                      on:change={(e) => { paramValues[key] = e.currentTarget.checked; }}
+                      on:change={(e) => {
+                        paramValues[key] = e.currentTarget.checked;
+                      }}
                     />
                     {param.label}
                   {:else if param.type === 'select'}
@@ -877,7 +941,9 @@
                     />
                   {:else}
                     {param.label}: {formatParamValue(paramValues[key])}
-                    <span class="default-value">Default: {formatParamValue(param.default)}</span>
+                    <span class="default-value"
+                      >Default: {formatParamValue(param.default)}</span
+                    >
                     <input
                       type="range"
                       id={key}
@@ -1038,7 +1104,7 @@
     gap: 0.5rem;
   }
 
-  input[type="range"] {
+  input[type='range'] {
     width: 100%;
     cursor: pointer;
     accent-color: var(--main-blue);
@@ -1060,7 +1126,7 @@
     border-color: var(--main-blue);
   }
 
-  input[type="color"] {
+  input[type='color'] {
     width: 100%;
     height: 40px;
     padding: 0.25rem;
@@ -1070,7 +1136,7 @@
     cursor: pointer;
   }
 
-  input[type="color"]:focus {
+  input[type='color']:focus {
     outline: none;
     border-color: var(--main-blue);
   }
@@ -1087,7 +1153,7 @@
     gap: 0.75rem;
   }
 
-  input[type="checkbox"] {
+  input[type='checkbox'] {
     width: 20px;
     height: 20px;
     cursor: pointer;

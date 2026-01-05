@@ -13,6 +13,11 @@ import type {
   BlogPostTag,
   ContactSubmission,
   FileRecord,
+  SpriteLayer,
+  ColliderShape,
+  AnimationFrame,
+  AnimationState,
+  SpriteDefinition,
 } from '$lib/db/types';
 
 declare global {
@@ -39,6 +44,11 @@ declare global {
   type BlogPostTag = import('$lib/db/types').BlogPostTag;
   type ContactSubmission = import('$lib/db/types').ContactSubmission;
   type FileRecord = import('$lib/db/types').FileRecord;
+  type SpriteLayer = import('$lib/db/types').SpriteLayer;
+  type ColliderShape = import('$lib/db/types').ColliderShape;
+  type AnimationFrame = import('$lib/db/types').AnimationFrame;
+  type AnimationState = import('$lib/db/types').AnimationState;
+  type SpriteDefinition = import('$lib/db/types').SpriteDefinition;
 }
 
 export {};

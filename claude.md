@@ -40,13 +40,16 @@ function playNote(frequency) {}
 
 // Query typing (always use type assertions with Drizzle)
 /** @type {Category[]} */
-const items = /** @type {Category[]} */ (await db.select().from(categories).all());
+const items = /** @type {Category[]} */ (
+  await db.select().from(categories).all()
+);
 
 // DOM manipulation (required in Svelte 5)
 let el = /** @type {HTMLElement} */ (document.getElementById('foo'));
 ```
 
 **Adding a new database table:**
+
 1. Create schema in `src/lib/db/schema/your-table.js` with `@typedef`
 2. Add interface to `src/lib/db/schema/types.d.ts`
 3. Export via `src/lib/db/types.d.ts`
@@ -55,6 +58,7 @@ let el = /** @type {HTMLElement} */ (document.getElementById('foo'));
 6. Run `npx drizzle-kit push`
 
 **Drizzle quirks:**
+
 - Booleans: `integer('field', { mode: 'boolean' })` → `boolean`
 - Timestamps: `integer('field', { mode: 'timestamp' })` → `Date`
 - Always use type assertions on queries
@@ -135,24 +139,29 @@ npx drizzle-kit studio    # Open Drizzle Studio GUI
 ## Known Technical Debt
 
 **High Priority:**
+
 - Admin interface incomplete (bios/metadata need UI)
 
 **Medium Priority:**
+
 - Magic numbers hardcoded (timeouts, dimensions)
 - Theme system (only dark mode implemented)
 
 **Low Priority:**
+
 - No `prefers-reduced-motion` support
 - [notes.json](src/routes/home/notes.json) not migrated to database
 
 ## Guidelines for AI Assistants
 
 **Before editing:**
+
 - Read existing files to understand implementation
 - Check [global.css](src/global.css) for available CSS variables
 - Maintain JSDoc pattern (don't convert to `.ts` unless requested)
 
 **When adding features:**
+
 - Follow SvelteKit routing conventions
 - Use scoped CSS in components
 - Add JSDoc type annotations
@@ -161,6 +170,7 @@ npx drizzle-kit studio    # Open Drizzle Studio GUI
 - Prefer Svelte's declarative approach over DOM manipulation
 
 **Code quality:**
+
 - Run `npm run check && npm run lint && npm run format`
 - Test animations in browser
 - Check responsive behavior (mobile/desktop)

@@ -24,3 +24,13 @@ export function requireAuth(locals) {
     throw redirect(303, '/admin/login');
   }
 }
+
+/**
+ * Require wing night authentication
+ * @param {App.Locals} locals
+ */
+export function requireWingsAuth(locals) {
+  if (!locals.wingsUser) {
+    throw redirect(303, '/wings');
+  }
+}

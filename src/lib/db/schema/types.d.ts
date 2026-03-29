@@ -243,3 +243,61 @@ export interface SpriteDefinition {
   createdAt: Date;
   updatedAt: Date;
 }
+
+export interface WingPerson {
+  id: number;
+  name: string;
+  createdAt: Date;
+}
+
+export interface WingRestaurant {
+  id: number;
+  name: string;
+  notes: string | null;
+  createdAt: Date;
+}
+
+export interface WingMenuItem {
+  id: number;
+  restaurantId: number;
+  name: string;
+  priceInCents: number | null;
+  createdAt: Date;
+}
+
+export interface WingSession {
+  id: number;
+  restaurantId: number;
+  restaurantName?: string | null;
+  date: string;
+  notes: string | null;
+  createdAt: Date;
+}
+
+export interface WingSessionAttendee {
+  id: number;
+  sessionId: number;
+  personId: number;
+  createdAt: Date;
+}
+
+export interface WingOrderEntry {
+  id: number;
+  sessionId: number;
+  personId: number;
+  menuItemId: number;
+  quantity: number;
+  createdAt: Date;
+}
+
+export interface WingPersonWithOrders {
+  personId: number;
+  personName: string;
+  items: Array<{
+    entryId: number;
+    menuItemId: number;
+    menuItemName: string;
+    priceInCents: number | null;
+    quantity: number;
+  }>;
+}

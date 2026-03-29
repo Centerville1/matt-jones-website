@@ -18,6 +18,13 @@ import type {
   AnimationFrame,
   AnimationState,
   SpriteDefinition,
+  WingPerson,
+  WingRestaurant,
+  WingMenuItem,
+  WingSession,
+  WingSessionAttendee,
+  WingOrderEntry,
+  WingPersonWithOrders,
 } from '$lib/db/types';
 
 declare global {
@@ -25,6 +32,7 @@ declare global {
     // interface Error {}
     interface Locals {
       user: { authenticated: boolean } | null;
+      wingsUser: { authenticated: boolean } | null;
     }
     // interface PageData {}
     // interface PageState {}
@@ -49,6 +57,13 @@ declare global {
   type AnimationFrame = import('$lib/db/types').AnimationFrame;
   type AnimationState = import('$lib/db/types').AnimationState;
   type SpriteDefinition = import('$lib/db/types').SpriteDefinition;
+  type WingPerson = import('$lib/db/types').WingPerson;
+  type WingRestaurant = import('$lib/db/types').WingRestaurant;
+  type WingMenuItem = import('$lib/db/types').WingMenuItem;
+  type WingSession = import('$lib/db/types').WingSession;
+  type WingSessionAttendee = import('$lib/db/types').WingSessionAttendee;
+  type WingOrderEntry = import('$lib/db/types').WingOrderEntry;
+  type WingPersonWithOrders = import('$lib/db/types').WingPersonWithOrders;
 }
 
 export {};

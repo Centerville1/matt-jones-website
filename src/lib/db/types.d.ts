@@ -23,4 +23,11 @@ export type {
   AnimationFrame,
   AnimationState,
   SpriteDefinition,
+  WingPerson,
+  WingRestaurant,
+  WingMenuItem,
+  WingSession,
+  WingSessionAttendee,
+  WingOrderEntry,
+  WingPersonWithOrders,
 } from './schema/types';
